@@ -19,7 +19,11 @@ const Register = ({ navigation }) => {
 
   const registerReducer = useSelector(state => state.registerReducer)
 
-  const { loading } = registerReducer
+  const { loading, fullName,
+    email,
+    phoneNumber,
+    password,
+    passwordConfirm } = registerReducer
 
   const visiblePasswordHandler = () => {
     setVisiblePassword(!visiblePassword);
@@ -30,7 +34,11 @@ const Register = ({ navigation }) => {
   };
 
   const registerHandler = () => {
-    dispatch(postRegister())
+    if (fullName && email && phoneNumber && password && passwordConfirm) {
+      dispatch(postRegister())
+    } else {
+      return;
+    }
   }
 
   const phoneNumberRef = useRef();
@@ -51,6 +59,8 @@ const Register = ({ navigation }) => {
         <Gap height={40} />
         <View style={styles.inputContainer}>
           <TextInput
+            placeholderTextColor={colors.text.grey1}
+
             returnKeyType="next"
             style={styles.textInput}
             onChangeText={(e) => dispatch(changeRegister({
@@ -62,6 +72,8 @@ const Register = ({ navigation }) => {
         <Gap height={20} />
         <View style={styles.inputContainer}>
           <TextInput
+            placeholderTextColor={colors.text.grey1}
+
             onSubmitEditing={() => emailRef.current.focus()}
             ref={phoneNumberRef}
             returnKeyType="next"
@@ -74,6 +86,8 @@ const Register = ({ navigation }) => {
         <Gap height={20} />
         <View style={styles.inputContainer}>
           <TextInput
+            placeholderTextColor={colors.text.grey1}
+
             onSubmitEditing={() => passwordRef.current.focus()}
             ref={emailRef}
             returnKeyType="next"
@@ -86,6 +100,8 @@ const Register = ({ navigation }) => {
         <Gap height={20} />
         <View style={styles.inputContainer}>
           <TextInput
+            placeholderTextColor={colors.text.grey1}
+
             onSubmitEditing={() => confirmPasswordRef.current.focus()}
             ref={passwordRef}
             returnKeyType="next"
@@ -105,6 +121,8 @@ const Register = ({ navigation }) => {
         <Gap height={20} />
         <View style={styles.inputContainer}>
           <TextInput
+            placeholderTextColor={colors.text.grey1}
+
             ref={confirmPasswordRef}
             style={styles.textInput}
             placeholder="Ulangi Password"
@@ -191,7 +209,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   textInput: {
-    flex: 1
+    flex: 1,
+    color: colors.text.dark1,
+    fontFamily: fonts.primary.normal,
+    fontSize: 14
   },
   termsText: {
     flexDirection: 'row',
