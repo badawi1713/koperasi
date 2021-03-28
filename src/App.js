@@ -1,20 +1,21 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { NavigationContainer } from '@react-navigation/native';
+import { navigationRef } from './helpers/RootNavigation';
+import { Provider as AuthProvider } from './context/AuthContext';
+import { Provider } from 'react-redux'
+import React from 'react';
+import Router from './routers';
+import store from './store';
 
 const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Getting Started</Text>
-    </View>
-  )
-}
+    <Provider store={store}>
+      <AuthProvider>
+        <NavigationContainer ref={navigationRef}>
+          <Router />
+        </NavigationContainer>
+      </AuthProvider>
+    </Provider>
+  );
+};
 
-export default App
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-})
+export default App;
