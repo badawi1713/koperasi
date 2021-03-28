@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { Controller, useForm } from "react-hook-form";
 import {
   SafeAreaView,
   ScrollView,
@@ -14,30 +15,36 @@ import { Button, Gap, Link, TopNavbar } from '../../components';
 
 const Register = ({ navigation }) => {
   const dispatch = useDispatch()
+  const { control, handleSubmit, errors, watch } = useForm();
+
   const [visiblePassword, setVisiblePassword] = useState(false);
   const [visiblePasswordConfirm, setVisiblePasswordConfirm] = useState(false);
 
   const registerReducer = useSelector(state => state.registerReducer)
 
-  const { loading, fullName,
-    email,
-    phoneNumber,
-    password,
-    passwordConfirm } = registerReducer
+  const { loading, phoneNumber } = registerReducer
 
   const visiblePasswordHandler = () => {
     setVisiblePassword(!visiblePassword);
   };
 
+  console.log('res', phoneNumber)
+
   const visiblePasswordConfirmHandler = () => {
     setVisiblePasswordConfirm(!visiblePasswordConfirm);
   };
 
-  const registerHandler = () => {
-    if (fullName && email && phoneNumber && password && passwordConfirm) {
-      dispatch(postRegister())
+  const password = watch("password");
+  const passwordConfirm = watch("passwordConfirm");
+
+  const registerHandler = async () => {
+    if (password !== passwordConfirm) {
+      return false
     } else {
-      return;
+      await dispatch(changeRegister({
+        loading: true
+      }))
+      await dispatch(postRegister())
     }
   }
 
@@ -58,103 +65,163 @@ const Register = ({ navigation }) => {
       <ScrollView style={styles.content}>
         <Gap height={40} />
         <View style={styles.inputContainer}>
-          <TextInput
-            placeholderTextColor={colors.text.grey1}
-
-            returnKeyType="next"
-            style={styles.textInput}
-            onChangeText={(e) => dispatch(changeRegister({
-              fullName: e
-            }))}
-            placeholder="Nama Lengkap" keyboardType="name-phone-pad" onSubmitEditing={() => phoneNumberRef.current.focus()} />
-
+          <Controller
+            control={control}
+            render={({ onChange, onBlur, value }) => (
+              <TextInput
+                onBlur={onBlur}
+                placeholderTextColor={colors.text.grey1}
+                returnKeyType="next"
+                style={styles.textInput}
+                onChangeText={(e) => { onChange(e); dispatch(changeRegister({ fullName: e })) }}
+                value={value}
+                placeholder="Nama Lengkap" keyboardType="name-phone-pad" onSubmitEditing={() => phoneNumberRef.current.focus()} />
+            )}
+            name="fullName"
+            rules={{ required: true }}
+            defaultValue=""
+          />
         </View>
+        {errors.fullName && <>
+          <Gap height={5} />
+          <Text style={styles.errorText}>Nama lengkap harus diisi</Text>
+        </>}
         <Gap height={20} />
         <View style={styles.inputContainer}>
-          <TextInput
-            placeholderTextColor={colors.text.grey1}
-
-            onSubmitEditing={() => emailRef.current.focus()}
-            ref={phoneNumberRef}
-            returnKeyType="next"
-            style={styles.textInput}
-            onChangeText={(e) => dispatch(changeRegister({
-              phoneNumber: e
-            }))}
-            placeholder="Nomor Ponsel" keyboardType='phone-pad' />
+          <Controller
+            control={control}
+            render={({ onChange, onBlur, value }) => (
+              <TextInput
+                placeholderTextColor={colors.text.grey1}
+                onSubmitEditing={() => emailRef.current.focus()}
+                onBlur={onBlur}
+                ref={phoneNumberRef}
+                returnKeyType="next"
+                style={styles.textInput}
+                onChangeText={(e) => { onChange(e); dispatch(changeRegister({ phoneNumber: e })) }}
+                value={value}
+                placeholder="Nomor Ponsel" keyboardType='phone-pad' />
+            )}
+            name="phoneNumber"
+            rules={{ required: true }}
+            defaultValue=""
+          />
         </View>
+        {errors.phoneNumber && <>
+          <Gap height={5} />
+          <Text style={styles.errorText}>Nomor ponsel harus diisi</Text>
+        </>}
         <Gap height={20} />
         <View style={styles.inputContainer}>
-          <TextInput
-            placeholderTextColor={colors.text.grey1}
-
-            onSubmitEditing={() => passwordRef.current.focus()}
-            ref={emailRef}
-            returnKeyType="next"
-            style={styles.textInput}
-            onChangeText={(e) => dispatch(changeRegister({
-              email: e
-            }))}
-            placeholder="Email" keyboardType="email-address" />
+          <Controller
+            control={control}
+            render={({ onChange, onBlur, value }) => (
+              <TextInput
+                placeholderTextColor={colors.text.grey1}
+                onSubmitEditing={() => passwordRef.current.focus()}
+                ref={emailRef}
+                onBlur={onBlur}
+                returnKeyType="next"
+                style={styles.textInput}
+                onChangeText={(e) => { onChange(e); dispatch(changeRegister({ email: e })) }}
+                value={value}
+                placeholder="Email" keyboardType="email-address" />
+            )}
+            name="email"
+            rules={{ required: true }}
+            defaultValue=""
+          />
         </View>
+        {errors.email && <>
+          <Gap height={5} />
+          <Text style={styles.errorText}>Email harus diisi</Text>
+        </>}
         <Gap height={20} />
         <View style={styles.inputContainer}>
-          <TextInput
-            placeholderTextColor={colors.text.grey1}
-
-            onSubmitEditing={() => confirmPasswordRef.current.focus()}
-            ref={passwordRef}
-            returnKeyType="next"
-            style={styles.textInput}
-            placeholder="Password"
-            secureTextEntry={visiblePassword ? false : true}
-            onChangeText={(e) => dispatch(changeRegister({
-              password: e
-            }))}
-            autoCapitalize="none"
-            autoCorrect={false}
+          <Controller
+            control={control}
+            render={({ onChange, onBlur, value }) => (
+              <TextInput
+                onSubmitEditing={() => confirmPasswordRef.current.focus()}
+                ref={passwordRef}
+                returnKeyType="next"
+                style={styles.textInput}
+                placeholder="Password"
+                value={value}
+                onBlur={onBlur}
+                secureTextEntry={visiblePassword ? false : true}
+                onChangeText={(e) => { onChange(e); dispatch(changeRegister({ password: e })) }}
+                autoCorrect={false}
+                placeholderTextColor={colors.text.grey1}
+                autoCapitalize='none'
+              />
+            )}
+            name="password"
+            rules={{ required: true, minLength: 6 }}
+            defaultValue=""
           />
           <TouchableOpacity onPress={visiblePasswordHandler}>
             {visiblePassword ? <ICInvisible /> : <ICVisible />}
           </TouchableOpacity>
         </View>
+        {errors.password?.type === "required" && <>
+          <Gap height={5} />
+          <Text style={styles.errorText}>Password harus diisi</Text>
+        </>}
+        {errors.password?.type === "minLength" && <>
+          <Gap height={5} />
+          <Text style={styles.errorText}>Password minimal 6 karakter</Text>
+        </>}
         <Gap height={20} />
         <View style={styles.inputContainer}>
-          <TextInput
-            placeholderTextColor={colors.text.grey1}
-
-            ref={confirmPasswordRef}
-            style={styles.textInput}
-            placeholder="Ulangi Password"
-            secureTextEntry={visiblePasswordConfirm ? false : true}
-            onChangeText={(e) => dispatch(changeRegister({
-              passwordConfirm: e
-            }))}
-            autoCapitalize="none"
-            autoCorrect={false}
+          <Controller
+            control={control}
+            render={({ onChange, onBlur, value }) => (
+              <TextInput
+                ref={confirmPasswordRef}
+                style={styles.textInput}
+                placeholder="Konfirmasi Password"
+                value={value}
+                onBlur={onBlur}
+                secureTextEntry={visiblePasswordConfirm ? false : true}
+                onChangeText={(e) => { onChange(e); dispatch(changeRegister({ passwordConfirm: e })) }}
+                autoCorrect={false}
+                placeholderTextColor={colors.text.grey1}
+                autoCapitalize='none'
+              />
+            )}
+            name="passwordConfirm"
+            rules={{ required: true }}
+            defaultValue=""
           />
           <TouchableOpacity onPress={visiblePasswordConfirmHandler}>
             {visiblePasswordConfirm ? <ICInvisible /> : <ICVisible />}
           </TouchableOpacity>
         </View>
+        {
+          password !== passwordConfirm && <>
+            <Gap height={5} />
+            <Text style={styles.errorText}>Konfirmasi password belum sesuai</Text>
+          </>
+        }
         <Gap height={30} />
         <Button
           variant="primary"
           title="Daftar"
-          onPress={registerHandler}
+          onPress={handleSubmit(registerHandler)}
           loading={loading}
         />
         <Gap height={20} />
         <Text style={styles.textInfo}>
           Dengan daftar berarti kamu menyetujui
         </Text>
-        <Gap height={10} />
+        <Gap height={5} />
         <View style={styles.termsText}>
           <Link align="center" title="Syarat dan Ketentuan" />
           <Text style={styles.textInfo}> & </Text>
           <Link align="center" title="Kebijakan Privasi" />
         </View>
-        <Gap height={10} />
+        <Gap height={20} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -181,6 +248,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: fonts.primary.normal,
     color: colors.black,
+  },
+  errorText: {
+    fontFamily: fonts.primary.normal,
+    color: colors.text.danger
   },
   logoContainer: {
     width: '100%',

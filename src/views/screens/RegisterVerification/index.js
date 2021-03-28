@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import {
   ScrollView, StyleSheet, Text,
-  TouchableOpacity, View, ActivityIndicator
+  TouchableOpacity, View
 } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { ICBackspace } from '../../../assets';
+import { changeRegister, postOTP } from '../../../store/actions';
 import { colors, fonts } from '../../../utils';
 import { Gap, Link, TopNavbar } from '../../components';
-import { postOTP, changeRegister } from '../../../store/actions';
-import { useDispatch, useSelector } from 'react-redux'
 
 const formatTime = (time) =>
   `${String(Math.floor(time / 60)).padStart(2, '0')}:${String(
@@ -19,14 +19,17 @@ const RegisterVerification = ({ navigation }) => {
 
   const register = useSelector(state => state.registerReducer)
 
-  const { phoneNumber, loading, error } = register
+  const { phoneNumber, errorMessage, error, codeText } = register
 
-  const [time, setTime] = useState(300);
-  const [codeText, setCodetext] = useState([]);
+  const [time, setTime] = useState(10);
 
   useEffect(() => {
     if (time === 0) {
       setTime(null)
+      dispatch(changeRegister({
+        error: false,
+        errorMessage: ""
+      }))
     }
 
     if (!time) return;
@@ -46,10 +49,10 @@ const RegisterVerification = ({ navigation }) => {
       dispatch(postOTP(newOTP))
     }
 
-    if (codeText.length !== 4) {
-      return;
-    } else {
+    if (codeText.length === 4) {
       return otpVerification();
+    } else {
+      return;
     }
   }, [dispatch, codeText])
 
@@ -57,16 +60,20 @@ const RegisterVerification = ({ navigation }) => {
     if (codeText.length >= 4) {
       return false;
     } else {
-      setCodetext([...codeText, code]);
+      dispatch(changeRegister({
+        codeText: [...codeText, code]
+      }));
     }
   };
 
   const deleteCodeTextHandler = () => {
     if (codeText.length > 0) {
-      setCodetext(codeText.slice(0, -1));
+      dispatch(changeRegister({
+        codeText: codeText.slice(0, -1)
+      }));
     }
-    return false;
-  };
+    return false
+  }
 
   return (
     <View style={styles.container}>
@@ -80,7 +87,7 @@ const RegisterVerification = ({ navigation }) => {
         </Text>
         <Gap height={10} />
         <Text style={styles.phoneNumber}>{phoneNumber}</Text>
-        <Gap height={40} />
+        <Gap height={20} />
         <View style={styles.codeVerificationGroup}>
           <View style={styles.codeVerificationItem}>
             <Text style={styles.codeText}>{codeText[0]}</Text>
@@ -95,9 +102,11 @@ const RegisterVerification = ({ navigation }) => {
             <Text style={styles.codeText}>{codeText[3]}</Text>
           </View>
         </View>
-        <Gap height={20} />
+        <Gap height={10} />
+        {error && <Text style={styles.errorText}>{errorMessage}</Text>}
+        <Gap height={5} />
         {time === null ? <View>
-          <Text style={styles.errorText}>Waktu Verifikasi Habis</Text>
+          <Text style={styles.errorText}>Maaf, waktu verifikasi OTP habis</Text>
           <Gap height={5} />
           <Link onPress={async () => {
             await dispatch(changeRegister({
@@ -107,64 +116,76 @@ const RegisterVerification = ({ navigation }) => {
               password: "",
               passwordConfirm: ""
             }))
-            await navigation.navigate('Register')
+            await navigation.replace('Register')
           }} title="Silakan daftar kembali" />
         </View> :
           <Text style={styles.countdownTimer}>{formatTime(time)}</Text>
         }
         <Gap height={20} />
+
         <View style={styles.numpadContainer}>
           <TouchableOpacity
+            disabled={time === null}
             style={styles.buttonGroup}
             onPress={() => typeCodeTextHandler(1)}>
             <Text style={styles.buttonItem}>1</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            disabled={time === null}
             style={styles.buttonGroup}
             onPress={() => typeCodeTextHandler(2)}>
             <Text style={styles.buttonItem}>2</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            disabled={time === null}
             style={styles.buttonGroup}
             onPress={() => typeCodeTextHandler(3)}>
             <Text style={styles.buttonItem}>3</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            disabled={time === null}
             style={styles.buttonGroup}
             onPress={() => typeCodeTextHandler(4)}>
             <Text style={styles.buttonItem}>4</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            disabled={time === null}
             style={styles.buttonGroup}
             onPress={() => typeCodeTextHandler(5)}>
             <Text style={styles.buttonItem}>5</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            disabled={time === null}
             style={styles.buttonGroup}
             onPress={() => typeCodeTextHandler(6)}>
             <Text style={styles.buttonItem}>6</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            disabled={time === null}
             style={styles.buttonGroup}
             onPress={() => typeCodeTextHandler(7)}>
             <Text style={styles.buttonItem}>7</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            disabled={time === null}
             style={styles.buttonGroup}
             onPress={() => typeCodeTextHandler(8)}>
             <Text style={styles.buttonItem}>8</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            disabled={time === null}
             style={styles.buttonGroup}
             onPress={() => typeCodeTextHandler(9)}>
             <Text style={styles.buttonItem}>9</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            disabled={time === null}
             style={styles.buttonGroup}
             onPress={() => typeCodeTextHandler(0)}>
             <Text style={styles.buttonItem}>0</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            disabled={time === null}
             style={styles.buttonGroup}
             onPress={deleteCodeTextHandler}>
             <ICBackspace />

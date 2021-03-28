@@ -95,6 +95,7 @@ const Login = ({ navigation }) => {
                 onChangeText={value => onChange(value)}
                 autoCorrect={false}
                 placeholderTextColor={colors.text.grey1}
+                autoCapitalize='none'
               />
             )}
             name="password"
@@ -125,9 +126,9 @@ const Login = ({ navigation }) => {
             onPress={() => navigation.navigate('Register')}
           />
         </View>
-        <Gap height={10} />
+        <Gap height={5} />
         <Link align="center" title="Lupa Password?" />
-        <Gap height={10} />
+        <Gap height={20} />
       </ScrollView>
     </SafeAreaView>
   );

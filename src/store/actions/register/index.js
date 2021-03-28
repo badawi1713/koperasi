@@ -6,32 +6,65 @@ export const postOTP = (code) => {
     return async (dispatch, getState) => {
         const { registerReducer } = getState();
         const { password, phoneNumber } = registerReducer;
+        await dispatch({
+            type: SET_REGISTER,
+            payload: {
+                loading: false,
+                error: false,
+                errorMessage: ""
+            },
+        });
         const data = {
             "noHp": phoneNumber,
             "otp": code,
             "password": password
         }
         try {
-            await ApiPostRequest(
+            const response = await ApiPostRequest(
                 `/mobile/register/otp`, data
             );
-            await dispatch({
-                type: SET_REGISTER,
-                payload: {
-                    fullName: "",
-                    phoneNumber: "",
-                    email: "",
-                    password: "",
-                    passwordConfirm: ""
-                },
-            });
 
-            await replace("Login");
+            if (response.error) {
+                await dispatch({
+                    type: SET_REGISTER,
+                    payload: {
+                        loading: false,
+                        error: true,
+                        errorMessage: "Maaf, kode OTP salah, silakan coba kembali",
+                        codeText: []
+                    },
+                });
+
+            } else {
+                await dispatch({
+                    type: SET_REGISTER,
+                    payload: {
+                        fullName: "",
+                        phoneNumber: "",
+                        email: "",
+                        password: "",
+                        passwordConfirm: "",
+                        loading: false,
+                        error: false,
+                        errorMessage: "",
+                        codeText: []
+                    },
+                });
+
+                setTimeout(() => {
+                    replace("Login")
+                }, 3000)
+
+            }
+
+
         } catch (err) {
             dispatch({
                 type: SET_REGISTER,
                 payload: {
-                    error: true
+                    error: true,
+                    errorMessage: "",
+                    codeText: []
                 },
             });
         }
@@ -54,14 +87,22 @@ export const postRegister = () => {
                 `/mobile/register`, data
             );
 
+            dispatch({
+                type: SET_REGISTER,
+                payload: {
+                    loading: false,
+                    error: false
+                },
+            });
+
             await ApiGetRequest(`/mobile/register/sendOtp/${phoneNumber}`)
 
             await replace("RegisterVerification");
         } catch (error) {
-            console.log('register error', error)
             dispatch({
                 type: SET_REGISTER,
                 payload: {
+                    loading: false,
                     error: true
                 },
             });

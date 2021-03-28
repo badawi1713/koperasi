@@ -8,7 +8,8 @@ const initialState = {
     email: "",
     phoneNumber: "",
     password: "",
-    passwordConfirm: ""
+    passwordConfirm: "",
+    codeText: []
 };
 
 const registerReducer = (state = initialState, action) => {
