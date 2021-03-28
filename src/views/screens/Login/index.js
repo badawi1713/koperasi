@@ -68,6 +68,7 @@ const Login = ({ navigation }) => {
                 style={styles.textInput}
                 keyboardType='email-address'
                 value={value}
+                placeholderTextColor={colors.text.grey1}
               />
             )}
             name="email"
@@ -93,6 +94,7 @@ const Login = ({ navigation }) => {
                 secureTextEntry={visiblePassword ? false : true}
                 onChangeText={value => onChange(value)}
                 autoCorrect={false}
+                placeholderTextColor={colors.text.grey1}
               />
             )}
             name="password"
@@ -180,7 +182,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   textInput: {
-    flex: 1
+    flex: 1,
+    color: colors.text.dark1,
+    fontFamily: fonts.primary.normal,
+    fontSize: 14
   },
 
   registeredText: {

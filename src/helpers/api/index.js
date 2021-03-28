@@ -6,7 +6,7 @@ import axios from 'axios';
 
 // main config axios
 export const Api = axios.create({
-  baseURL: REACT_APP_API_URL,
+  baseURL: "http://128.199.102.215:8001/",
   mode: 'no-cors',
   credentials: true,
   crossdomain: true,

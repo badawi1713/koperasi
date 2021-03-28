@@ -8,7 +8,7 @@ import {
 import * as RootNavigation from '../../../helpers/RootNavigation';
 import { SET_AUTH } from '../../constants';
 
-const baseURL = REACT_APP_API_URL;
+const baseURL = "http://128.199.102.215:8001/"
 
 export const login = (data) => {
   return async (dispatch) => {
