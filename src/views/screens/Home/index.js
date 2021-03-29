@@ -9,6 +9,7 @@ import {
   View
 } from 'react-native';
 import ContentLoader from "react-native-easy-content-loader";
+import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
 import { IMGAll, IMGPulsa } from '../../../assets';
 import { ICImage, ICTopUp, ICTransfer, ICWithdraw } from '../../../assets/icons';
@@ -60,7 +61,11 @@ const Home = ({ navigation }) => {
                   <View>
                     <Gap width={40} height={5} />
                     <ContentLoader paragraph={false} tWidth={100} active tHeight={10} />
-                  </View> : <Text style={styles.moneyText}> {saldoBalance}</Text>
+                  </View> :
+                  <NumberFormat value={saldoBalance} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={(value, props) =>
+                    <Text style={styles.moneyText}>{value}</Text>
+                  } />
+
                 }
               </View>
             </View>
