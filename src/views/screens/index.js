@@ -4,6 +4,7 @@ import CoperationMember from './CoperationMember';
 import CoperationMemberSaving from './CoperationMemberSaving';
 import CoperationMemberSavingPayment from './CoperationMemberSavingPayment';
 import CoperationMemberSavingPaymentMethod from './CoperationMemberSavingPaymentMethod';
+import CoperationMemberLoan from './CoperationMemberLoan';
 import EWallet from './EWallet';
 import GetStarted from './GetStarted';
 import History from './History';
@@ -22,6 +23,7 @@ import TopUpPayment from './TopUpPayment';
 import TopUpPaymentMethod from './TopUpPaymentMethod';
 
 export {
+  CoperationMemberLoan,
   CoperationMemberSavingPayment,
   CoperationMemberSavingPaymentMethod,
   CoperationMemberSaving,

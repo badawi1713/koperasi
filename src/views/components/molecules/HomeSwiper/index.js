@@ -1,17 +1,53 @@
 import React from 'react'
-import { Image, TouchableOpacity, View } from 'react-native'
+import { Image, TouchableOpacity, View, StyleSheet } from 'react-native'
 import Swiper from 'react-native-swiper'
 import { IMGBanner1, IMGBanner2, IMGBanner3 } from '../../../../assets/images'
 import { colors } from '../../../../utils'
 import Gap from '../../atoms/Gap'
 
-var styles = {
+
+const HomeSwiper = () => {
+    return (
+        <Swiper
+            style={{ justifyContent: 'center' }}
+            height={120}
+            showsButtons={false}
+            loop={true}
+            autoplay
+            paginationStyle={{ bottom: 0 }}
+            dot={<View style={styles.dotStyle} />}
+            activeDotStyle={styles.activeDotStyle}
+            style={styles.wrapper}>
+            <TouchableOpacity testID="Banner1" style={styles.slide}>
+                <View style={styles.item} >
+                    <Image source={IMGBanner1} style={{ flex: 1, borderRadius: 10, resizeMode: 'contain' }} />
+                </View>
+                <Gap height={20} />
+            </TouchableOpacity>
+            <TouchableOpacity testID="Banner2" style={styles.slide}>
+                <View style={styles.item} >
+                    <Image source={IMGBanner2} style={{ flex: 1, borderRadius: 10, resizeMode: 'contain' }} />
+                </View>
+                <Gap height={20} />
+            </TouchableOpacity>
+            <TouchableOpacity testID="Banner3" style={styles.slide}>
+                <View style={styles.item} >
+                    <Image source={IMGBanner3} style={{ flex: 1, borderRadius: 10, resizeMode: 'contain' }} />
+                </View>
+                <Gap height={20} />
+            </TouchableOpacity>
+        </Swiper>
+    )
+}
+
+
+const styles = StyleSheet.create({
     slide: {
         flex: 1,
         alignItems: 'center',
     },
     item: {
-        width: '80%',
+        width: '100%',
         height: '75%',
         borderRadius: 10,
         alignItems: 'center'
@@ -36,37 +72,6 @@ var styles = {
         marginTop: 24,
         marginBottom: 8,
     },
-}
-
-const HomeSwiper = () => (
-    <Swiper
-        style={{ justifyContent: 'center' }}
-        height={120}
-        showsButtons={false}
-        loop={true}
-        paginationStyle={{ bottom: 0 }}
-        dot={<View style={styles.dotStyle} />}
-        activeDotStyle={styles.activeDotStyle}
-        style={styles.wrapper}>
-        <TouchableOpacity testID="Banner1" style={styles.slide}>
-            <View style={styles.item} >
-                <Image source={IMGBanner1} style={{ flex: 1, borderRadius: 10, resizeMode: 'cover' }} />
-            </View>
-            <Gap height={20} />
-        </TouchableOpacity>
-        <TouchableOpacity testID="Banner2" style={styles.slide}>
-            <View style={styles.item} >
-                <Image source={IMGBanner2} style={{ flex: 1, borderRadius: 10, resizeMode: 'cover' }} />
-            </View>
-            <Gap height={20} />
-        </TouchableOpacity>
-        <TouchableOpacity testID="Banner3" style={styles.slide}>
-            <View style={styles.item} >
-                <Image source={IMGBanner3} style={{ flex: 1, borderRadius: 10, resizeMode: 'cover' }} />
-            </View>
-            <Gap height={20} />
-        </TouchableOpacity>
-    </Swiper>
-)
+})
 
 export default HomeSwiper;

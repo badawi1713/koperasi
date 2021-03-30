@@ -76,7 +76,6 @@ export function ApiPostMultipart(url, data = {}) {
 export const ApiPostRequest = (url, data = {}) => {
     return Api.post(url, data)
         .then((response) => {
-            console.log('uwu', response);
             response;
         })
         .then((responseJson) => {

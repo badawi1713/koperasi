@@ -5,6 +5,7 @@ import { ICSavings, ICTotalBudget } from '../../../assets'
 import { changeMisc, getSavingCoperationMemberData } from '../../../store/actions'
 import { colors, fonts } from '../../../utils'
 import { Button, SavingDetail, Gap, TopNavbar, SavingTransfer } from '../../components'
+import NumberFormat from 'react-number-format';
 
 const CoperationMemberSaving = ({ navigation }) => {
     const dispatch = useDispatch()
@@ -60,7 +61,10 @@ const CoperationMemberSaving = ({ navigation }) => {
                             <Gap width={10} />
                             <View>
                                 <Text style={styles.textTitle}>Total Simpanan</Text>
-                                <Text style={styles.textTitle}>Rp {totalSimpanan}</Text>
+                                <NumberFormat value={totalSimpanan || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                                    <Text style={styles.textTitle}>Rp {value}</Text>
+
+                                } />
                                 <Gap height={5} />
                                 <TouchableOpacity onPress={showSavingDetailHandler}><Text style={styles.textButton}>Detail Simpanan</Text></TouchableOpacity>
                             </View>
@@ -88,9 +92,10 @@ const CoperationMemberSaving = ({ navigation }) => {
                                             <View>
                                                 <Text style={styles.text}>Setoran Simpanan Pokok</Text>
                                                 <Gap height={5} />
-                                                <Text style={styles.text}>
-                                                    Rp {item.historyNominal}
-                                                </Text>
+                                                <NumberFormat value={item.historyNominal || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                                                    <Text style={styles.text}>Rp {value}</Text>
+
+                                                } />
                                             </View>
                                         </View>
                                         <Text style={styles.textStatus(item.historyStatus)}>

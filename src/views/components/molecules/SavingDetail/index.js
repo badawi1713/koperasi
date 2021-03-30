@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import { Gap, TopNavbar } from '../..'
 import { ICSavingTotal, ICTotalBudget } from '../../../../assets'
 import { colors, fonts } from '../../../../utils'
+import NumberFormat from 'react-number-format';
 
 const SavingDetail = ({ showSavingDetailHandler, handleBackButtonClick }) => {
 
@@ -28,7 +29,10 @@ const SavingDetail = ({ showSavingDetailHandler, handleBackButtonClick }) => {
                         <Gap width={10} />
                         <Text style={styles.textTitle}>Simpanan Pokok</Text>
                     </View>
-                    <Text style={styles.textTitle}>Rp {dataSimpananPokok}</Text>
+                    <NumberFormat value={dataSimpananPokok || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                        <Text style={styles.textTitle}>Rp {value}</Text>
+
+                    } />
 
                 </View>
                 <Gap height={20} />
@@ -38,7 +42,10 @@ const SavingDetail = ({ showSavingDetailHandler, handleBackButtonClick }) => {
                         <Gap width={10} />
                         <Text style={styles.textTitle}>Simpanan Wajib</Text>
                     </View>
-                    <Text style={styles.textTitle}>Rp {dataSimpananWajib}</Text>
+                    <NumberFormat value={dataSimpananWajib || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                        <Text style={styles.textTitle}>Rp {value}</Text>
+
+                    } />
 
                 </View>
 
@@ -49,7 +56,10 @@ const SavingDetail = ({ showSavingDetailHandler, handleBackButtonClick }) => {
                         <Gap width={10} />
                         <Text style={styles.textTitle}>Simpanan Sukarela</Text>
                     </View>
-                    <Text style={styles.textTitle}>Rp {dataSimpananSukarela}</Text>
+                    <NumberFormat value={dataSimpananSukarela || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                        <Text style={styles.textTitle}>Rp {value}</Text>
+
+                    } />
 
                 </View>
                 <Gap height={40} />
@@ -60,8 +70,10 @@ const SavingDetail = ({ showSavingDetailHandler, handleBackButtonClick }) => {
                         <Gap width={10} />
                         <Text style={styles.textTitle}>Total Simpanan</Text>
                     </View>
-                    <Text style={styles.textTitle}>Rp {totalSimpanan}</Text>
+                    <NumberFormat value={totalSimpanan || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                        <Text style={styles.textTitle}>Rp {value}</Text>
 
+                    } />
                 </View>
 
             </ScrollView>

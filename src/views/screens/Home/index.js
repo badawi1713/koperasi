@@ -24,9 +24,7 @@ const Home = ({ navigation }) => {
   const dispatch = useDispatch();
   const homeReducer = useSelector(state => state.homeReducer);
   const userProfile = state.userProfile;
-  const { saldoBalance, loading, banner, category } = homeReducer;
-
-  console.log('user prof', userProfile)
+  const { saldoBalance, loading, category } = homeReducer;
 
   useEffect(() => {
     const getHomeData = () => {
@@ -50,6 +48,7 @@ const Home = ({ navigation }) => {
       <TopNavbar title="KSP CN" variant="link-home" />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
+          <Gap height={10} />
           <Input variant="search" />
           <Gap height={20} />
           <View style={styles.transactionInfo}>
@@ -62,7 +61,7 @@ const Home = ({ navigation }) => {
                     <Gap width={40} height={5} />
                     <ContentLoader paragraph={false} tWidth={100} active tHeight={10} />
                   </View> :
-                  <NumberFormat value={saldoBalance} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={(value, props) =>
+                  <NumberFormat value={saldoBalance || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
                     <Text style={styles.moneyText}>{value}</Text>
                   } />
 

@@ -22,8 +22,6 @@ const CoperationMemberSavingPayment = ({ navigation }) => {
     const savingCoperationMemberReducer = useSelector(state => state.savingCoperationMemberReducer);
     const { simpananWajib, simpananPokok, simpananSukarela } = savingCoperationMemberReducer;
 
-    console.log(simpananPokok, simpananSukarela, simpananWajib)
-
     const [time, setTime] = useState(7200);
 
     useEffect(() => {
@@ -139,12 +137,11 @@ const styles = StyleSheet.create({
         resizeMode: 'contain'
     },
     card: {
-        borderWidth: 1,
+        borderWidth: 0.6,
+        borderColor: colors.border,
         borderRadius: 6,
         paddingVertical: 10,
         paddingHorizontal: 20,
-        elevation: 1,
-        borderColor: colors.border
     },
     cardContent: {
         flexDirection: 'row',

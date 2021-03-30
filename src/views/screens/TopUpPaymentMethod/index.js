@@ -87,11 +87,8 @@ const styles = StyleSheet.create({
     paymentItem: {
         marginBottom: 20,
         alignItems: 'center',
-        elevation: 1,
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
+        borderWidth: 0.6,
+        borderColor: colors.border,
         paddingVertical: 20,
         borderRadius: 6
     },

@@ -66,7 +66,6 @@ const MemberRegisterForm = () => {
 
     const postMemberProfileHandler = async () => {
         const data = await createFormData(ktp, { nama, noKtp, tempatLahir, tanggalLahir, alamat });
-        console.log('test data', data)
         await dispatch(registerMemberProfile(data))
     };
 

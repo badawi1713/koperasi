@@ -7,7 +7,7 @@ import { changeSavingCoperationMember } from '../../../../store/actions'
 import { colors, fonts } from '../../../../utils'
 import { Button } from '../../atoms'
 
-const SavingTransfer = ({ showSavingTransferHandler, handleBackButtonClick }) => {
+const LoanTransfer = ({ showSavingTransferHandler, handleBackButtonClick }) => {
     const dispatch = useDispatch()
 
     const [isWajibError, setIsWajibError] = useState(false)
@@ -29,13 +29,13 @@ const SavingTransfer = ({ showSavingTransferHandler, handleBackButtonClick }) =>
 
     return (
         <SafeAreaView style={styles.container}>
-            <TopNavbar title='Setor Simpanan' back linkBack={showSavingTransferHandler} />
+            <TopNavbar title='Pinjam Dana' back linkBack={showSavingTransferHandler} />
             <View style={{ flex: 1, justifyContent: 'space-between' }}>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <Gap height={20} />
                     <View style={styles.content}>
                         <View style={styles.inputGroup}>
-                            <Text style={styles.label}>Nominal Simpanan Wajib</Text>
+                            <Text style={styles.label}>Nominal Pinjaman</Text>
                             <View style={styles.inputContainer}>
                                 <TextInput
                                     onChangeText={async (e) => {
@@ -59,7 +59,7 @@ const SavingTransfer = ({ showSavingTransferHandler, handleBackButtonClick }) =>
                         <Gap height={20} />
 
                         <View style={styles.inputGroup}>
-                            <Text style={styles.label}>Nominal Simpanan Pokok</Text>
+                            <Text style={styles.label}>Lama Angsuran (Bulan)</Text>
                             <View style={styles.inputContainer}>
                                 <TextInput
                                     onChangeText={async (e) => {
@@ -81,30 +81,6 @@ const SavingTransfer = ({ showSavingTransferHandler, handleBackButtonClick }) =>
                         </View>
                         <Gap height={20} />
 
-                        <View style={styles.inputGroup}>
-                            <Text style={styles.label}>Nominal Simpanan Sukarela</Text>
-                            <View style={styles.inputContainer}>
-                                <TextInput
-                                    onChangeText={async (e) => {
-                                        dispatch(changeSavingCoperationMember({ simpananSukarela: e }))
-                                        if (e > 0 && e < 20000) {
-                                            setIsSukarelaError(true)
-                                        } else {
-                                            setIsSukarelaError(false)
-                                        }
-                                    }}
-                                    style={styles.textInput}
-                                    placeholder="Minimal Rp 20.000"
-                                    keyboardType='number-pad'
-                                    placeholderTextColor={colors.text.grey1}
-
-                                />
-                            </View>
-                            {isSukarelaError && (
-                                <Text style={styles.errorText}>Minimal setoran Rp 20.000</Text>)}
-                        </View>
-                        <Gap height={20} />
-
                     </View>
                 </ScrollView>
 
@@ -114,7 +90,7 @@ const SavingTransfer = ({ showSavingTransferHandler, handleBackButtonClick }) =>
     )
 }
 
-export default SavingTransfer;
+export default LoanTransfer;
 
 const styles = StyleSheet.create({
     container: {

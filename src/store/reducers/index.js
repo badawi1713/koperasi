@@ -4,4 +4,5 @@ import registerReducer from './register'
 import topUpReducer from './topUp'
 import miscReducer from './misc'
 import savingCoperationMemberReducer from './savingCoperationMember'
-export { registerReducer, topUpReducer, profileReducer, homeReducer, miscReducer, savingCoperationMemberReducer }
+import loanCoperationMemberReducer from './loanCoperationMember'
+export { registerReducer, topUpReducer, profileReducer, homeReducer, miscReducer, savingCoperationMemberReducer, loanCoperationMemberReducer }

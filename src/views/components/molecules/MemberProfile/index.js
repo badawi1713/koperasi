@@ -9,11 +9,12 @@ import { ICSavings, IMGDefaultUser, ICTotalBudget } from '../../../../assets';
 import { colors, fonts } from '../../../../utils';
 import { Button, Gap } from '../../../components';
 import * as Navigation from '../../../../helpers/RootNavigation'
+import NumberFormat from 'react-number-format';
 
 const MemberProfile = () => {
     const profileReducer = useSelector(state => state.profileReducer)
 
-    const { transactionHistory, userProfile: { name, id } } = profileReducer;
+    const { transactionHistory, userProfile: { name, id }, totalSaving } = profileReducer;
 
     return (
         <View style={styles.container}>
@@ -31,7 +32,7 @@ const MemberProfile = () => {
                         <Button onPress={() => Navigation.navigate('CoperationMemberSaving')} fullWidth title='Simpanan' variant='primary' />
                     </View>
                     <View style={styles.buttonItem}>
-                        <Button fullWidth title='Pinjaman' />
+                        <Button onPress={() => Navigation.navigate('CoperationMemberLoan')} fullWidth title='Pinjaman' />
                     </View>
                 </View>
             </View>
@@ -42,9 +43,10 @@ const MemberProfile = () => {
                     <Gap width={10} />
                     <Text style={styles.text}>Total Simpanan</Text>
                 </View>
-                <Text style={styles.text}>
-                    Rp 125.000
-                </Text>
+                <NumberFormat value={totalSaving || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                    <Text style={styles.text}>Rp {value}</Text>
+
+                } />
             </View>
 
             <Gap height={20} />
@@ -67,9 +69,10 @@ const MemberProfile = () => {
                                     <View>
                                         <Text style={styles.text}>Setoran Simpanan</Text>
                                         <Gap height={5} />
-                                        <Text style={styles.text}>
-                                            Rp {item.historyNominal}
-                                        </Text>
+                                        <NumberFormat value={item.historyNominal || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                                            <Text style={styles.text}>Rp {value}</Text>
+
+                                        } />
                                     </View>
                                 </View>
                                 <Text style={styles.textStatus(item.historyStatus)}>

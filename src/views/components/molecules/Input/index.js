@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { ICSearch } from '../../../../assets/icons';
-import { colors } from '../../../../utils';
+import { colors, fonts } from '../../../../utils';
 import { Gap } from '../../atoms';
 
 const Input = ({ variant = 'text' }) => {
@@ -12,7 +12,7 @@ const Input = ({ variant = 'text' }) => {
       <View style={styles.container}>
         <ICSearch />
         <Gap width={5} />
-        <TextInput placeholder="Search ..." style={styles.textInput} />
+        <TextInput placeholder="Search ..." style={styles.textInput} placeholderTextColor={colors.text.grey1} />
       </View>
     );
   } else {
@@ -35,6 +35,8 @@ const styles = StyleSheet.create({
   },
   textInput: {
     fontSize: 16,
-    flex: 1
+    flex: 1,
+    fontFamily: fonts.primary.normal,
+    color: colors.black
   },
 });

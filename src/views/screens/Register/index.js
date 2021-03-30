@@ -28,8 +28,6 @@ const Register = ({ navigation }) => {
     setVisiblePassword(!visiblePassword);
   };
 
-  console.log('res', phoneNumber)
-
   const visiblePasswordConfirmHandler = () => {
     setVisiblePasswordConfirm(!visiblePasswordConfirm);
   };

@@ -17,7 +17,7 @@ export const getProfile = () => {
                 payload: {
                     loading: false,
                     transactionHistory: response.data.data.riwayatTransaksi,
-                    savingTotal: response.data.data.totalSimpanan,
+                    totalSaving: response.data.data.totalSimpanan,
                     memberStatus: response.data.data.statusAnggota
                 }
             })
@@ -35,7 +35,6 @@ export const getProfile = () => {
 }
 
 export const registerMemberProfile = (data) => {
-    console.log('dataqqq', data)
     return async (dispatch,) => {
         dispatch({
             type: SET_PROFILE,

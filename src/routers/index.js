@@ -5,6 +5,7 @@ import { BottomTab } from '../views/components';
 import {
   CoperationAccount,
   CoperationMember,
+  CoperationMemberLoan,
   CoperationMemberSaving, CoperationMemberSavingPayment,
   CoperationMemberSavingPaymentMethod,
   EWallet,
@@ -105,6 +106,11 @@ const Router = () => {
         options={{ headerShown: false }}
         name="CoperationMemberSavingPaymentMethod"
         component={CoperationMemberSavingPaymentMethod}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="CoperationMemberLoan"
+        component={CoperationMemberLoan}
       />
 
     </Stack.Navigator>

@@ -5,6 +5,7 @@ import { ICEWalletInActive } from '../../../assets'
 import { changeTopUp } from '../../../store/actions/topUp'
 import { colors, fonts } from '../../../utils'
 import { Button, Gap, TopNavbar } from '../../components'
+import NumberFormat from 'react-number-format';
 
 const TopUp = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -29,7 +30,9 @@ const TopUp = ({ navigation }) => {
                 <View>
                     <Text style={styles.header}>Saldo Wallet</Text>
                     <Gap height={5} />
-                    <Text style={styles.text}>Rp {saldoBalance}</Text>
+
+                    <NumberFormat value={saldoBalance || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                        <Text style={styles.text}>Rp {value}</Text>} />
                 </View>
             </View>
             <Gap height={18} />
@@ -38,7 +41,7 @@ const TopUp = ({ navigation }) => {
                     <Text style={styles.header}>Nominal Top Up</Text>
                     <Gap height={18} />
                     <Text style={styles.label}>Masukkan nominal top up di sini</Text>
-                    <TextInput keyboardType='decimal-pad' onChangeText={(e) => changeSaldoHandler(e)} placeholder='Minimal Rp 20.000' style={styles.textInput} />
+                    <TextInput keyboardType='decimal-pad' onChangeText={(e) => changeSaldoHandler(e)} placeholder='Minimal Rp 20.000' placeholderTextColor={colors.text.grey1} style={styles.textInput} />
                 </View>
                 <View style={{ paddingHorizontal: 18 }}>
                     <Button disabled={saldoNominal < 20000} title='Top Up' variant={saldoNominal < 20000 ? 'disabled' : 'primary'} onPress={() => navigation.navigate('TopUpPaymentMethod')} />
@@ -81,9 +84,11 @@ const styles = StyleSheet.create({
         padding: 18,
     },
     textInput: {
-        backgroundColor: colors.background.grey4,
+        backgroundColor: colors.background.grey5,
         borderRadius: 6,
         paddingHorizontal: 18,
-        marginTop: 6
+        marginTop: 6,
+        fontFamily: fonts.primary.normal,
+        color: colors.black
     }
 })
