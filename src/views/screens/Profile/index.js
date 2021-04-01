@@ -15,7 +15,6 @@ const Profile = ({ navigation }) => {
   const profileReducer = useSelector(state => state.profileReducer);
   const { userProfile: { name, email, noTelp } } = profileReducer
 
-  console.log('red', profileReducer)
   return (
     <SafeAreaView style={styles.container}>
       <TopNavbar title="Akun" />

@@ -6,13 +6,14 @@ import { navigate } from '../../../../helpers/RootNavigation'
 import { changeSavingCoperationMember } from '../../../../store/actions'
 import { colors, fonts } from '../../../../utils'
 import { Button } from '../../atoms'
+import { Picker } from '@react-native-picker/picker';
 
 const LoanTransfer = ({ showSavingTransferHandler, handleBackButtonClick }) => {
     const dispatch = useDispatch()
 
     const [isWajibError, setIsWajibError] = useState(false)
-    const [isPokokError, setIsPokokError] = useState(false)
-    const [isSukarelaError, setIsSukarelaError] = useState(false)
+    const [month, setMonth] = useState(null)
+
 
     const savingCoperationMemberReducer = useSelector(state => state.savingCoperationMemberReducer)
 
@@ -59,25 +60,19 @@ const LoanTransfer = ({ showSavingTransferHandler, handleBackButtonClick }) => {
                         <Gap height={20} />
 
                         <View style={styles.inputGroup}>
-                            <Text style={styles.label}>Lama Angsuran (Bulan)</Text>
-                            <View style={styles.inputContainer}>
-                                <TextInput
-                                    onChangeText={async (e) => {
-                                        dispatch(changeSavingCoperationMember({ simpananPokok: e }))
-                                        if (e > 0 && e < 20000) {
-                                            setIsPokokError(true)
-                                        } else {
-                                            setIsPokokError(false)
-                                        }
-                                    }}
-                                    style={styles.textInput}
-                                    placeholder="Minimal Rp 20.000"
-                                    keyboardType='number-pad'
-                                    placeholderTextColor={colors.text.grey1}
-                                />
-                            </View>
-                            {isPokokError && (
-                                <Text style={styles.errorText}>Minimal setoran Rp 20.000</Text>)}
+                            <Picker
+                                itemStyle={{ color: 'red' }}
+                                style={styles.inputContainer}
+                                selectedValue={month}
+                                onValueChange={(itemValue, itemIndex) =>
+                                    setMonth(itemValue)
+                                }>
+                                <Picker.Item label="1" value={1} />
+                                <Picker.Item label="3" value={3} />
+                                <Picker.Item label="6" value={6} />
+                                <Picker.Item label="12" value={12} />
+                                <Picker.Item label="24" value={24} />
+                            </Picker>
                         </View>
                         <Gap height={20} />
 
@@ -125,6 +120,16 @@ const styles = StyleSheet.create({
     errorText: {
         fontFamily: fonts.primary.normal,
         color: colors.text.danger
+    },
+    inputAndroid: {
+        fontSize: 14,
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+        borderWidth: 1,
+        borderColor: 'blue',
+        borderRadius: 8,
+        color: 'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
     },
 
 })

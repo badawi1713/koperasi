@@ -4,7 +4,7 @@ const initialState = {
     loading: true,
     error: false,
     errorMessage: "",
-    saldoBalance: [],
+    saldoBalance: 0,
     banner: [],
     category: []
 };

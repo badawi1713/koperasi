@@ -5,6 +5,12 @@ const initialState = {
     error: false,
     errorMessage: "",
     userProfile: [],
+    memberProfile: {
+        nama: "",
+        ktp: [],
+        noKtp: "",
+        tempatLahir: "", tanggalLahir: "", alamat: ""
+    },
     transactionHistory: [],
     memberStatus: [],
     totalSaving: []
