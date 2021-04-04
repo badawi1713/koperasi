@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { BackHandler, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import SelectPicker from 'react-native-form-select-picker'
 import { useDispatch, useSelector } from 'react-redux'
 import { Gap, TopNavbar } from '../..'
 import { navigate } from '../../../../helpers/RootNavigation'
 import { changeSavingCoperationMember } from '../../../../store/actions'
 import { colors, fonts } from '../../../../utils'
 import { Button } from '../../atoms'
-import { Picker } from '@react-native-picker/picker';
 
-const LoanTransfer = ({ showSavingTransferHandler, handleBackButtonClick }) => {
+const options = [{ "label": "1 Bulan", value: 1 }, { "label": "3 Bulan", value: 3 }, { "label": "6 Bulan", value: 6 }, { "label": "12 Bulan", value: 12 }, { "label": "24 Bulan", value: 24 }];
+
+const LoanTransfer = ({ showLoanTransferHandler, handleBackButtonClick }) => {
     const dispatch = useDispatch()
 
     const [isWajibError, setIsWajibError] = useState(false)
@@ -30,7 +32,7 @@ const LoanTransfer = ({ showSavingTransferHandler, handleBackButtonClick }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <TopNavbar title='Pinjam Dana' back linkBack={showSavingTransferHandler} />
+            <TopNavbar title='Pinjam Dana' back linkBack={showLoanTransferHandler} />
             <View style={{ flex: 1, justifyContent: 'space-between' }}>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <Gap height={20} />
@@ -60,21 +62,28 @@ const LoanTransfer = ({ showSavingTransferHandler, handleBackButtonClick }) => {
                         <Gap height={20} />
 
                         <View style={styles.inputGroup}>
-                            <Picker
-                                itemStyle={{ color: 'red' }}
-                                style={styles.inputContainer}
-                                selectedValue={month}
-                                onValueChange={(itemValue, itemIndex) =>
-                                    setMonth(itemValue)
-                                }>
-                                <Picker.Item label="1" value={1} />
-                                <Picker.Item label="3" value={3} />
-                                <Picker.Item label="6" value={6} />
-                                <Picker.Item label="12" value={12} />
-                                <Picker.Item label="24" value={24} />
-                            </Picker>
+                            <Text style={styles.label}>Lama Angsuran</Text>
+                            <SelectPicker
+                                doneButtonTextStyle={{ color: colors.text.green1, fontFamily: fonts.primary[600] }}
+                                onSelectedStyle={styles.textInput}
+                                doneButtonText='Pilih'
+                                onValueChange={(value) => {
+                                    setMonth(value);
+                                }}
+                                placeholder='Pilih lama angsuran'
+                                style={styles.selectContainer}
+                                selected={month}
+                                placeholderStyle={{ color: colors.text.grey1, fontFamily: fonts.primary.normal }}
+                            >
+
+                                {Object.values(options).map((item) => (
+                                    <SelectPicker.Item label={item.label} value={item.value} key={item.label} />
+                                ))}
+
+                            </SelectPicker>
+
                         </View>
-                        <Gap height={20} />
+
 
                     </View>
                 </ScrollView>
@@ -112,24 +121,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: colors.white
     },
+    selectContainer: {
+        borderWidth: 1,
+        borderColor: colors.border,
+        borderRadius: 4,
+        paddingHorizontal: 12,
+        paddingVertical: 14,
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: colors.white
+    },
     textInput: {
         flex: 1,
         color: colors.black,
-        fontFamily: fonts.primary.normal
+        fontFamily: fonts.primary.normal,
+        fontSize: 14
     },
     errorText: {
         fontFamily: fonts.primary.normal,
         color: colors.text.danger
-    },
-    inputAndroid: {
-        fontSize: 14,
-        paddingHorizontal: 10,
-        paddingVertical: 8,
-        borderWidth: 1,
-        borderColor: 'blue',
-        borderRadius: 8,
-        color: 'black',
-        paddingRight: 30, // to ensure the text is never behind the icon
     },
 
 })

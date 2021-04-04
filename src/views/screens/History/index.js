@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   text: {
-    fontSize: 18,
+    fontSize: 16,
     color: colors.text.header,
     textAlign: 'center',
     fontFamily: fonts.primary[600],
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   buttonGroup: {
     flex: 1,
     alignItems: 'center',
-    padding: 18,
+    padding: 16,
     flexDirection: 'row',
     justifyContent: 'center'
   },
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   transactionAmount: {
     color: colors.text.primary,
     fontFamily: fonts.primary[700],
-    fontSize: 18
+    fontSize: 14
   },
   transactionTime: {
     paddingHorizontal: 16,

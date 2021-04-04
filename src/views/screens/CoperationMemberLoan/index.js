@@ -32,7 +32,7 @@ const CoperationMemberLoan = ({ navigation }) => {
         return getSavingData()
     }, [dispatch])
 
-    const showSavingDetailHandler = () => {
+    const showLoanDetailHandler = () => {
         dispatch(changeMisc({
             showLoanDetail: !showLoanDetail,
             showLoanTransfer: false
@@ -46,7 +46,7 @@ const CoperationMemberLoan = ({ navigation }) => {
         }))
     }
 
-    if (showLoanDetail) { return <SavingDetail handleBackButtonClick={handleBackButtonClick} showSavingDetailHandler={showSavingDetailHandler} /> } else if (showLoanTransfer) {
+    if (showLoanDetail) { return <SavingDetail handleBackButtonClick={handleBackButtonClick} showLoanDetailHandler={showLoanDetailHandler} /> } else if (showLoanTransfer) {
         return <LoanTransfer handleBackButtonClick={handleBackButtonClick} showLoanTransferHandler={showLoanTransferHandler} />
     }
     else {
@@ -66,7 +66,7 @@ const CoperationMemberLoan = ({ navigation }) => {
 
                                 } />
                                 <Gap height={5} />
-                                <TouchableOpacity onPress={showSavingDetailHandler}><Text style={styles.textButton}>Detail Pinjaman</Text></TouchableOpacity>
+                                <TouchableOpacity ><Text style={styles.textButton}>Detail Pinjaman</Text></TouchableOpacity>
                             </View>
                         </View>
                         <View style={styles.buttonGroup}>

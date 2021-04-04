@@ -37,8 +37,6 @@ const MemberRegisterForm = () => {
     const { memberProfile, userProfile: { name } } = profileReducer;
     const { nama, ktp, noKtp, tempatLahir, tanggalLahir, alamat } = memberProfile;
 
-    console.log('test', memberProfile)
-
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -91,6 +89,7 @@ const MemberRegisterForm = () => {
                             style={styles.textInput}
                             placeholder="Nama Lengkap"
                             keyboardType="name-phone-pad"
+                            value={nama}
                             onChangeText={(e) => dispatch(changeProfile({ memberProfile: { ...memberProfile, nama: e } }))}
                         />
                     </View>
@@ -107,6 +106,7 @@ const MemberRegisterForm = () => {
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.textInput}
+                            value={noKtp}
                             placeholder="Nomor KTP"
                             keyboardType='number-pad'
                             onChangeText={(e) => dispatch(changeProfile({ memberProfile: { ...memberProfile, noKtp: e } }))}
@@ -122,6 +122,7 @@ const MemberRegisterForm = () => {
                                 style={styles.textInput}
                                 placeholder="Tempat Lahir"
                                 keyboardType="name-phone-pad"
+                                value={tempatLahir}
                                 onChangeText={(e) => dispatch(changeProfile({ memberProfile: { ...memberProfile, tempatLahir: e } }))}
                             />
                         </View>
@@ -132,6 +133,7 @@ const MemberRegisterForm = () => {
                             <ICalendar />
                             <Gap width={5} />
                             <TextInput
+                                value={tanggalLahir}
                                 placeholder="DD-MM-YYYY"
                                 editable={false}
                             />
@@ -144,6 +146,7 @@ const MemberRegisterForm = () => {
                     <View style={styles.inputAddressContainer}>
                         <TextInput
                             style={styles.textInput}
+                            value={alamat}
                             placeholder="Alamat"
                             keyboardType="name-phone-pad"
                             multiline={true}
