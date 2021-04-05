@@ -5,6 +5,7 @@ import ICBackspace from './backspace.svg';
 import ICalendar from './calendar.svg';
 import ICCart from './cart.svg';
 import ICCopy from './copy.svg';
+import ICDebt from './debt.svg';
 import ICEmail from './email.svg';
 import ICFilter from './filter.svg';
 import ICFlashOff from './flash-off.svg';
@@ -16,6 +17,7 @@ import ICHomeActive from './home-active.svg';
 import ICHomeInActive from './home-inactive.svg';
 import ICImage from './image.svg';
 import ICInvisible from './invisible.svg';
+import ICLoan from './loan.svg';
 import ICNotification from './notification.svg';
 import ICPhoneData from './phone-data.svg';
 import ICPhone from './phone.svg';
@@ -40,9 +42,9 @@ import ICVisible from './visible.svg';
 import ICEWalletActive from './wallet-active.svg';
 import ICEWalletInActive from './wallet-inactive.svg';
 import ICWithdraw from './withdraw.svg';
-import ICLoan from './loan.svg';
 
 export {
+  ICDebt,
   ICLoan,
   ICSavingTotal,
   ICalendar,

@@ -5,6 +5,8 @@ import { Api } from '../helpers/api';
 import { replace } from '../helpers/RootNavigation';
 import createDataContext from './createDataContext';
 
+import { Alert } from "react-native";
+
 const showMessage = () => {
   ToastAndroid.show("Sesi login berakhir, silakan login kembali.", ToastAndroid.SHORT);
 };
@@ -72,10 +74,20 @@ const signin = (dispatch) => async (data) => {
 
     replace('MainApp');
   } catch (err) {
-    console.log('err', err);
+    Alert.alert(
+      "Proses Login Gagal",
+      err.response.data.rd,
+      [
+        {
+          text: "Tutup",
+          style: "cancel",
+        },
+      ],
+
+    );
     dispatch({
       type: 'add_error',
-      payload: 'Something went wrong with sign in',
+      payload: 'Terjadi kesalahan ketika melakukan login',
     });
   }
 };

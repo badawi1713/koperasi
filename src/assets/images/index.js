@@ -14,8 +14,10 @@ import IMGBanner2 from './img-banner-2.png'
 import IMGBanner3 from './img-banner-3.png'
 import IMGCashOnDelivery from './img-cod.png'
 import IMGDefaultUser from './img-default-user.png'
+import IMGPending from './img-pending.svg';
 
 export {
+  IMGPending,
   IMGDefaultUser,
   IMGCashOnDelivery,
   IMGBanner1,

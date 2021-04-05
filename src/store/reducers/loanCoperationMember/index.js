@@ -4,13 +4,10 @@ const initialState = {
     loading: false,
     error: false,
     errorMessage: "",
-    dataSimpananPokok: 0,
-    dataSimpananWajib: 0,
-    dataSimpananSukarela: 0,
-    simpananPokok: "",
-    simpananWajib: "",
-    simpananSukarela: "",
-    totalSimpanan: 0,
+    loanAmount: 0,
+    month: 0,
+    loanHistory: [],
+    data: {},
     viaPayment: "",
     paymentMethodData: []
 };

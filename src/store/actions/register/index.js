@@ -98,7 +98,7 @@ export const postRegister = () => {
                     },
                 });
                 Alert.alert(
-                    "Terjadi Kesalahan",
+                    "Proses Registrasi Gagal",
                     response.error,
                     [
                         {

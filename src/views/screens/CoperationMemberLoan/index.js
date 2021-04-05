@@ -2,18 +2,16 @@ import React, { useEffect } from 'react'
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import NumberFormat from 'react-number-format'
 import { useDispatch, useSelector } from 'react-redux'
-import { ICLoan, ICSavings } from '../../../assets'
-import { changeMisc, getSavingCoperationMemberData } from '../../../store/actions'
+import { ICLoan, ICDebt } from '../../../assets'
+import { changeMisc, getLoanCoperationMemberData } from '../../../store/actions'
 import { colors, fonts } from '../../../utils'
 import { Button, Gap, SavingDetail, LoanTransfer, TopNavbar } from '../../components'
 
 const CoperationMemberLoan = ({ navigation }) => {
     const dispatch = useDispatch()
-    const profileReducer = useSelector(state => state.profileReducer)
     const miscReducer = useSelector(state => state.miscReducer)
-    const savingCoperationMemberReducer = useSelector(state => state.savingCoperationMemberReducer)
-    const { totalSimpanan } = savingCoperationMemberReducer;
-    const { transactionHistory } = profileReducer
+    const loanCoperationMemberReducer = useSelector(state => state.loanCoperationMemberReducer)
+    const { data, loanHistory } = loanCoperationMemberReducer;
     const { showLoanDetail, showLoanTransfer } = miscReducer
 
     const handleBackButtonClick = () => {
@@ -25,11 +23,11 @@ const CoperationMemberLoan = ({ navigation }) => {
     }
 
     useEffect(() => {
-        const getSavingData = () => {
-            dispatch(getSavingCoperationMemberData())
+        const getLoanData = () => {
+            dispatch(getLoanCoperationMemberData())
         }
 
-        return getSavingData()
+        return getLoanData()
     }, [dispatch])
 
     const showLoanDetailHandler = () => {
@@ -61,7 +59,7 @@ const CoperationMemberLoan = ({ navigation }) => {
                             <Gap width={10} />
                             <View>
                                 <Text style={styles.textTitle}>Total Pinjaman</Text>
-                                <NumberFormat value={totalSimpanan || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                                <NumberFormat value={data && data.jumlahTenor || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
                                     <Text style={styles.textTitle}>Rp {value}</Text>
 
                                 } />
@@ -77,31 +75,45 @@ const CoperationMemberLoan = ({ navigation }) => {
                         <Text style={styles.text}>Riwayat Pinjaman</Text>
                     </View>
 
-                    {transactionHistory.length !== 0 ?
+                    {loanHistory.length === 0 ?
                         <>
                             <Gap height={30} />
                             <Text style={[styles.textTitle, { textAlign: 'center' }]}>Tidak Ada Riwayat Pinjaman</Text>
                         </> :
                         <ScrollView showsVerticalScrollIndicator={false}>
-                            {transactionHistory.map((item, index) => (
+                            {loanHistory.map((item, index) => (
                                 <View key={index}>
                                     <View style={styles.section}>
                                         <View style={styles.row}>
-                                            <ICSavings width={28} height={28} />
+                                            <ICDebt width={28} height={28} />
                                             <Gap width={10} />
-                                            <View>
-                                                <Text style={styles.text}>{item.historyTitle || "Setoran"}</Text>
+                                            <View style={{ flex: 1, }}>
+                                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flex: 1 }}>
+                                                    <Text style={styles.text}>Jumlah Pokok Pinjaman</Text>
+                                                    <NumberFormat value={item.jumlahPokokPinjam || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                                                        <Text>Rp {value}</Text>
+                                                    } />
+
+                                                </View>
                                                 <Gap height={5} />
-                                                <Text style={styles.text}>
-                                                    Rp {item.historyNominal}
-                                                </Text>
+                                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flex: 1 }}>
+                                                    <Text style={styles.text}>Sisa Pokok Pinjaman</Text>
+                                                    <NumberFormat value={item.sisaPokokPinjam || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                                                        <Text>Rp {value}</Text>
+                                                    } />
+
+                                                </View>
+                                                <Gap height={5} />
+                                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flex: 1 }}>
+                                                    <Text style={styles.text}>Jatuh Tempo</Text>
+                                                    <Text>12-05-2021</Text>
+
+                                                </View>
+                                                <Gap height={10} />
+                                                <Text style={styles.status}>{item.status}</Text>
                                             </View>
                                         </View>
-                                        <Text style={styles.textStatus(item.historyStatus)}>
-                                            {item.historyStatus}
-                                        </Text>
                                     </View>
-                                    <Gap height={10} />
                                 </View>
 
                             ))}
@@ -139,7 +151,6 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: 'row',
-        alignItems: 'center'
     },
     buttonGroup: {
         width: 90
@@ -148,6 +159,12 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: colors.black,
         fontFamily: fonts.primary[600],
+    },
+    status: {
+        fontSize: 14,
+        color: colors.black,
+        fontFamily: fonts.primary.normal,
+        textAlign: 'right'
     },
     textStatus: (status) => ({
         fontSize: 14,

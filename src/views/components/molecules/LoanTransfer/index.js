@@ -4,7 +4,7 @@ import SelectPicker from 'react-native-form-select-picker'
 import { useDispatch, useSelector } from 'react-redux'
 import { Gap, TopNavbar } from '../..'
 import { navigate } from '../../../../helpers/RootNavigation'
-import { changeSavingCoperationMember } from '../../../../store/actions'
+import { changeLoanCoperationMember, postLoanCoperationMemberTransfer } from '../../../../store/actions'
 import { colors, fonts } from '../../../../utils'
 import { Button } from '../../atoms'
 
@@ -13,13 +13,13 @@ const options = [{ "label": "1 Bulan", value: 1 }, { "label": "3 Bulan", value: 
 const LoanTransfer = ({ showLoanTransferHandler, handleBackButtonClick }) => {
     const dispatch = useDispatch()
 
-    const [isWajibError, setIsWajibError] = useState(false)
-    const [month, setMonth] = useState(null)
+    const [minLoanError, setMinLoanError] = useState(false)
+    const [maxLoanError, setMaxLoanError] = useState(false)
+    const [minMonthError, setMinMonthError] = useState(false)
 
+    const loanCoperationMemberReducer = useSelector(state => state.loanCoperationMemberReducer)
 
-    const savingCoperationMemberReducer = useSelector(state => state.savingCoperationMemberReducer)
-
-    const { simpananWajib, simpananPokok, simpananSukarela } = savingCoperationMemberReducer
+    const { loanAmount, month } = loanCoperationMemberReducer
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
@@ -28,7 +28,7 @@ const LoanTransfer = ({ showLoanTransferHandler, handleBackButtonClick }) => {
         };
     }, []);
 
-    const savingTransferCondition = simpananWajib > 0 && simpananWajib < 20000 || simpananPokok > 0 && simpananPokok < 20000 || simpananSukarela > 0 && simpananSukarela < 20000 || ((!simpananPokok || simpananPokok === 0) && (!simpananWajib || simpananWajib === 0) && (!simpananSukarela || simpananSukarela === 0))
+    const loanTransferCondition = loanAmount >= 0 && loanAmount < 1000000 || month === 0
 
     return (
         <SafeAreaView style={styles.container}>
@@ -42,22 +42,29 @@ const LoanTransfer = ({ showLoanTransferHandler, handleBackButtonClick }) => {
                             <View style={styles.inputContainer}>
                                 <TextInput
                                     onChangeText={async (e) => {
-                                        dispatch(changeSavingCoperationMember({ simpananWajib: e }))
-                                        if (e > 0 && e < 20000) {
-                                            setIsWajibError(true)
-                                        } else {
-                                            setIsWajibError(false)
+                                        dispatch(changeLoanCoperationMember({ loanAmount: e }))
+                                        if (e >= 0 && e < 1000000) {
+                                            setMinLoanError(true)
+                                        } else if (e >= 10000000) {
+                                            setMaxLoanError(true)
+                                        }
+                                        else {
+                                            setMinLoanError(false)
+                                            setMaxLoanError(false)
                                         }
                                     }}
+                                    value={loanAmount.toString()}
                                     style={styles.textInput}
-                                    placeholder="Minimal Rp 20.000"
+                                    placeholder="Minimal Rp 1.000.000"
                                     keyboardType='number-pad'
                                     placeholderTextColor={colors.text.grey1}
 
                                 />
                             </View>
-                            {isWajibError && (
-                                <Text style={styles.errorText}>Minimal setoran Rp 20.000</Text>)}
+                            {minLoanError && (
+                                <Text style={styles.errorText}>Minimal pinjaman dana Rp 1.000.000</Text>)}
+                            {maxLoanError && (
+                                <Text style={styles.errorText}>Maksimal pinjaman dana Rp 10.000.000</Text>)}
                         </View>
                         <Gap height={20} />
 
@@ -68,7 +75,12 @@ const LoanTransfer = ({ showLoanTransferHandler, handleBackButtonClick }) => {
                                 onSelectedStyle={styles.textInput}
                                 doneButtonText='Pilih'
                                 onValueChange={(value) => {
-                                    setMonth(value);
+                                    dispatch(changeLoanCoperationMember({ month: value }))
+                                    if (value === 0) {
+                                        setMinMonthError(true)
+                                    } else {
+                                        setMinMonthError(false)
+                                    }
                                 }}
                                 placeholder='Pilih lama angsuran'
                                 style={styles.selectContainer}
@@ -81,6 +93,8 @@ const LoanTransfer = ({ showLoanTransferHandler, handleBackButtonClick }) => {
                                 ))}
 
                             </SelectPicker>
+                            {minMonthError && (
+                                <Text style={styles.errorText}>Minimal lama angsuran 1 bulan</Text>)}
 
                         </View>
 
@@ -88,7 +102,7 @@ const LoanTransfer = ({ showLoanTransferHandler, handleBackButtonClick }) => {
                     </View>
                 </ScrollView>
 
-                <Button disabled={savingTransferCondition} onPress={() => { navigate('CoperationMemberSavingPaymentMethod') }} rounded={false} fullWidth title='Lanjutkan' variant={savingTransferCondition ? 'disabled' : 'primary'} />
+                <Button disabled={loanTransferCondition} onPress={() => { dispatch(postLoanCoperationMemberTransfer()) }} rounded={false} fullWidth title='Lanjutkan' variant={loanTransferCondition ? 'disabled' : 'primary'} />
             </View>
         </SafeAreaView>
     )
