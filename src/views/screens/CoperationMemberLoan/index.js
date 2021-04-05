@@ -90,7 +90,7 @@ const CoperationMemberLoan = ({ navigation }) => {
                                             <ICSavings width={28} height={28} />
                                             <Gap width={10} />
                                             <View>
-                                                <Text style={styles.text}>Setoran Simpanan Pokok</Text>
+                                                <Text style={styles.text}>{item.historyTitle || "Setoran"}</Text>
                                                 <Gap height={5} />
                                                 <Text style={styles.text}>
                                                     Rp {item.historyNominal}

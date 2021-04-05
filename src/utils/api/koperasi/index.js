@@ -33,7 +33,7 @@ export function ApiGetRequest(url, data = {}) {
         })
         .catch((error) => {
             return {
-                error: (error.response && error.response.data.message) || error,
+                error: (error.response && error.response.data.rd) || error,
             };
         });
 }
@@ -51,7 +51,7 @@ export function ApiGetUploadFile(url, data = {}, callbackUpload = () => { }) {
         })
         .catch((error) => {
             return {
-                error: (error.response && error.response.data.message) || error,
+                error: (error.response && error.response.data.rd) || error,
             };
         });
 }
@@ -68,7 +68,7 @@ export function ApiPostMultipart(url, data = {}) {
         })
         .catch((error) => {
             return {
-                error: (error.response && error.response.data.message) || error,
+                error: (error.response && error.response.data.rd) || error,
             };
         });
 }
@@ -82,8 +82,11 @@ export const ApiPostRequest = (url, data = {}) => {
             return responseJson;
         })
         .catch((error) => {
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
             return {
-                error: (error.response && error.response.data.message) || error,
+                error: (error.response && error.response.data.rd) || error,
             };
         });
 };
@@ -96,7 +99,7 @@ export const ApiPutRequest = (url, data = {}) => {
         })
         .catch((error) => {
             return {
-                error: (error.response && error.response.data.message) || error,
+                error: (error.response && error.response.data.rd) || error,
             };
         });
 };
@@ -109,7 +112,7 @@ export const ApiDeleteRequest = (url, data = {}) => {
         })
         .catch((error) => {
             return {
-                error: (error.response && error.response.data.message) || error,
+                error: (error.response && error.response.data.rd) || error,
             };
         });
 };

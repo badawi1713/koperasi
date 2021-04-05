@@ -21,7 +21,7 @@ const RegisterVerification = ({ navigation }) => {
 
   const { phoneNumber, errorMessage, error, codeText } = register
 
-  const [time, setTime] = useState(10);
+  const [time, setTime] = useState(180);
 
   useEffect(() => {
     if (time === 0) {

@@ -5,7 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   Text, TextInput,
-  TouchableOpacity, View
+  TouchableOpacity, View, Alert
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { ICInvisible, ICVisible } from '../../../assets';
@@ -22,7 +22,7 @@ const Register = ({ navigation }) => {
 
   const registerReducer = useSelector(state => state.registerReducer)
 
-  const { loading, phoneNumber } = registerReducer
+  const { loading, error } = registerReducer
 
   const visiblePasswordHandler = () => {
     setVisiblePassword(!visiblePassword);

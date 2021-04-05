@@ -32,12 +32,10 @@ const Profile = ({ navigation }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.buttonGroup}>
-          <View style={styles.buttonItem}>
-            <Button fullWidth title="Anggota Koperasi" onPress={() => navigation.navigate('CoperationMember')} variant="primary" />
-          </View>
-          <View style={styles.buttonItem}>
+          <Button fullWidth title="Anggota Koperasi" onPress={() => navigation.navigate('CoperationMember')} variant="primary" />
+          {/* <View style={styles.buttonItem}>
             <Button fullWidth title="Akun Koperasi" onPress={() => navigation.navigate('CoperationAccount')} />
-          </View>
+          </View> */}
         </View>
         <View style={styles.miscSection}>
           <View style={styles.miscGroup}>
@@ -70,7 +68,7 @@ const Profile = ({ navigation }) => {
             onPress={signout}
             title="Keluar"
             fullWidth
-            variant="primary"
+            variant="outlined"
           />
         </View>
       </ScrollView>

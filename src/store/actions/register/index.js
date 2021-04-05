@@ -1,6 +1,7 @@
 import { replace } from '../../../helpers/RootNavigation';
 import { ApiGetRequest, ApiPostRequest } from '../../../utils/api/koperasi';
 import { SET_REGISTER } from '../../constants';
+import { Alert } from "react-native";
 
 export const postOTP = (code) => {
     return async (dispatch, getState) => {
@@ -83,27 +84,52 @@ export const postRegister = () => {
             "passwordConf": passwordConfirm
         }
         try {
-            await ApiPostRequest(
+            const response = await ApiPostRequest(
                 `/mobile/register`, data
             );
 
-            dispatch({
-                type: SET_REGISTER,
-                payload: {
-                    loading: false,
-                    error: false
-                },
-            });
+            if (response.error) {
+                dispatch({
+                    type: SET_REGISTER,
+                    payload: {
+                        loading: false,
+                        error: true,
+                        errorMessage: response.error
+                    },
+                });
+                Alert.alert(
+                    "Terjadi Kesalahan",
+                    response.error,
+                    [
+                        {
+                            text: "Tutup",
+                            style: "cancel",
+                        },
+                    ],
 
-            await ApiGetRequest(`/mobile/register/sendOtp/${phoneNumber}`)
+                );
+            } else {
+                dispatch({
+                    type: SET_REGISTER,
+                    payload: {
+                        loading: false,
+                        error: false,
+                        errorMessage: ""
 
-            await replace("RegisterVerification");
+                    },
+                });
+
+                await ApiGetRequest(`/mobile/register/sendOtp/${phoneNumber}`)
+
+                await replace("RegisterVerification");
+            }
         } catch (error) {
             dispatch({
                 type: SET_REGISTER,
                 payload: {
                     loading: false,
-                    error: true
+                    error: true,
+                    errorMessage: ""
                 },
             });
         }
