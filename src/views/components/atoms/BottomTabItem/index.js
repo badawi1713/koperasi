@@ -14,7 +14,13 @@ import {
   ICStoreInActive,
 } from '../../../../assets/icons';
 import { colors, fonts } from '../../../../utils';
+import { useDispatch } from 'react-redux'
+import { getSaldoBalance } from '../../../../store/actions/home';
+
+
 const BottomTabItem = ({ title, active, onPress, onLongPress, indexActive, navigation }) => {
+  const dispatch = useDispatch()
+
   const Icon = () => {
     if (title === 'Home') {
       return active ? <ICHomeActive /> : <ICHomeInActive />;
@@ -61,8 +67,19 @@ const BottomTabItem = ({ title, active, onPress, onLongPress, indexActive, navig
     }
     return (
       <TouchableOpacity
-        onPress={onPress}
-        onLongPress={onLongPress}
+        onPress={() => {
+          if (title === 'Home') {
+            onPress()
+            dispatch(getSaldoBalance())
+          } else { onPress() }
+        }}
+        onLongPress={() => {
+          if (title === 'Home') {
+            onLongPress()
+            dispatch(getSaldoBalance())
+          } else { onLongPress() }
+        }
+        }
         style={styles.container}>
         <Icon />
         <Text style={styles.text(active)}>{title}</Text>
@@ -72,8 +89,19 @@ const BottomTabItem = ({ title, active, onPress, onLongPress, indexActive, navig
 
   return (
     <TouchableOpacity
-      onPress={onPress}
-      onLongPress={onLongPress}
+      onPress={() => {
+        if (title === 'Home') {
+          onPress()
+          dispatch(getSaldoBalance())
+        } else { onPress() }
+      }}
+      onLongPress={() => {
+        if (title === 'Home') {
+          onLongPress()
+          dispatch(getSaldoBalance())
+        } else { onLongPress() }
+      }
+      }
       style={styles.container}>
       <Icon />
       <Text style={styles.text(active)}>{title}</Text>

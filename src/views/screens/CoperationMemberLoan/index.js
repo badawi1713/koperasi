@@ -59,7 +59,7 @@ const CoperationMemberLoan = ({ navigation }) => {
                             <Gap width={10} />
                             <View>
                                 <Text style={styles.textTitle}>Total Pinjaman</Text>
-                                <NumberFormat value={data && data.jumlahTenor || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                                <NumberFormat value={data && data.jumlahPokokPinjam || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
                                     <Text style={styles.textTitle}>Rp {value}</Text>
 
                                 } />
@@ -103,14 +103,8 @@ const CoperationMemberLoan = ({ navigation }) => {
                                                     } />
 
                                                 </View>
-                                                <Gap height={5} />
-                                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flex: 1 }}>
-                                                    <Text style={styles.text}>Jatuh Tempo</Text>
-                                                    <Text>12-05-2021</Text>
-
-                                                </View>
                                                 <Gap height={10} />
-                                                <Text style={styles.status}>{item.status}</Text>
+                                                <Text style={styles.textStatus(item.status)}>{item.status}</Text>
                                             </View>
                                         </View>
                                     </View>
@@ -160,15 +154,11 @@ const styles = StyleSheet.create({
         color: colors.black,
         fontFamily: fonts.primary[600],
     },
-    status: {
-        fontSize: 14,
-        color: colors.black,
-        fontFamily: fonts.primary.normal,
-        textAlign: 'right'
-    },
+
     textStatus: (status) => ({
+        textAlign: 'right',
         fontSize: 14,
-        color: status === "Berhasil" ? colors.text.green1 : colors.text.danger,
+        color: status === "Disetujui" ? colors.text.green1 : colors.text.danger,
         fontFamily: fonts.primary[600],
     }),
     textTitle: {
