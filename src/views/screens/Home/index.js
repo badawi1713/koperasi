@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Image,
   SafeAreaView,
@@ -6,7 +6,8 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  RefreshControl
 } from 'react-native';
 import ContentLoader from "react-native-easy-content-loader";
 import NumberFormat from 'react-number-format';
@@ -19,12 +20,24 @@ import { getHomeContent, getSaldoBalance } from '../../../store/actions/home';
 import { colors, fonts } from '../../../utils';
 import { Gap, HomeSwiper, Input, TopNavbar } from '../../components';
 
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
 const Home = ({ navigation }) => {
   const { state } = useContext(Context);
+  const [refreshing, setRefreshing] = useState(false);
   const dispatch = useDispatch();
   const homeReducer = useSelector(state => state.homeReducer);
   const userProfile = state.userProfile;
   const { saldoBalance, loading, category } = homeReducer;
+
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    dispatch(getSaldoBalance());
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
   useEffect(() => {
     const getHomeData = () => {
@@ -46,7 +59,14 @@ const Home = ({ navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <TopNavbar title="KSP CN" variant="link-home" />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+      >
         <View style={styles.header}>
           <Gap height={10} />
           <Input variant="search" />

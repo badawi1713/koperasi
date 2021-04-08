@@ -1,7 +1,39 @@
-import { ApiGetRequest, ApiPostRequest } from '../../../utils/api/koperasi';
-import { SET_LOAN_COPERATION_MEMBER } from '../../constants';
 import { Alert } from "react-native";
 import * as RootNavigation from '../../../helpers/RootNavigation';
+import { ApiGetRequest, ApiPostRequest } from '../../../utils/api/koperasi';
+import { SET_LOAN_COPERATION_MEMBER } from '../../constants';
+
+export const getInstallmentPaymentData = () => {
+    return async (dispatch, getState) => {
+        const { loanCoperationMemberReducer } = getState()
+        const { id } = loanCoperationMemberReducer
+        dispatch({
+            type: SET_LOAN_COPERATION_MEMBER,
+            payload: {
+                loading: true
+            }
+        })
+
+        try {
+            const response = await ApiGetRequest(`/mobile/koperasi/pinjamanBayar/${id}`)
+            await dispatch({
+                type: SET_LOAN_COPERATION_MEMBER,
+                payload: {
+                    loading: false,
+                    installmentPaymentData: response.data.data
+                }
+            })
+        } catch (error) {
+            dispatch({
+                type: SET_LOAN_COPERATION_MEMBER,
+                payload: {
+                    loading: false,
+                    error: true
+                }
+            })
+        }
+    }
+}
 
 export const getLoanCoperationMemberPaymentMethod = () => {
     return async (dispatch) => {
@@ -125,6 +157,7 @@ export const getLoanCoperationMemberData = () => {
                     loading: false,
                     loanHistory: response.data.data.pinjamanHistory,
                     data: response.data.data,
+                    id: response.data.data.id
                 }
             })
 

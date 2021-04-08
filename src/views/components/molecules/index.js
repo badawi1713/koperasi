@@ -4,6 +4,7 @@ import CoperationRegisterConfirmation from './CoperationRegisterConfirmation';
 import CoperationRegisterForm from './CoperationRegisterForm';
 import HomeSwiper from './HomeSwiper';
 import Input from './Input';
+import LoanDetail from './LoanDetail';
 import LoanTransfer from './LoanTransfer';
 import MemberProfile from './MemberProfile';
 import MemberRegisterConfirmation from './MemberRegisterConfirmation';
@@ -15,5 +16,5 @@ import SavingTransfer from './SavingTransfer';
 import StartedSwiper from './StartedSwiper';
 import TopNavbar from './TopNavbar';
 
-export { LoanTransfer, TopNavbar, SavingTransfer, SavingDetail, MemberProfile, HomeSwiper, MemberRegisterConfirmation, StartedSwiper, Input, BottomTab, PulsaContent, PhoneDataContent, MemberRegisterForm, CoperationRegisterForm, CoperationRegisterConfirmation };
+export { LoanTransfer, LoanDetail, TopNavbar, SavingTransfer, SavingDetail, MemberProfile, HomeSwiper, MemberRegisterConfirmation, StartedSwiper, Input, BottomTab, PulsaContent, PhoneDataContent, MemberRegisterForm, CoperationRegisterForm, CoperationRegisterConfirmation };
 

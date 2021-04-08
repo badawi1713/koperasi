@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 let url = "http://rumahkios.com:8001/api"
 
-const Api = axios.create({
+export const Api = axios.create({
     baseURL: url,
     mode: 'no-cors',
     credentials: true,

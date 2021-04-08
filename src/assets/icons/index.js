@@ -42,8 +42,10 @@ import ICVisible from './visible.svg';
 import ICEWalletActive from './wallet-active.svg';
 import ICEWalletInActive from './wallet-inactive.svg';
 import ICWithdraw from './withdraw.svg';
+import ICPayment from './payment.svg';
 
 export {
+  ICPayment,
   ICDebt,
   ICLoan,
   ICSavingTotal,

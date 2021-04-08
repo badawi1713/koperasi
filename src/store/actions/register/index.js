@@ -1,12 +1,34 @@
-import { replace } from '../../../helpers/RootNavigation';
-import { ApiGetRequest, ApiPostRequest } from '../../../utils/api/koperasi';
-import { SET_REGISTER } from '../../constants';
 import { Alert } from "react-native";
+import { replace } from '../../../helpers/RootNavigation';
+import { Api, ApiGetRequest } from '../../../utils/api/koperasi';
+import { SET_REGISTER } from '../../constants';
+
+export const getOTP = () => {
+    return async (dispatch, getState) => {
+        const { registerReducer } = getState();
+        const { phoneNumber } = registerReducer;
+
+        try {
+            await ApiGetRequest(`/mobile/register/sendOtp/${phoneNumber}`)
+
+        } catch (error) {
+            console.log(error);
+            dispatch({
+                type: SET_REGISTER,
+                payload: {
+                    loading: false,
+                    error: true,
+                    errorMessage: error.response.data.rd,
+                },
+            });
+        }
+    }
+}
 
 export const postOTP = (code) => {
     return async (dispatch, getState) => {
         const { registerReducer } = getState();
-        const { password, phoneNumber } = registerReducer;
+        const { password, phoneNumber, fullName, email } = registerReducer;
         await dispatch({
             type: SET_REGISTER,
             payload: {
@@ -16,58 +38,51 @@ export const postOTP = (code) => {
             },
         });
         const data = {
+            "nama": fullName,
+            "noHp": phoneNumber,
+            "email": email,
+            "password": password,
             "noHp": phoneNumber,
             "otp": code,
-            "password": password
         }
+
+        console.log(data)
         try {
-            const response = await ApiPostRequest(
+            await Api.post(
                 `/mobile/register/otp`, data
             );
 
-            if (response.error) {
-                await dispatch({
-                    type: SET_REGISTER,
-                    payload: {
-                        loading: false,
-                        error: true,
-                        errorMessage: "Maaf, kode OTP salah, silakan coba kembali",
-                        codeText: []
-                    },
-                });
-
-            } else {
-                await dispatch({
-                    type: SET_REGISTER,
-                    payload: {
-                        fullName: "",
-                        phoneNumber: "",
-                        email: "",
-                        password: "",
-                        passwordConfirm: "",
-                        loading: false,
-                        error: false,
-                        errorMessage: "",
-                        codeText: []
-                    },
-                });
-
-                setTimeout(() => {
-                    replace("Login")
-                }, 3000)
-
-            }
-
-
-        } catch (err) {
-            dispatch({
+            await dispatch({
                 type: SET_REGISTER,
                 payload: {
-                    error: true,
+                    fullName: "",
+                    phoneNumber: "",
+                    email: "",
+                    password: "",
+                    passwordConfirm: "",
+                    loading: false,
+                    error: false,
                     errorMessage: "",
                     codeText: []
                 },
             });
+
+            setTimeout(() => {
+                replace("Login")
+            }, 2000)
+
+
+        } catch (err) {
+            await dispatch({
+                type: SET_REGISTER,
+                payload: {
+                    loading: false,
+                    error: true,
+                    errorMessage: "Maaf, kode OTP salah, silakan coba kembali",
+                    codeText: []
+                },
+            });
+            console.log(err.response.data.rd)
         }
     }
 }
@@ -84,54 +99,44 @@ export const postRegister = () => {
             "passwordConf": passwordConfirm
         }
         try {
-            const response = await ApiPostRequest(
+            await Api.post(
                 `/mobile/register`, data
             );
 
-            if (response.error) {
-                dispatch({
-                    type: SET_REGISTER,
-                    payload: {
-                        loading: false,
-                        error: true,
-                        errorMessage: response.error
-                    },
-                });
-                Alert.alert(
-                    "Proses Registrasi Gagal",
-                    response.error,
-                    [
-                        {
-                            text: "Tutup",
-                            style: "cancel",
-                        },
-                    ],
+            await dispatch({
+                type: SET_REGISTER,
+                payload: {
+                    loading: false,
+                    error: false,
+                    errorMessage: ""
 
-                );
-            } else {
-                dispatch({
-                    type: SET_REGISTER,
-                    payload: {
-                        loading: false,
-                        error: false,
-                        errorMessage: ""
+                },
+            });
 
-                    },
-                });
+            await ApiGetRequest(`/mobile/register/sendOtp`)
 
-                await ApiGetRequest(`/mobile/register/sendOtp/${phoneNumber}`)
-
-                await replace("RegisterVerification");
-            }
+            await replace("RegisterVerification");
         } catch (error) {
             dispatch({
                 type: SET_REGISTER,
                 payload: {
                     loading: false,
                     error: true,
-                    errorMessage: ""
+                    errorMessage: error.response.data.rd,
                 },
             });
+            Alert.alert(
+                "Proses Registrasi Gagal",
+                error.response.data.rd,
+                [
+                    {
+                        text: "Tutup",
+                        style: "cancel",
+                    },
+                ],
+
+            );
+
         }
     }
 

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { ICLoan, ICDebt } from '../../../assets'
 import { changeMisc, getLoanCoperationMemberData } from '../../../store/actions'
 import { colors, fonts } from '../../../utils'
-import { Button, Gap, SavingDetail, LoanTransfer, TopNavbar } from '../../components'
+import { Button, Gap, LoanDetail, LoanTransfer, TopNavbar } from '../../components'
 
 const CoperationMemberLoan = ({ navigation }) => {
     const dispatch = useDispatch()
@@ -44,7 +44,7 @@ const CoperationMemberLoan = ({ navigation }) => {
         }))
     }
 
-    if (showLoanDetail) { return <SavingDetail handleBackButtonClick={handleBackButtonClick} showLoanDetailHandler={showLoanDetailHandler} /> } else if (showLoanTransfer) {
+    if (showLoanDetail) { return <LoanDetail handleBackButtonClick={handleBackButtonClick} showLoanDetailHandler={showLoanDetailHandler} /> } else if (showLoanTransfer) {
         return <LoanTransfer handleBackButtonClick={handleBackButtonClick} showLoanTransferHandler={showLoanTransferHandler} />
     }
     else {
@@ -64,7 +64,7 @@ const CoperationMemberLoan = ({ navigation }) => {
 
                                 } />
                                 <Gap height={5} />
-                                <TouchableOpacity ><Text style={styles.textButton}>Detail Pinjaman</Text></TouchableOpacity>
+                                <TouchableOpacity onPress={showLoanDetailHandler} ><Text style={styles.textButton}>Tagihan Pinjaman</Text></TouchableOpacity>
                             </View>
                         </View>
                         <View style={styles.buttonGroup}>

@@ -9,7 +9,9 @@ const initialState = {
     loanHistory: [],
     data: {},
     viaPayment: "",
-    paymentMethodData: []
+    paymentMethodData: [],
+    installmentPaymentData: [],
+    id: ""
 };
 
 const loanCoperationMemberReducer = (state = initialState, action) => {

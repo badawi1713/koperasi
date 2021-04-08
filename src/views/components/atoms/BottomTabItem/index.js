@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, } from 'react-native';
 import {
   ICEWalletActive,
   ICEWalletInActive,
@@ -11,15 +11,12 @@ import {
   ICProfileInActive,
   ICScanner,
   ICStoreActive,
-  ICStoreInActive,
+  ICStoreInActive
 } from '../../../../assets/icons';
 import { colors, fonts } from '../../../../utils';
-import { useDispatch } from 'react-redux'
-import { getSaldoBalance } from '../../../../store/actions/home';
 
 
 const BottomTabItem = ({ title, active, onPress, onLongPress, indexActive, navigation }) => {
-  const dispatch = useDispatch()
 
   const Icon = () => {
     if (title === 'Home') {
@@ -68,16 +65,10 @@ const BottomTabItem = ({ title, active, onPress, onLongPress, indexActive, navig
     return (
       <TouchableOpacity
         onPress={() => {
-          if (title === 'Home') {
-            onPress()
-            dispatch(getSaldoBalance())
-          } else { onPress() }
+          onPress()
         }}
         onLongPress={() => {
-          if (title === 'Home') {
-            onLongPress()
-            dispatch(getSaldoBalance())
-          } else { onLongPress() }
+          onLongPress()
         }
         }
         style={styles.container}>
@@ -90,16 +81,10 @@ const BottomTabItem = ({ title, active, onPress, onLongPress, indexActive, navig
   return (
     <TouchableOpacity
       onPress={() => {
-        if (title === 'Home') {
-          onPress()
-          dispatch(getSaldoBalance())
-        } else { onPress() }
+        onPress()
       }}
       onLongPress={() => {
-        if (title === 'Home') {
-          onLongPress()
-          dispatch(getSaldoBalance())
-        } else { onLongPress() }
+        onLongPress()
       }
       }
       style={styles.container}>

@@ -20,19 +20,19 @@ const HomeSwiper = () => {
             style={styles.wrapper}>
             <TouchableOpacity testID="Banner1" style={styles.slide}>
                 <View style={styles.item} >
-                    <Image source={IMGBanner1} style={{ flex: 1, borderRadius: 10, resizeMode: 'contain' }} />
+                    <Image source={IMGBanner1} style={{ flex: 1, borderRadius: 4, resizeMode: 'contain' }} />
                 </View>
                 <Gap height={20} />
             </TouchableOpacity>
             <TouchableOpacity testID="Banner2" style={styles.slide}>
                 <View style={styles.item} >
-                    <Image source={IMGBanner2} style={{ flex: 1, borderRadius: 10, resizeMode: 'contain' }} />
+                    <Image source={IMGBanner2} style={{ flex: 1, borderRadius: 4, resizeMode: 'contain' }} />
                 </View>
                 <Gap height={20} />
             </TouchableOpacity>
             <TouchableOpacity testID="Banner3" style={styles.slide}>
                 <View style={styles.item} >
-                    <Image source={IMGBanner3} style={{ flex: 1, borderRadius: 10, resizeMode: 'contain' }} />
+                    <Image source={IMGBanner3} style={{ flex: 1, borderRadius: 4, resizeMode: 'contain' }} />
                 </View>
                 <Gap height={20} />
             </TouchableOpacity>
@@ -48,8 +48,8 @@ const styles = StyleSheet.create({
     },
     item: {
         width: '100%',
-        height: '75%',
-        borderRadius: 10,
+        height: '80%',
+        borderRadius: 4,
         alignItems: 'center'
     },
     dotStyle: {

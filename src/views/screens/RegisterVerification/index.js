@@ -103,6 +103,7 @@ const RegisterVerification = ({ navigation }) => {
           </View>
         </View>
         <Gap height={10} />
+        {/* {error && AlertMessage} */}
         {error && <Text style={styles.errorText}>{errorMessage}</Text>}
         <Gap height={5} />
         {time === null ? <View>

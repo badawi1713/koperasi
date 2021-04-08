@@ -5,7 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   Text, TextInput,
-  TouchableOpacity, View, Alert
+  TouchableOpacity, View
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { ICInvisible, ICVisible } from '../../../assets';
@@ -36,14 +36,12 @@ const Register = ({ navigation }) => {
   const passwordConfirm = watch("passwordConfirm");
 
   const registerHandler = async () => {
-    if (password !== passwordConfirm) {
-      return false
-    } else {
-      await dispatch(changeRegister({
-        loading: true
-      }))
-      await dispatch(postRegister())
-    }
+
+    await dispatch(changeRegister({
+      loading: true
+    }))
+    await dispatch(postRegister())
+
   }
 
   const phoneNumberRef = useRef();

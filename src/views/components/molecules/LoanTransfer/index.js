@@ -3,7 +3,6 @@ import { BackHandler, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, Vie
 import SelectPicker from 'react-native-form-select-picker'
 import { useDispatch, useSelector } from 'react-redux'
 import { Gap, TopNavbar } from '../..'
-import { navigate } from '../../../../helpers/RootNavigation'
 import { changeLoanCoperationMember, postLoanCoperationMemberTransfer } from '../../../../store/actions'
 import { colors, fonts } from '../../../../utils'
 import { Button } from '../../atoms'
