@@ -14,6 +14,8 @@ const CoperationMemberSavingPaymentMethod = ({ navigation }) => {
 
     const { loading, paymentMethodData } = savingCoperationMemberReducer
 
+    console.log("payment", paymentMethodData)
+
     useEffect(() => {
         const getTopUpMethodList = () => {
             dispatch(getSavingCoperationMemberPaymentMethod())
@@ -24,7 +26,7 @@ const CoperationMemberSavingPaymentMethod = ({ navigation }) => {
     const PaymentMethodList = ({ item }) => (
         <TouchableOpacity onPress={async () => {
             await dispatch(changeSavingCoperationMember({
-                via: item.idBank
+                viaPayment: item.idBank
             }))
             await dispatch(postSavingCoperationMemberTransfer())
             await navigation.navigate('CoperationMemberSavingPayment')

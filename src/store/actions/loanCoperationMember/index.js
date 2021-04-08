@@ -1,6 +1,6 @@
 import { Alert } from "react-native";
 import * as RootNavigation from '../../../helpers/RootNavigation';
-import { ApiGetRequest, ApiPostRequest } from '../../../utils/api/koperasi';
+import { ApiGetRequest, Api } from '../../../utils/api/koperasi';
 import { SET_LOAN_COPERATION_MEMBER } from '../../constants';
 
 export const getInstallmentPaymentData = () => {
@@ -76,57 +76,45 @@ export const postLoanCoperationMemberTransfer = () => {
         }
 
         try {
-            const response = await ApiPostRequest(
+            await Api.post(
                 `/mobile/koperasi/pinjamanApply`, data
             );
 
-            if (response.error) {
-                Alert.alert(
-                    "Proses Pinjam Dana Gagal",
-                    response.error,
-                    [
-                        {
-                            text: "Tutup",
-                            style: "cancel",
-                        },
-                    ],
 
-                );
-                dispatch({
-                    type: SET_LOAN_COPERATION_MEMBER,
-                    payload: {
-                        error: true,
-                        loading: false,
-                        loanAmount: "",
-                        month: ""
+            await Alert.alert(
+                "Proses Pinjam Dana Sukses",
+                "Terima kasih, pinjaman akan segera diproses",
+                [
+                    {
+                        onPress: () => { RootNavigation.navigate("CoperationMemberLoan") },
+                        text: "OK",
+                        style: "cancel",
                     },
-                });
+                ],
 
-            } else {
-                Alert.alert(
-                    "Proses Pinjam Dana Sukses",
-                    "Terima kasih, pinjaman akan segera diproses",
-                    [
-                        {
-                            onPress: () => { RootNavigation.navigate("CoperationMemberLoan") },
-                            text: "OK",
-                            style: "cancel",
-                        },
-                    ],
-
-                );
-                dispatch({
-                    type: SET_LOAN_COPERATION_MEMBER,
-                    payload: {
-                        error: false,
-                        loading: false,
-                        loanAmount: "",
-                        month: ""
-                    },
-                });
-            }
+            );
+            await dispatch({
+                type: SET_LOAN_COPERATION_MEMBER,
+                payload: {
+                    error: false,
+                    loading: false,
+                    loanAmount: "",
+                    month: ""
+                },
+            });
 
         } catch (err) {
+            Alert.alert(
+                "Proses Pinjam Dana Gagal",
+                response.error,
+                [
+                    {
+                        text: "Tutup",
+                        style: "cancel",
+                    },
+                ],
+
+            );
             dispatch({
                 type: SET_LOAN_COPERATION_MEMBER,
                 payload: {

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { ICCopy, IMGAccountConfirmation } from '../../../assets'
+import { changeTopUp } from '../../../store/actions'
 import { colors, fonts } from '../../../utils'
 import { Gap, TopNavbar } from '../../components'
+import NumberFormat from 'react-number-format';
 
 const formatHour = (time) =>
     `${String(Math.floor(time / 3600)).padStart(2, '0')}`;
@@ -17,7 +19,7 @@ const formatSecond = (time) =>
     ).padStart(2, '0')}`;
 
 const TopUpPayment = ({ navigation }) => {
-
+    const dispatch = useDispatch()
     const topUpReducer = useSelector(state => state.topUpReducer);
     const { saldoNominal } = topUpReducer;
 
@@ -48,7 +50,9 @@ const TopUpPayment = ({ navigation }) => {
                         <Gap height={20} />
                         <View style={styles.cardContent}>
                             <View style={styles.priceBox}>
-                                <Text style={styles.priceText}>Rp {saldoNominal}</Text>
+                                <NumberFormat value={saldoNominal || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                                    <Text style={styles.priceText}>Rp {value}</Text>
+                                } />
                             </View>
                             <TouchableOpacity>
                                 <Text style={styles.detailText}>Detail</Text>
@@ -109,7 +113,13 @@ const TopUpPayment = ({ navigation }) => {
                     <Gap height={20} />
                 </View>
             </ScrollView>
-            <TouchableOpacity onPress={() => navigation.navigate('MainApp')} style={styles.okButton}>
+            <TouchableOpacity onPress={() => {
+                navigation.navigate('MainApp')
+                dispatch(changeTopUp({
+                    saldoNominal: 0,
+
+                }))
+            }} style={styles.okButton}>
                 <Text style={styles.okText}>OK</Text>
             </TouchableOpacity>
         </SafeAreaView>

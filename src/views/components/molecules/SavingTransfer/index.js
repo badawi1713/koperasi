@@ -25,8 +25,8 @@ const SavingTransfer = ({ showSavingTransferHandler, handleBackButtonClick }) =>
         };
     }, []);
 
-    const savingTransferCondition = simpananWajib > 0 && simpananWajib < 20000 || simpananPokok > 0 && simpananPokok < 20000 || simpananSukarela > 0 && simpananSukarela < 20000 || ((!simpananPokok || simpananPokok === 0) && (!simpananWajib || simpananWajib === 0) && (!simpananSukarela || simpananSukarela === 0))
-
+    const savingTransferCondition = simpananWajib > 0 && simpananWajib < 20000 || simpananPokok > 0 && simpananPokok < 20000 || simpananSukarela > 0 && simpananSukarela < 20000 || ((!simpananPokok && simpananPokok === 0) && (!simpananWajib && simpananWajib === 0) && (!simpananSukarela && simpananSukarela === 0))
+    console.log(simpananPokok, simpananSukarela, simpananWajib)
     return (
         <SafeAreaView style={styles.container}>
             <TopNavbar title='Setor Simpanan' back linkBack={showSavingTransferHandler} />
@@ -46,6 +46,7 @@ const SavingTransfer = ({ showSavingTransferHandler, handleBackButtonClick }) =>
                                             setIsWajibError(false)
                                         }
                                     }}
+                                    value={simpananWajib}
                                     style={styles.textInput}
                                     placeholder="Minimal Rp 20.000"
                                     keyboardType='number-pad'
@@ -70,6 +71,7 @@ const SavingTransfer = ({ showSavingTransferHandler, handleBackButtonClick }) =>
                                             setIsPokokError(false)
                                         }
                                     }}
+                                    value={simpananPokok}
                                     style={styles.textInput}
                                     placeholder="Minimal Rp 20.000"
                                     keyboardType='number-pad'
@@ -85,6 +87,7 @@ const SavingTransfer = ({ showSavingTransferHandler, handleBackButtonClick }) =>
                             <Text style={styles.label}>Nominal Simpanan Sukarela</Text>
                             <View style={styles.inputContainer}>
                                 <TextInput
+                                    value={simpananSukarela}
                                     onChangeText={async (e) => {
                                         dispatch(changeSavingCoperationMember({ simpananSukarela: e }))
                                         if (e > 0 && e < 20000) {

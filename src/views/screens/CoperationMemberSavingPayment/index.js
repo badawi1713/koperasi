@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import { ICCopy, IMGAccountConfirmation } from '../../../assets'
+import { changeSavingCoperationMember } from '../../../store/actions'
 import { colors, fonts } from '../../../utils'
 import { Gap, TopNavbar } from '../../components'
-import { changeSavingCoperationMember, getSavingCoperationMemberPaymentMethod, postSavingCoperationMemberTransfer } from '../../../store/actions';
+import NumberFormat from 'react-number-format';
+import { useDispatch } from 'react-redux'
 
 const formatHour = (time) =>
     `${String(Math.floor(time / 3600)).padStart(2, '0')}`;
@@ -18,7 +20,7 @@ const formatSecond = (time) =>
     ).padStart(2, '0')}`;
 
 const CoperationMemberSavingPayment = ({ navigation }) => {
-
+    const dispatch = useDispatch()
     const savingCoperationMemberReducer = useSelector(state => state.savingCoperationMemberReducer);
     const { simpananWajib, simpananPokok, simpananSukarela } = savingCoperationMemberReducer;
 
@@ -49,7 +51,9 @@ const CoperationMemberSavingPayment = ({ navigation }) => {
                         <Gap height={20} />
                         <View style={styles.cardContent}>
                             <View style={styles.priceBox}>
-                                <Text style={styles.priceText}>Rp {simpananPokok + simpananSukarela + simpananWajib}</Text>
+                                <NumberFormat value={Number(simpananPokok || 0) + Number(simpananSukarela || 0) + Number(simpananWajib || 0)} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                                    <Text style={styles.priceText}>Rp {value}</Text>
+                                } />
                             </View>
                             <TouchableOpacity>
                                 <Text style={styles.detailText}>Detail</Text>
@@ -110,7 +114,13 @@ const CoperationMemberSavingPayment = ({ navigation }) => {
                     <Gap height={20} />
                 </View>
             </ScrollView>
-            <TouchableOpacity onPress={() => navigation.navigate('MainApp')} style={styles.okButton}>
+            <TouchableOpacity onPress={() => {
+                navigation.navigate('MainApp'); dispatch(changeSavingCoperationMember({
+                    simpananPokok: "",
+                    simpananWajib: "",
+                    simpananSukarela: "",
+                }))
+            }} style={styles.okButton}>
                 <Text style={styles.okText}>OK</Text>
             </TouchableOpacity>
         </SafeAreaView>
