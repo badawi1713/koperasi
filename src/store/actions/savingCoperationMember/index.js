@@ -41,7 +41,6 @@ export const postSavingCoperationMemberTransfer = () => {
             simpananPokok, simpananWajib, simpananSukarela, bayarVia: viaPayment
         }
 
-        console.log(data)
         try {
             await ApiPostRequest(
                 `/mobile/koperasi/simpanan`, data

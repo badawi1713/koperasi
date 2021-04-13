@@ -1,7 +1,7 @@
 import { SET_SAVING_COPERATION_MEMBER } from '../../constants';
 
 const initialState = {
-    loading: false,
+    loading: true,
     error: false,
     errorMessage: "",
     dataSimpananPokok: 0,

@@ -7,7 +7,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-  RefreshControl
+  RefreshControl,
+  StatusBar
 } from 'react-native';
 import ContentLoader from "react-native-easy-content-loader";
 import NumberFormat from 'react-number-format';
@@ -58,6 +59,12 @@ const Home = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <StatusBar
+        animated={true}
+        backgroundColor='#fff'
+        barStyle='dark-content'
+        showHideTransition='fade'
+      />
       <TopNavbar title="KSP CN" variant="link-home" />
       <ScrollView showsVerticalScrollIndicator={false}
         refreshControl={

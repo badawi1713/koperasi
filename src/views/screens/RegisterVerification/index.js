@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   ScrollView, StyleSheet, Text,
-  TouchableOpacity, View
+  TouchableOpacity, View, StatusBar
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { ICBackspace } from '../../../assets';
@@ -77,6 +77,12 @@ const RegisterVerification = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar
+        animated={true}
+        backgroundColor='#fff'
+        barStyle='dark-content'
+        showHideTransition='fade'
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <TopNavbar title="Verifikasi Pendaftaran" />
         <Gap height={40} />

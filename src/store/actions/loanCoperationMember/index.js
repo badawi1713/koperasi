@@ -67,7 +67,7 @@ export const getLoanCoperationMemberPaymentMethod = () => {
     }
 }
 
-export const postLoanCoperationMemberTransfer = () => {
+export const postLoanCalculateTransfer = () => {
     return async (dispatch, getState) => {
         const { loanCoperationMemberReducer } = getState();
         const { loanAmount, month } = loanCoperationMemberReducer;
@@ -80,6 +80,54 @@ export const postLoanCoperationMemberTransfer = () => {
                 `/mobile/koperasi/pinjamanApply`, data
             );
 
+            await dispatch({
+                type: SET_LOAN_COPERATION_MEMBER,
+                payload: {
+                    error: false,
+                    loading: false,
+                    loanAmount: "",
+                    month: ""
+                },
+            });
+
+        } catch (err) {
+            Alert.alert(
+                "Proses Pinjam Dana Gagal",
+                err.response.data.rd,
+                [
+                    {
+                        text: "Tutup",
+                        style: "cancel",
+                    },
+                ],
+
+            );
+            dispatch({
+                type: SET_LOAN_COPERATION_MEMBER,
+                payload: {
+                    error: true,
+                    loading: false,
+                    loanAmount: "",
+                    month: ""
+                },
+            });
+        }
+    }
+}
+
+export const postLoanSaveTransfer = () => {
+    return async (dispatch, getState) => {
+        const { loanCoperationMemberReducer } = getState();
+        const { loanAmount, month } = loanCoperationMemberReducer;
+        const data = {
+            nominal: loanAmount, tenor: month
+        }
+
+        try {
+            await Api.post(
+                `/mobile/koperasi/pinjamanSimulasi`, data
+            );
+
 
             await Alert.alert(
                 "Proses Pinjam Dana Sukses",
@@ -88,7 +136,6 @@ export const postLoanCoperationMemberTransfer = () => {
                     {
                         onPress: () => { RootNavigation.navigate("CoperationMemberLoan") },
                         text: "OK",
-                        style: "cancel",
                     },
                 ],
 
@@ -106,7 +153,7 @@ export const postLoanCoperationMemberTransfer = () => {
         } catch (err) {
             Alert.alert(
                 "Proses Pinjam Dana Gagal",
-                response.error,
+                err.response.data.rd,
                 [
                     {
                         text: "Tutup",

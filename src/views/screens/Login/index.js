@@ -9,6 +9,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  StatusBar
 } from 'react-native';
 import { ICInvisible, ICVisible } from '../../../assets';
 import { Context } from '../../../context/AuthContext';
@@ -39,6 +40,12 @@ const Login = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar
+        animated={true}
+        backgroundColor='#fff'
+        barStyle='dark-content'
+        showHideTransition='fade'
+      />
       <TopNavbar
         variant="link-back"
         title="Daftar"

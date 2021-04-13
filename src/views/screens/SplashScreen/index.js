@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { Image, SafeAreaView, StyleSheet } from 'react-native';
+import { Image, SafeAreaView, StyleSheet, StatusBar } from 'react-native';
 import { colors } from '../../../utils';
 import { Context as AuthContext } from '../../../context/AuthContext';
 
@@ -15,6 +15,12 @@ const SplashScreen = () => {
   // useEffect dengan array kosong berfungsi supaya useEffect hanya te-render sekali.
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar
+        animated={true}
+        backgroundColor='#fff'
+        barStyle='dark-content'
+        showHideTransition='fade'
+      />
       <Image
         source={require('../../../assets/images/img-logo.jpg')}
         style={styles.logo}

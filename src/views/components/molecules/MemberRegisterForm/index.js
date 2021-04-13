@@ -5,6 +5,7 @@ import {
     TextInput,
     TouchableOpacity, View, Platform
 } from 'react-native';
+import { Controller, useForm } from "react-hook-form";
 import { launchImageLibrary } from 'react-native-image-picker';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,11 +33,14 @@ const createFormData = (file, body = {}) => {
 const MemberRegisterForm = () => {
     const dispatch = useDispatch();
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [tanggalLahirError, setTanggalLahirError] = useState(false);
+    const [ktpError, setKtpError] = useState(false);
 
     const profileReducer = useSelector(state => state.profileReducer);
-    const { memberProfile, userProfile: { name } } = profileReducer;
-    const { nama, ktp, noKtp, tempatLahir, tanggalLahir, alamat } = memberProfile;
+    const { memberProfile, registerLoading, userProfile: { name } } = profileReducer;
+    const { nama, ktp, noKtp, tempatLahir, tanggalLahir, alamat, } = memberProfile;
 
+    const { control, handleSubmit, errors, watch } = useForm();
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -50,23 +54,44 @@ const MemberRegisterForm = () => {
         const selectedDate = await moment(date).format('YYYY-MM-DD')
         await dispatch(changeProfile({ memberProfile: { ...memberProfile, tanggalLahir: selectedDate } }))
         await hideDatePicker();
+        setTanggalLahirError(false)
     };
 
     const openGalleryHandler = async () => {
         await launchImageLibrary({ noData: true }, async (response) => {
             if (response.didCancel) {
                 await dispatch(changeProfile({ memberProfile: { ...memberProfile, ktp: [] } }))
+                setKtpError(true)
 
             } else {
                 await dispatch(changeProfile({ memberProfile: { ...memberProfile, ktp: response } }))
+                setKtpError(false)
             }
-            await console.log(memberProfile)
         });
     };
 
     const postMemberProfileHandler = async () => {
-        const data = await createFormData(ktp, { nama, noKtp, tempatLahir, tanggalLahir, alamat });
-        await dispatch(registerMemberProfile(data))
+        dispatch(changeProfile({ registerLoading: true }))
+        if (tanggalLahir === "" && ktp.length === 0) {
+            setKtpError(true)
+            setTanggalLahirError(true)
+            dispatch(changeProfile({ registerLoading: false }))
+
+        } else if (tanggalLahir === "") {
+            setTanggalLahirError(true)
+            dispatch(changeProfile({ registerLoading: false }))
+        } else if (ktp.length === 0) {
+            setKtpError(true)
+            dispatch(changeProfile({ registerLoading: false }))
+
+        } else {
+            dispatch(changeProfile({ registerLoading: false }))
+            setKtpError(false)
+            setTanggalLahirError(false)
+            const data = await createFormData(ktp, { nama, noKtp, tempatLahir, tanggalLahir, alamat });
+            await dispatch(registerMemberProfile(data))
+        }
+
     };
 
 
@@ -85,14 +110,27 @@ const MemberRegisterForm = () => {
                 <View style={styles.inputGroup}>
                     <Text style={styles.label}>Nama Lengkap</Text>
                     <View style={styles.inputContainer}>
-                        <TextInput
-                            style={styles.textInput}
-                            placeholder="Nama Lengkap"
-                            keyboardType="name-phone-pad"
-                            value={nama}
-                            onChangeText={(e) => dispatch(changeProfile({ memberProfile: { ...memberProfile, nama: e } }))}
+                        <Controller
+                            control={control}
+                            render={({ onChange, onBlur, value }) => (
+                                <TextInput
+                                    onBlur={onBlur}
+                                    style={styles.textInput}
+                                    placeholder="Nama Lengkap"
+                                    keyboardType="name-phone-pad"
+                                    value={value}
+                                    onChangeText={(e) => { onChange(e); dispatch(changeProfile({ memberProfile: { ...memberProfile, nama: e } })); }}
+                                />
+                            )}
+                            name="nama"
+                            rules={{ required: true }}
+                            defaultValue=""
                         />
                     </View>
+                    {errors.nama && <>
+                        <Gap height={5} />
+                        <Text style={styles.errorText}>Nama lengkap harus diisi</Text>
+                    </>}
                 </View>
                 <Gap height={10} />
                 <TouchableOpacity style={styles.uploadContainer(ktp.length === 0)} onPress={openGalleryHandler}>
@@ -100,32 +138,65 @@ const MemberRegisterForm = () => {
                     <Gap width={10} />
                     <Text numberOfLines={1} ellipsizeMode='middle' style={styles.buttonText(ktp.length === 0)}>{ktp.length === 0 ? "Upload KTP" : ktp.fileName}</Text>
                 </TouchableOpacity>
+                {ktpError && <>
+                    <Gap height={5} />
+                    <Text style={styles.errorText}>Gambar KTP belum dipilih</Text>
+                </>}
                 <Gap height={10} />
                 <View style={styles.inputGroup}>
                     <Text style={styles.label}>Nomor Identitas KTP</Text>
                     <View style={styles.inputContainer}>
-                        <TextInput
-                            style={styles.textInput}
-                            value={noKtp}
-                            placeholder="Nomor KTP"
-                            keyboardType='number-pad'
-                            onChangeText={(e) => dispatch(changeProfile({ memberProfile: { ...memberProfile, noKtp: e } }))}
+                        <Controller
+                            control={control}
+                            render={({ onChange, onBlur, value }) => (
+                                <TextInput
+                                    onBlur={onBlur}
+                                    style={styles.textInput}
+                                    value={value}
+                                    placeholder="Nomor KTP"
+                                    keyboardType='number-pad'
+                                    onChangeText={(e) => {
+                                        onChange(e)
+                                        dispatch(changeProfile({ memberProfile: { ...memberProfile, noKtp: e } }))
+                                    }}
+                                />
+                            )}
+                            name="ktp"
+                            rules={{ required: true }}
+                            defaultValue=""
                         />
                     </View>
+                    {errors.ktp && <>
+                        <Gap height={5} />
+                        <Text style={styles.errorText}>Nomor KTP harus diisi</Text>
+                    </>}
                 </View>
                 <Gap height={10} />
                 <View style={[styles.inputGroup, { flexDirection: 'row', justifyContent: 'space-between' }]}>
                     <View style={{ width: "50%" }}>
                         <Text style={styles.label}>Tempat Lahir</Text>
                         <View style={styles.inputContainer}>
-                            <TextInput
-                                style={styles.textInput}
-                                placeholder="Tempat Lahir"
-                                keyboardType="name-phone-pad"
-                                value={tempatLahir}
-                                onChangeText={(e) => dispatch(changeProfile({ memberProfile: { ...memberProfile, tempatLahir: e } }))}
+                            <Controller
+                                control={control}
+                                render={({ onChange, onBlur, value }) => (
+                                    <TextInput
+                                        onBlur={onBlur}
+                                        style={styles.textInput}
+                                        value={value}
+                                        placeholder="Tempat Lahir"
+                                        keyboardType="name-phone-pad"
+                                        onChangeText={(e) => { onChange(e); dispatch(changeProfile({ memberProfile: { ...memberProfile, tempatLahir: e } })) }}
+                                    />
+                                )}
+                                name="tempatLahir"
+                                rules={{ required: true }}
+                                defaultValue=""
                             />
                         </View>
+                        {errors.tempatLahir && <>
+                            <Gap height={5} />
+                            <Text style={styles.errorText}>Tempat lahir harus diisi</Text>
+                        </>}
                     </View>
                     <View style={{ width: "45%" }}>
                         <Text style={styles.label}>Tanggal Lahir</Text>
@@ -138,22 +209,39 @@ const MemberRegisterForm = () => {
                                 editable={false}
                             />
                         </TouchableOpacity>
+                        {tanggalLahirError && <>
+                            <Gap height={5} />
+                            <Text style={styles.errorText}>Tanggal lahir harus diisi</Text>
+                        </>}
                     </View>
                 </View>
                 <Gap height={10} />
                 <View style={styles.inputGroup}>
                     <Text style={styles.label}>Alamat</Text>
                     <View style={styles.inputAddressContainer}>
-                        <TextInput
-                            style={styles.textInput}
-                            value={alamat}
-                            placeholder="Alamat"
-                            keyboardType="name-phone-pad"
-                            multiline={true}
-                            onChangeText={(e) => dispatch(changeProfile({ memberProfile: { ...memberProfile, alamat: e } }))}
-
+                        <Controller
+                            control={control}
+                            render={({ onChange, onBlur, value }) => (
+                                <TextInput
+                                    onBlur={onBlur}
+                                    style={styles.textInput}
+                                    value={value}
+                                    placeholder="Alamat"
+                                    keyboardType="name-phone-pad"
+                                    multiline={true}
+                                    onChangeText={(e) => { onChange(e); dispatch(changeProfile({ memberProfile: { ...memberProfile, alamat: e } })) }}
+                                />
+                            )}
+                            name="alamat"
+                            rules={{ required: true }}
+                            defaultValue=""
                         />
+
                     </View>
+                    {errors.alamat && <>
+                        <Gap height={5} />
+                        <Text style={styles.errorText}>Alamat harus diisi</Text>
+                    </>}
                 </View>
                 {/* <Gap height={10} />
                 <View style={styles.inputGroup}>
@@ -182,7 +270,9 @@ const MemberRegisterForm = () => {
                 </Text>
 
                 <Gap height={20} />
-                <Button onPress={postMemberProfileHandler} title="Buka Toko Koperasi" variant="primary" fullWidth />
+                <Button loading={registerLoading} onPress={
+                    handleSubmit(postMemberProfileHandler)
+                } title="Buka Toko Koperasi" variant="primary" fullWidth />
             </View>
         </ScrollView>
     );
@@ -254,5 +344,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center',
+    },
+    errorText: {
+        fontFamily: fonts.primary.normal,
+        color: colors.text.danger
     },
 });

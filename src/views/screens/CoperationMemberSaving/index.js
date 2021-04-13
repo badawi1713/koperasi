@@ -1,18 +1,19 @@
 import React, { useEffect } from 'react'
-import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, BackHandler } from 'react-native'
+import { ActivityIndicator, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import ContentLoader from "react-native-easy-content-loader"
+import NumberFormat from 'react-number-format'
 import { useDispatch, useSelector } from 'react-redux'
 import { ICSavings, ICTotalBudget } from '../../../assets'
 import { changeMisc, getSavingCoperationMemberData } from '../../../store/actions'
 import { colors, fonts } from '../../../utils'
-import { Button, SavingDetail, Gap, TopNavbar, SavingTransfer } from '../../components'
-import NumberFormat from 'react-number-format';
+import { Button, Gap, SavingDetail, SavingTransfer, TopNavbar } from '../../components'
 
 const CoperationMemberSaving = ({ navigation }) => {
     const dispatch = useDispatch()
     const profileReducer = useSelector(state => state.profileReducer)
     const miscReducer = useSelector(state => state.miscReducer)
     const savingCoperationMemberReducer = useSelector(state => state.savingCoperationMemberReducer)
-    const { totalSimpanan } = savingCoperationMemberReducer;
+    const { totalSimpanan, loading } = savingCoperationMemberReducer;
     const { transactionHistory } = profileReducer
     const { showSavingDetail, showSavingTransfer } = miscReducer
 
@@ -61,10 +62,14 @@ const CoperationMemberSaving = ({ navigation }) => {
                             <Gap width={10} />
                             <View>
                                 <Text style={styles.textTitle}>Total Simpanan</Text>
-                                <NumberFormat value={totalSimpanan || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
-                                    <Text style={styles.textTitle}>Rp {value}</Text>
+                                {loading ?
+                                    <ContentLoader paragrah pHeight={12} pRows={1} active title={false} />
+                                    :
+                                    <NumberFormat value={totalSimpanan || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                                        <Text style={styles.textTitle}>Rp {value}</Text>
 
-                                } />
+                                    } />
+                                }
                                 <Gap height={5} />
                                 <TouchableOpacity onPress={showSavingDetailHandler}><Text style={styles.textButton}>Detail Simpanan</Text></TouchableOpacity>
                             </View>
@@ -77,40 +82,43 @@ const CoperationMemberSaving = ({ navigation }) => {
                         <Text style={styles.text}>Riwayat Simpanan</Text>
                     </View>
 
-                    {transactionHistory.length === 0 ?
-                        <>
-                            <Gap height={30} />
-                            <Text style={[styles.textTitle, { textAlign: 'center' }]}>Tidak Ada Riwayat Simpanan</Text>
-                        </> :
-                        <ScrollView showsVerticalScrollIndicator={false}>
-                            {transactionHistory.map((item, index) => (
-                                <View key={index}>
-                                    <View style={styles.section}>
-                                        <View style={styles.row}>
-                                            <ICSavings width={28} height={28} />
-                                            <Gap width={10} />
-                                            <View>
-                                                <Text style={styles.text}>{item.historyTitle || "Setoran"}</Text>
-                                                <Gap height={5} />
-                                                <NumberFormat value={item.historyNominal || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
-                                                    <Text style={styles.text}>Rp {value}</Text>
+                    {
+                        loading ?
+                            <ActivityIndicator color={colors.background.green1} size='large' /> :
+                            transactionHistory.length === 0 ?
+                                <>
+                                    <Gap height={30} />
+                                    <Text style={[styles.textTitle, { textAlign: 'center' }]}>Tidak Ada Riwayat Simpanan</Text>
+                                </> :
+                                <ScrollView showsVerticalScrollIndicator={false}>
+                                    {transactionHistory.map((item, index) => (
+                                        <View key={index}>
+                                            <View style={styles.section}>
+                                                <View style={styles.row}>
+                                                    <ICSavings width={28} height={28} />
+                                                    <Gap width={10} />
+                                                    <View>
+                                                        <Text style={styles.text}>{item.historyTitle || "Setoran"}</Text>
+                                                        <Gap height={5} />
+                                                        <NumberFormat value={item.historyNominal || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                                                            <Text style={styles.text}>Rp {value}</Text>
 
-                                                } />
+                                                        } />
+                                                    </View>
+                                                </View>
+                                                <Text style={styles.textStatus(item.historyStatus)}>
+                                                    {item.historyStatus}
+                                                </Text>
                                             </View>
+                                            <Gap height={10} />
                                         </View>
-                                        <Text style={styles.textStatus(item.historyStatus)}>
-                                            {item.historyStatus}
-                                        </Text>
-                                    </View>
-                                    <Gap height={10} />
-                                </View>
 
-                            ))}
+                                    ))}
 
-                            <Gap height={20} />
+                                    <Gap height={20} />
 
 
-                        </ScrollView>
+                                </ScrollView>
 
                     }
 

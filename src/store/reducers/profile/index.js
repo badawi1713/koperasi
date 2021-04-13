@@ -3,6 +3,7 @@ import { SET_PROFILE } from '../../constants';
 const initialState = {
     loading: true,
     error: false,
+    registerLoading: false,
     errorMessage: "",
     userProfile: [],
     memberProfile: {

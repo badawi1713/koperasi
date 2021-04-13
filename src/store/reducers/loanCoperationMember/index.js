@@ -1,7 +1,7 @@
 import { SET_LOAN_COPERATION_MEMBER } from '../../constants';
 
 const initialState = {
-    loading: false,
+    loading: true,
     error: false,
     errorMessage: "",
     loanAmount: 0,

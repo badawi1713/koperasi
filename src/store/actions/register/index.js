@@ -9,8 +9,8 @@ export const getOTP = () => {
         const { phoneNumber } = registerReducer;
 
         try {
-            await ApiGetRequest(`/mobile/register/sendOtp/${phoneNumber}`)
-
+            const response = await ApiGetRequest(`/mobile/register/sendOtp/${phoneNumber}`)
+            console.log(response)
         } catch (error) {
             console.log(error);
             dispatch({
@@ -46,7 +46,6 @@ export const postOTP = (code) => {
             "otp": code,
         }
 
-        console.log(data)
         try {
             await Api.post(
                 `/mobile/register/otp`, data
@@ -67,10 +66,18 @@ export const postOTP = (code) => {
                 },
             });
 
-            setTimeout(() => {
-                replace("Login")
-            }, 2000)
+            Alert.alert(
+                "Proses Registrasi Berhasil",
+                "User berhasil terdaftar, silakan melakukan login",
+                [
+                    {
+                        text: "OK",
+                        onPress: () => replace("Login"),
+                        style: "cancel",
+                    },
+                ],
 
+            );
 
         } catch (err) {
             await dispatch({

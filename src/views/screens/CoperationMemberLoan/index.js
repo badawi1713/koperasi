@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
-import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import ContentLoader from "react-native-easy-content-loader"
 import NumberFormat from 'react-number-format'
 import { useDispatch, useSelector } from 'react-redux'
-import { ICLoan, ICDebt } from '../../../assets'
+import { ICDebt, ICLoan } from '../../../assets'
 import { changeMisc, getLoanCoperationMemberData } from '../../../store/actions'
 import { colors, fonts } from '../../../utils'
 import { Button, Gap, LoanDetail, LoanTransfer, TopNavbar } from '../../components'
@@ -11,7 +12,7 @@ const CoperationMemberLoan = ({ navigation }) => {
     const dispatch = useDispatch()
     const miscReducer = useSelector(state => state.miscReducer)
     const loanCoperationMemberReducer = useSelector(state => state.loanCoperationMemberReducer)
-    const { data, loanHistory } = loanCoperationMemberReducer;
+    const { data, loanHistory, loading } = loanCoperationMemberReducer;
     const { showLoanDetail, showLoanTransfer } = miscReducer
 
     const handleBackButtonClick = () => {
@@ -59,10 +60,14 @@ const CoperationMemberLoan = ({ navigation }) => {
                             <Gap width={10} />
                             <View>
                                 <Text style={styles.textTitle}>Total Pinjaman</Text>
-                                <NumberFormat value={data && data.jumlahPokokPinjam || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
-                                    <Text style={styles.textTitle}>Rp {value}</Text>
+                                {loading ?
+                                    <ContentLoader paragrah pHeight={12} pRows={1} active title={false} />
+                                    : <NumberFormat value={data && data.jumlahPokokPinjam || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                                        <Text style={styles.textTitle}>Rp {value}</Text>
 
-                                } />
+                                    } />
+                                }
+
                                 <Gap height={5} />
                                 <TouchableOpacity onPress={showLoanDetailHandler} ><Text style={styles.textButton}>Tagihan Pinjaman</Text></TouchableOpacity>
                             </View>
@@ -75,47 +80,50 @@ const CoperationMemberLoan = ({ navigation }) => {
                         <Text style={styles.text}>Riwayat Pinjaman</Text>
                     </View>
 
-                    {loanHistory.length === 0 ?
-                        <>
-                            <Gap height={30} />
-                            <Text style={[styles.textTitle, { textAlign: 'center' }]}>Tidak Ada Riwayat Pinjaman</Text>
-                        </> :
-                        <ScrollView showsVerticalScrollIndicator={false}>
-                            {loanHistory.map((item, index) => (
-                                <View key={index}>
-                                    <View style={styles.section}>
-                                        <View style={styles.row}>
-                                            <ICDebt width={28} height={28} />
-                                            <Gap width={10} />
-                                            <View style={{ flex: 1, }}>
-                                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flex: 1 }}>
-                                                    <Text style={styles.text}>Jumlah Pokok Pinjaman</Text>
-                                                    <NumberFormat value={item.jumlahPokokPinjam || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
-                                                        <Text>Rp {value}</Text>
-                                                    } />
+                    {
+                        loading ?
+                            <ActivityIndicator color={colors.background.green1} size='large' /> :
+                            loanHistory.length === 0 ?
+                                <>
+                                    <Gap height={30} />
+                                    <Text style={[styles.textTitle, { textAlign: 'center' }]}>Tidak Ada Riwayat Pinjaman</Text>
+                                </> :
+                                <ScrollView showsVerticalScrollIndicator={false}>
+                                    {loanHistory.map((item, index) => (
+                                        <View key={index}>
+                                            <View style={styles.section}>
+                                                <View style={styles.row}>
+                                                    <ICDebt width={28} height={28} />
+                                                    <Gap width={10} />
+                                                    <View style={{ flex: 1, }}>
+                                                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flex: 1 }}>
+                                                            <Text style={styles.text}>Jumlah Pokok Pinjaman</Text>
+                                                            <NumberFormat value={item.jumlahPokokPinjam || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                                                                <Text>Rp {value}</Text>
+                                                            } />
 
-                                                </View>
-                                                <Gap height={5} />
-                                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flex: 1 }}>
-                                                    <Text style={styles.text}>Sisa Pokok Pinjaman</Text>
-                                                    <NumberFormat value={item.sisaPokokPinjam || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
-                                                        <Text>Rp {value}</Text>
-                                                    } />
+                                                        </View>
+                                                        <Gap height={5} />
+                                                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flex: 1 }}>
+                                                            <Text style={styles.text}>Sisa Pokok Pinjaman</Text>
+                                                            <NumberFormat value={item.sisaPokokPinjam || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                                                                <Text>Rp {value}</Text>
+                                                            } />
 
+                                                        </View>
+                                                        <Gap height={10} />
+                                                        <Text style={styles.textStatus(item.status)}>{item.status}</Text>
+                                                    </View>
                                                 </View>
-                                                <Gap height={10} />
-                                                <Text style={styles.textStatus(item.status)}>{item.status}</Text>
                                             </View>
                                         </View>
-                                    </View>
-                                </View>
 
-                            ))}
+                                    ))}
 
-                            <Gap height={20} />
+                                    <Gap height={20} />
 
 
-                        </ScrollView>
+                                </ScrollView>
 
                     }
 

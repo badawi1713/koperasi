@@ -1,11 +1,17 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, StyleSheet, View, StatusBar } from 'react-native';
 import { colors, fonts } from '../../../utils';
 import { Button, Gap, StartedSwiper, TopNavbar } from '../../components';
 
 const GetStarted = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar
+        animated={true}
+        backgroundColor='#fff'
+        barStyle='dark-content'
+        showHideTransition='fade'
+      />
       <TopNavbar
         variant="link"
         title="Lewati"

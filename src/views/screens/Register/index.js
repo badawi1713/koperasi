@@ -5,7 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   Text, TextInput,
-  TouchableOpacity, View
+  TouchableOpacity, View, StatusBar
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { ICInvisible, ICVisible } from '../../../assets';
@@ -22,7 +22,7 @@ const Register = ({ navigation }) => {
 
   const registerReducer = useSelector(state => state.registerReducer)
 
-  const { loading, error } = registerReducer
+  const { loading, } = registerReducer
 
   const visiblePasswordHandler = () => {
     setVisiblePassword(!visiblePassword);
@@ -51,6 +51,12 @@ const Register = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar
+        animated={true}
+        backgroundColor='#fff'
+        barStyle='dark-content'
+        showHideTransition='fade'
+      />
       <TopNavbar
         variant="link-back"
         title="Masuk"

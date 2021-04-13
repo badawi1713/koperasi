@@ -3,7 +3,7 @@ import { BackHandler, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, Vie
 import SelectPicker from 'react-native-form-select-picker'
 import { useDispatch, useSelector } from 'react-redux'
 import { Gap, TopNavbar } from '../..'
-import { changeLoanCoperationMember, postLoanCoperationMemberTransfer } from '../../../../store/actions'
+import { changeLoanCoperationMember, postLoanCalculateTransfer, postLoanSaveTransfer } from '../../../../store/actions'
 import { colors, fonts } from '../../../../utils'
 import { Button } from '../../atoms'
 
@@ -28,6 +28,22 @@ const LoanTransfer = ({ showLoanTransferHandler, handleBackButtonClick }) => {
     }, []);
 
     const loanTransferCondition = loanAmount >= 0 && loanAmount < 1000000 || month === 0
+
+    const loanSubmitHandler = async () => {
+        await dispatch(postLoanCalculateTransfer())
+
+        Alert.alert(
+            "Konfirmasi Pinjaman",
+            `Konfirmasi peminjaman dana sebesar Rp ${loanAmount} dengan angsuran ${month} bulan?`,
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel"
+                },
+                { text: "OK", onPress: () => dispatch(postLoanSaveTransfer()) }
+            ]
+        );
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -87,8 +103,8 @@ const LoanTransfer = ({ showLoanTransferHandler, handleBackButtonClick }) => {
                                 placeholderStyle={{ color: colors.text.grey1, fontFamily: fonts.primary.normal }}
                             >
 
-                                {Object.values(options).map((item) => (
-                                    <SelectPicker.Item label={item.label} value={item.value} key={item.label} />
+                                {Object.values(options).map((item, index) => (
+                                    <SelectPicker.Item key={index} label={item.label} value={item.value} />
                                 ))}
 
                             </SelectPicker>
@@ -101,7 +117,7 @@ const LoanTransfer = ({ showLoanTransferHandler, handleBackButtonClick }) => {
                     </View>
                 </ScrollView>
 
-                <Button disabled={loanTransferCondition} onPress={() => { dispatch(postLoanCoperationMemberTransfer()) }} rounded={false} fullWidth title='Lanjutkan' variant={loanTransferCondition ? 'disabled' : 'primary'} />
+                <Button disabled={loanTransferCondition} onPress={loanSubmitHandler} rounded={false} fullWidth title='Lanjutkan' variant={loanTransferCondition ? 'disabled' : 'primary'} />
             </View>
         </SafeAreaView>
     )
