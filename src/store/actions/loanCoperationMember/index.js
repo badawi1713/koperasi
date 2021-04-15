@@ -15,7 +15,8 @@ export const getInstallmentPaymentData = () => {
         })
 
         try {
-            const response = await ApiGetRequest(`/mobile/koperasi/pinjamanBayar/${id}`)
+            const response = await Api.get(`/mobile/koperasi/pinjamanBayar/${id}`)
+            console.log(response.data.data)
             await dispatch({
                 type: SET_LOAN_COPERATION_MEMBER,
                 payload: {
@@ -28,7 +29,7 @@ export const getInstallmentPaymentData = () => {
                 type: SET_LOAN_COPERATION_MEMBER,
                 payload: {
                     loading: false,
-                    error: true
+                    error: true,
                 }
             })
         }
@@ -75,22 +76,61 @@ export const postLoanCalculateTransfer = () => {
             nominal: loanAmount, tenor: month
         }
 
+        await dispatch({
+            type: SET_LOAN_COPERATION_MEMBER,
+            payload: {
+                loading: true,
+            },
+        });
+
         try {
-            await Api.post(
-                `/mobile/koperasi/pinjamanApply`, data
+            const response = await Api.post(
+                `/mobile/koperasi/pinjamanSimulasi`, data
             );
 
-            await dispatch({
-                type: SET_LOAN_COPERATION_MEMBER,
-                payload: {
-                    error: false,
-                    loading: false,
-                    loanAmount: "",
-                    month: ""
-                },
-            });
+            console.log(response.data)
+
+            if (response.data.rc === "00") {
+                await Api.post(
+                    `/mobile/koperasi/pinjamanApply`, data
+                );
+
+                await Alert.alert(
+                    "Proses Pinjam Dana Sukses",
+                    "Terima kasih, pinjaman akan segera diproses",
+                    [
+                        {
+                            onPress: () => { RootNavigation.navigate("CoperationMemberLoan") },
+                            text: "OK",
+                        },
+                    ],
+
+                );
+
+                await dispatch({
+                    type: SET_LOAN_COPERATION_MEMBER,
+                    payload: {
+                        error: false,
+                        loading: false,
+                        loanAmount: "",
+                        month: ""
+                    },
+                });
+            } else {
+                dispatch({
+                    type: SET_LOAN_COPERATION_MEMBER,
+                    payload: {
+                        errorMessage: err.response.data.rd,
+                        error: true,
+                        loading: false,
+                        loanAmount: "",
+                        month: ""
+                    },
+                });
+            }
 
         } catch (err) {
+            console.log('nop', err.response.data.rd)
             Alert.alert(
                 "Proses Pinjam Dana Gagal",
                 err.response.data.rd,
@@ -123,48 +163,19 @@ export const postLoanSaveTransfer = () => {
             nominal: loanAmount, tenor: month
         }
 
+        console.log('data loan', data)
+
         try {
             await Api.post(
                 `/mobile/koperasi/pinjamanSimulasi`, data
             );
 
-
-            await Alert.alert(
-                "Proses Pinjam Dana Sukses",
-                "Terima kasih, pinjaman akan segera diproses",
-                [
-                    {
-                        onPress: () => { RootNavigation.navigate("CoperationMemberLoan") },
-                        text: "OK",
-                    },
-                ],
-
-            );
-            await dispatch({
-                type: SET_LOAN_COPERATION_MEMBER,
-                payload: {
-                    error: false,
-                    loading: false,
-                    loanAmount: "",
-                    month: ""
-                },
-            });
-
         } catch (err) {
-            Alert.alert(
-                "Proses Pinjam Dana Gagal",
-                err.response.data.rd,
-                [
-                    {
-                        text: "Tutup",
-                        style: "cancel",
-                    },
-                ],
-
-            );
+            console.log('this', err.response.data.rd,)
             dispatch({
                 type: SET_LOAN_COPERATION_MEMBER,
                 payload: {
+                    errorMessage: err.response.data.rd,
                     error: true,
                     loading: false,
                     loanAmount: "",

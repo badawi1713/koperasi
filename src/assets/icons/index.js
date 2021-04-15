@@ -43,8 +43,10 @@ import ICEWalletActive from './wallet-active.svg';
 import ICEWalletInActive from './wallet-inactive.svg';
 import ICWithdraw from './withdraw.svg';
 import ICPayment from './payment.svg';
+import ICPaymentDisabled from './payment-disabled.svg';
 
 export {
+  ICPaymentDisabled,
   ICPayment,
   ICDebt,
   ICLoan,

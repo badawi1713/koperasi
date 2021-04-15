@@ -35,12 +35,13 @@ const MemberRegisterForm = () => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [tanggalLahirError, setTanggalLahirError] = useState(false);
     const [ktpError, setKtpError] = useState(false);
+    const [ktpErrorMessage, setKtpErrorMessage] = useState("")
 
     const profileReducer = useSelector(state => state.profileReducer);
     const { memberProfile, registerLoading, userProfile: { name } } = profileReducer;
     const { nama, ktp, noKtp, tempatLahir, tanggalLahir, alamat, } = memberProfile;
 
-    const { control, handleSubmit, errors, watch } = useForm();
+    const { control, handleSubmit, errors } = useForm();
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -62,10 +63,19 @@ const MemberRegisterForm = () => {
             if (response.didCancel) {
                 await dispatch(changeProfile({ memberProfile: { ...memberProfile, ktp: [] } }))
                 setKtpError(true)
-
+                setKtpErrorMessage("Berkas KTP belum dipilih")
             } else {
-                await dispatch(changeProfile({ memberProfile: { ...memberProfile, ktp: response } }))
-                setKtpError(false)
+                if (response.fileSize > 1048576) {
+                    await dispatch(changeProfile({ memberProfile: { ...memberProfile, ktp: [] } }))
+                    setKtpError(true)
+                    setKtpErrorMessage("Ukuran berkas KTP maksimal 1 MB")
+
+                }
+                else {
+                    await dispatch(changeProfile({ memberProfile: { ...memberProfile, ktp: response } }))
+                    setKtpError(false)
+                    setKtpErrorMessage("")
+                }
             }
         });
     };
@@ -74,6 +84,7 @@ const MemberRegisterForm = () => {
         dispatch(changeProfile({ registerLoading: true }))
         if (tanggalLahir === "" && ktp.length === 0) {
             setKtpError(true)
+            setKtpErrorMessage("Berkas KTP belum dipilih")
             setTanggalLahirError(true)
             dispatch(changeProfile({ registerLoading: false }))
 
@@ -82,14 +93,17 @@ const MemberRegisterForm = () => {
             dispatch(changeProfile({ registerLoading: false }))
         } else if (ktp.length === 0) {
             setKtpError(true)
+            setKtpErrorMessage("Berkas KTP belum dipilih")
             dispatch(changeProfile({ registerLoading: false }))
 
         } else {
             dispatch(changeProfile({ registerLoading: false }))
             setKtpError(false)
+            setKtpErrorMessage("")
             setTanggalLahirError(false)
             const data = await createFormData(ktp, { nama, noKtp, tempatLahir, tanggalLahir, alamat });
             await dispatch(registerMemberProfile(data))
+
         }
 
     };
@@ -114,6 +128,8 @@ const MemberRegisterForm = () => {
                             control={control}
                             render={({ onChange, onBlur, value }) => (
                                 <TextInput
+                                    placeholderTextColor={colors.text.grey1}
+
                                     onBlur={onBlur}
                                     style={styles.textInput}
                                     placeholder="Nama Lengkap"
@@ -124,7 +140,7 @@ const MemberRegisterForm = () => {
                             )}
                             name="nama"
                             rules={{ required: true }}
-                            defaultValue=""
+                            defaultValue={name}
                         />
                     </View>
                     {errors.nama && <>
@@ -140,8 +156,9 @@ const MemberRegisterForm = () => {
                 </TouchableOpacity>
                 {ktpError && <>
                     <Gap height={5} />
-                    <Text style={styles.errorText}>Gambar KTP belum dipilih</Text>
+                    <Text style={styles.errorText}>{ktpErrorMessage}</Text>
                 </>}
+
                 <Gap height={10} />
                 <View style={styles.inputGroup}>
                     <Text style={styles.label}>Nomor Identitas KTP</Text>
@@ -150,6 +167,8 @@ const MemberRegisterForm = () => {
                             control={control}
                             render={({ onChange, onBlur, value }) => (
                                 <TextInput
+                                    placeholderTextColor={colors.text.grey1}
+
                                     onBlur={onBlur}
                                     style={styles.textInput}
                                     value={value}
@@ -180,6 +199,7 @@ const MemberRegisterForm = () => {
                                 control={control}
                                 render={({ onChange, onBlur, value }) => (
                                     <TextInput
+                                        placeholderTextColor={colors.text.grey1}
                                         onBlur={onBlur}
                                         style={styles.textInput}
                                         value={value}
@@ -204,14 +224,16 @@ const MemberRegisterForm = () => {
                             <ICalendar />
                             <Gap width={5} />
                             <TextInput
+                                style={styles.textInput}
+                                placeholderTextColor={colors.text.grey1}
                                 value={tanggalLahir}
-                                placeholder="DD-MM-YYYY"
                                 editable={false}
+                                placeholder="DD-MM-YYYY"
                             />
                         </TouchableOpacity>
                         {tanggalLahirError && <>
                             <Gap height={5} />
-                            <Text style={styles.errorText}>Tanggal lahir harus diisi</Text>
+                            <Text style={styles.errorText}>Tanggal harus diisi</Text>
                         </>}
                     </View>
                 </View>
@@ -223,6 +245,7 @@ const MemberRegisterForm = () => {
                             control={control}
                             render={({ onChange, onBlur, value }) => (
                                 <TextInput
+                                    placeholderTextColor={colors.text.grey1}
                                     onBlur={onBlur}
                                     style={styles.textInput}
                                     value={value}
@@ -272,7 +295,7 @@ const MemberRegisterForm = () => {
                 <Gap height={20} />
                 <Button loading={registerLoading} onPress={
                     handleSubmit(postMemberProfileHandler)
-                } title="Buka Toko Koperasi" variant="primary" fullWidth />
+                } title="Daftar Anggota Koperasi" variant="primary" fullWidth />
             </View>
         </ScrollView>
     );
@@ -307,6 +330,7 @@ const styles = StyleSheet.create({
     },
     textInput: {
         flex: 1,
+        color: colors.black
     },
     inputContainer: {
         borderWidth: 1,

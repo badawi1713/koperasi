@@ -4,7 +4,7 @@ import ContentLoader from "react-native-easy-content-loader"
 import NumberFormat from 'react-number-format'
 import { useDispatch, useSelector } from 'react-redux'
 import { ICDebt, ICLoan } from '../../../assets'
-import { changeMisc, getLoanCoperationMemberData } from '../../../store/actions'
+import { changeMisc, getLoanCoperationMemberData, changeLoanCoperationMember, getInstallmentPaymentData } from '../../../store/actions'
 import { colors, fonts } from '../../../utils'
 import { Button, Gap, LoanDetail, LoanTransfer, TopNavbar } from '../../components'
 
@@ -20,6 +20,7 @@ const CoperationMemberLoan = ({ navigation }) => {
             showLoanDetail: false,
             showLoanTransfer: false
         }))
+        dispatch(getLoanCoperationMemberData())
         return true;
     }
 
@@ -31,11 +32,16 @@ const CoperationMemberLoan = ({ navigation }) => {
         return getLoanData()
     }, [dispatch])
 
-    const showLoanDetailHandler = () => {
-        dispatch(changeMisc({
+    const showLoanDetailHandler = async () => {
+        await dispatch(changeMisc({
             showLoanDetail: !showLoanDetail,
             showLoanTransfer: false
         }))
+        await dispatch(changeLoanCoperationMember({
+            loading: true
+        }))
+        await dispatch(getLoanCoperationMemberData())
+        await dispatch(getInstallmentPaymentData())
     }
 
     const showLoanTransferHandler = () => {
@@ -43,6 +49,8 @@ const CoperationMemberLoan = ({ navigation }) => {
             showLoanDetail: false,
             showLoanTransfer: !showLoanTransfer
         }))
+        dispatch(getLoanCoperationMemberData())
+
     }
 
     if (showLoanDetail) { return <LoanDetail handleBackButtonClick={handleBackButtonClick} showLoanDetailHandler={showLoanDetailHandler} /> } else if (showLoanTransfer) {

@@ -1,13 +1,13 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import {
   ICBackArrow,
   ICCart,
   ICEmail,
   ICNotification,
 } from '../../../../assets/icons';
-import {colors, fonts} from '../../../../utils';
-import {Gap, Link} from '../../atoms';
+import { colors, fonts } from '../../../../utils';
+import { Gap, Link } from '../../atoms';
 
 const TopNavbar = ({
   variant = '',
@@ -82,16 +82,15 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 70,
     padding: 18,
-    borderBottomWidth: variant === '' ? 0.3 : 0,
-    borderColor: colors.border,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent:
       variant === 'link-home' || variant === 'link-back'
         ? 'space-between'
         : variant === 'link'
-        ? 'flex-end'
-        : 'flex-start',
+          ? 'flex-end'
+          : 'flex-start',
+    elevation: variant === 'link-home' || variant === '' ? 1 : 0
   }),
   titleText: (variant) => ({
     color: variant === 'link-home' ? colors.primary : colors.text.header,

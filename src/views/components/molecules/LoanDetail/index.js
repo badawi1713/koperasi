@@ -4,7 +4,7 @@ import { ActivityIndicator, BackHandler, SafeAreaView, ScrollView, StyleSheet, T
 import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
 import { Gap, TopNavbar } from '../..';
-import { ICPayment, IMGNoLoan } from '../../../../assets';
+import { ICPayment, IMGNoLoan, ICPaymentDisabled } from '../../../../assets';
 import { getInstallmentPaymentData } from '../../../../store/actions';
 import { colors, fonts } from '../../../../utils';
 
@@ -14,7 +14,7 @@ const LoanDetail = ({ showLoanDetailHandler, handleBackButtonClick }) => {
 
     const loanCoperationMemberReducer = useSelector(({ loanCoperationMemberReducer }) => loanCoperationMemberReducer);
 
-    let installmentPaymentData = loanCoperationMemberReducer.installmentPaymentData;
+    const installmentPaymentData = loanCoperationMemberReducer.installmentPaymentData;
 
     const { loading } = loanCoperationMemberReducer
 
@@ -24,6 +24,7 @@ const LoanDetail = ({ showLoanDetailHandler, handleBackButtonClick }) => {
 
     const [checkedPaymentData, setCheckedPaymentData] = useState(installmentPaymentData)
     const [paymentData, setPaymentData] = useState([]);
+    const [paymentButtonDisabled, setPaymentButtonDisabled] = useState(true)
     const [totalPayment, setTotalPayment] = useState(0);
 
     useEffect(() => {
@@ -38,7 +39,15 @@ const LoanDetail = ({ showLoanDetailHandler, handleBackButtonClick }) => {
             dispatch(getInstallmentPaymentData())
         }
         return getInstallmentPayment();
-    }, [])
+    }, [dispatch])
+
+    useEffect(() => {
+        if (paymentData.length > 0) {
+            setPaymentButtonDisabled(false)
+        } else {
+            setPaymentButtonDisabled(true)
+        }
+    }, [paymentData])
 
     const checkedPaymentHandler = (item) => {
         const existingData = paymentData.map(item => item.bayarId);
@@ -69,45 +78,43 @@ const LoanDetail = ({ showLoanDetailHandler, handleBackButtonClick }) => {
         <SafeAreaView style={styles.container}>
             <TopNavbar title='Tagihan Pinjaman' back linkBack={showLoanDetailHandler} />
             {loading ? <View style={styles.content}><ActivityIndicator color={colors.background.green1} size='large' /></View> :
-                checkedPaymentData.length === 0 ?
-                    (<View style={styles.content}><IMGNoLoan /><Gap height={20} /><Text style={styles.textTitle}>Tidak ada pinjaman yang aktif</Text></View>)
-                    :
+                checkedPaymentData && checkedPaymentData.length !== 0 ?
                     <>
                         <ScrollView showsVerticalScrollIndicator={false} style={styles.contentContainer}>
                             <Gap height={20} />
-                            {checkedPaymentData.map((item, index) => (
+                            {checkedPaymentData && checkedPaymentData.map((item, index) => (
                                 <View key={index}>
                                     <TouchableOpacity onPress={() => { checkedPaymentHandler(item) }} style={styles.cardContainer(item.isChecked)}>
-                                        <View style={styles.verticalLine} />
-                                        <Gap width={20} />
-                                        <ICPayment width={40} height={40} />
-                                        <Gap width={15} />
+                                        <View style={styles.verticalLine(item.isChecked)} />
+                                        <Gap width={10} />
+                                        {item.isChecked ? <ICPayment width={40} height={40} /> : <ICPaymentDisabled width={40} height={40} />}
+                                        <Gap width={10} />
                                         <View>
-                                            <Text>Jatuh Tempo</Text>
+                                            <Text style={styles.text}>Jatuh Tempo</Text>
                                             <Gap height={20} />
-                                            <Text>Angsuran Bulan</Text>
+                                            <Text style={styles.text}>Angsuran Bulan</Text>
                                             <Gap height={5} />
-                                            <Text>Nominal</Text>
+                                            <Text style={styles.text}>Nominal</Text>
                                             <Gap height={5} />
-                                            <Text>Denda</Text>
+                                            <Text style={styles.text}>Denda</Text>
                                             <Gap height={5} />
-                                            <Text>Status</Text>
+                                            <Text style={styles.text}>Status</Text>
                                         </View>
                                         <Gap width={20} />
                                         <View>
-                                            <Text>{moment(item.tanggalTenor).format("DD-MM-YYYY")}</Text>
+                                            <Text style={styles.text}>{moment(item.tanggalTenor).format("DD-MM-YYYY")}</Text>
                                             <Gap height={20} />
-                                            <Text>{item.angsuranKe}</Text>
+                                            <Text style={styles.text}>{item.angsuranKe}</Text>
                                             <Gap height={5} />
                                             <NumberFormat value={item.nominalAngsuran || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
-                                                <Text >Rp {value}</Text>
+                                                <Text style={styles.text} >Rp {value}</Text>
                                             } />
                                             <Gap height={5} />
                                             <NumberFormat value={item.denda || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
-                                                <Text >Rp {value}</Text>
+                                                <Text style={styles.text} >Rp {value}</Text>
                                             } />
                                             <Gap height={5} />
-                                            <Text>{item.status}</Text>
+                                            <Text style={styles.text}>{item.status}</Text>
                                         </View>
                                     </TouchableOpacity>
                                     <Gap height={20} />
@@ -117,16 +124,20 @@ const LoanDetail = ({ showLoanDetailHandler, handleBackButtonClick }) => {
                         </ScrollView>
                         <View style={styles.paymentBar} >
                             <View>
-                                <Text>Total Pembayaran</Text>
+                                <Text style={styles.text}>Total Pembayaran</Text>
                                 <Gap height={5} />
-                                <Text>Rp {totalPayment}</Text>
+                                <NumberFormat value={totalPayment || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                                    <Text style={styles.textTitle} >Rp {value}</Text>
+                                } />
+
                             </View>
-                            <TouchableOpacity style={styles.button}>
+                            <TouchableOpacity disabled={paymentButtonDisabled} style={styles.button(paymentButtonDisabled)}>
                                 <Text style={styles.textButton}>Bayar</Text>
                             </TouchableOpacity>
                         </View>
                     </>
-
+                    :
+                    (<View style={styles.content}><IMGNoLoan /><Gap height={20} /><Text style={styles.textTitle}>Tidak ada pinjaman yang aktif</Text></View>)
             }
         </SafeAreaView>
     )
@@ -163,9 +174,9 @@ const styles = StyleSheet.create({
     },
 
     text: {
-        fontSize: 14,
+        fontSize: 13,
         color: colors.black,
-        fontFamily: fonts.primary[600],
+        fontFamily: fonts.primary.normal,
     },
 
     textTitle: {
@@ -183,23 +194,23 @@ const styles = StyleSheet.create({
         padding: 18,
     },
 
-    button: {
+    button: (paymentButtonDisabled) => ({
         padding: 10,
         paddingHorizontal: 20,
-        backgroundColor: colors.background.green1,
+        backgroundColor: paymentButtonDisabled ? colors.background.grey2 : colors.background.green1,
         fontFamily: fonts.primary[400],
         borderRadius: 6
-    },
+    }),
     textButton: {
         fontSize: 16,
         color: colors.white,
         fontFamily: fonts.primary[600],
     },
-    verticalLine: {
+    verticalLine: (isChecked) => ({
         width: 4,
-        backgroundColor: colors.background.green1,
+        backgroundColor: isChecked ? colors.background.green1 : colors.border,
         height: '100%'
-    },
+    }),
     cardContainer: (isChecked) => ({
         flexDirection: 'row',
         borderRadius: 6,
@@ -207,7 +218,7 @@ const styles = StyleSheet.create({
         borderColor: colors.border,
         padding: 18,
         alignItems: 'center',
-        backgroundColor: isChecked ? colors.background.grey4 : colors.white
+        backgroundColor: isChecked ? colors.white : colors.background.grey4
     })
 
 })

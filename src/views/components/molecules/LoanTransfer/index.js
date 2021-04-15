@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { BackHandler, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { BackHandler, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View, Alert } from 'react-native'
 import SelectPicker from 'react-native-form-select-picker'
 import { useDispatch, useSelector } from 'react-redux'
 import { Gap, TopNavbar } from '../..'
@@ -18,7 +18,7 @@ const LoanTransfer = ({ showLoanTransferHandler, handleBackButtonClick }) => {
 
     const loanCoperationMemberReducer = useSelector(state => state.loanCoperationMemberReducer)
 
-    const { loanAmount, month } = loanCoperationMemberReducer
+    const { loanAmount, month, loading } = loanCoperationMemberReducer
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
@@ -27,22 +27,27 @@ const LoanTransfer = ({ showLoanTransferHandler, handleBackButtonClick }) => {
         };
     }, []);
 
-    const loanTransferCondition = loanAmount >= 0 && loanAmount < 1000000 || month === 0
+    const loanTransferCondition = loanAmount >= 0 && loanAmount < 1000000 || month < 1
 
-    const loanSubmitHandler = async () => {
-        await dispatch(postLoanCalculateTransfer())
-
+    const loanSubmitHandler = () => {
         Alert.alert(
-            "Konfirmasi Pinjaman",
-            `Konfirmasi peminjaman dana sebesar Rp ${loanAmount} dengan angsuran ${month} bulan?`,
+            "Proses Pinjam Dana",
+            `Konfirmasi peminjaman dana sebesar Rp ${loanAmount} dengan cicilan ${month} bulan?`,
             [
                 {
-                    text: "Cancel",
-                    style: "cancel"
+                    text: "Batal",
+                    style: "cancel",
                 },
-                { text: "OK", onPress: () => dispatch(postLoanSaveTransfer()) }
-            ]
+                {
+                    onPress: () => {
+                        dispatch(postLoanCalculateTransfer())
+                    },
+                    text: "Ya",
+                },
+            ],
+
         );
+
     }
 
     return (
@@ -103,8 +108,8 @@ const LoanTransfer = ({ showLoanTransferHandler, handleBackButtonClick }) => {
                                 placeholderStyle={{ color: colors.text.grey1, fontFamily: fonts.primary.normal }}
                             >
 
-                                {Object.values(options).map((item, index) => (
-                                    <SelectPicker.Item key={index} label={item.label} value={item.value} />
+                                {Object.values(options).map((item) => (
+                                    <SelectPicker.Item key={item.label} label={item.label} value={item.value} />
                                 ))}
 
                             </SelectPicker>
@@ -117,7 +122,7 @@ const LoanTransfer = ({ showLoanTransferHandler, handleBackButtonClick }) => {
                     </View>
                 </ScrollView>
 
-                <Button disabled={loanTransferCondition} onPress={loanSubmitHandler} rounded={false} fullWidth title='Lanjutkan' variant={loanTransferCondition ? 'disabled' : 'primary'} />
+                <Button disabled={loanTransferCondition} loading={loading} onPress={loanSubmitHandler} rounded={false} fullWidth title='Lanjutkan' variant={loanTransferCondition ? 'disabled' : 'primary'} />
             </View>
         </SafeAreaView>
     )

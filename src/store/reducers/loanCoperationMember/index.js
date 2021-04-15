@@ -4,7 +4,7 @@ const initialState = {
     loading: true,
     error: false,
     errorMessage: "",
-    loanAmount: 0,
+    loanAmount: "",
     month: 0,
     loanHistory: [],
     data: {},

@@ -1,5 +1,7 @@
-import { ApiGetRequest, ApiPostMultipart } from '../../../utils/api/koperasi';
+import { Api, ApiGetRequest } from '../../../utils/api/koperasi';
 import { SET_PROFILE } from '../../constants';
+import { Alert } from "react-native";
+import * as RootNavigation from '../../../helpers/RootNavigation';
 
 export const getProfile = () => {
     return async (dispatch) => {
@@ -39,19 +41,63 @@ export const registerMemberProfile = (data) => {
         dispatch({
             type: SET_PROFILE,
             payload: {
-                loading: true
+                registerLoading: true
             }
         })
 
         try {
-            const response = await ApiPostMultipart(
-                "/mobile/koperasi/register",
-                data
+
+            const response = await Api.post("/mobile/koperasi/register", data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            dispatch({
+                type: SET_PROFILE,
+                payload: {
+                    registerLoading: false,
+                    memberProfile: {
+                        nama: "",
+                        ktp: [],
+                        noKtp: "",
+                        tempatLahir: "", tanggalLahir: "", alamat: ""
+                    },
+                }
+            })
+
+            Alert.alert(
+                "Pendaftaran Anggota Koperasi Berhasil",
+                "Silakan tutup untuk langkah berikutnya",
+                [
+                    {
+                        onPress: () => { RootNavigation.navigate("CoperationMember") },
+                        text: "Tutup",
+                        style: "cancel",
+                    },
+                ],
+
             );
 
-            console.log('response upload', response.error.message)
         } catch (error) {
-            console.log("error register", error)
+            Alert.alert(
+                "Pendaftaran Anggota Koperasi Gagal",
+                error.response.data.rd,
+                [
+                    {
+                        onPress: () => { RootNavigation.navigate("CoperationMember") },
+                        text: "Tutup",
+                        style: "cancel",
+                    },
+                ],
+
+            );
+
+            dispatch({
+                type: SET_PROFILE,
+                payload: {
+                    registerLoading: false
+                }
+            })
         }
     }
 }

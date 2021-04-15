@@ -162,7 +162,7 @@ const Register = ({ navigation }) => {
             rules={{ required: true, minLength: 6 }}
             defaultValue=""
           />
-          <TouchableOpacity onPress={visiblePasswordHandler}>
+          <TouchableOpacity style={{ marginRight: 16 }} onPress={visiblePasswordHandler}>
             {visiblePassword ? <ICInvisible /> : <ICVisible />}
           </TouchableOpacity>
         </View>
@@ -196,7 +196,7 @@ const Register = ({ navigation }) => {
             rules={{ required: true }}
             defaultValue=""
           />
-          <TouchableOpacity onPress={visiblePasswordConfirmHandler}>
+          <TouchableOpacity style={{ marginRight: 16 }} onPress={visiblePasswordConfirmHandler}>
             {visiblePasswordConfirm ? <ICInvisible /> : <ICVisible />}
           </TouchableOpacity>
         </View>
@@ -275,8 +275,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 4,
-    paddingLeft: 8,
-    paddingRight: 16,
+
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -285,7 +284,9 @@ const styles = StyleSheet.create({
     flex: 1,
     color: colors.text.dark1,
     fontFamily: fonts.primary.normal,
-    fontSize: 14
+    fontSize: 14,
+    paddingLeft: 8,
+    paddingRight: 16,
   },
   termsText: {
     flexDirection: 'row',
