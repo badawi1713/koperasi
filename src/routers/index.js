@@ -27,6 +27,19 @@ import {
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
+const config = {
+  animation: 'spring',
+  config: {
+    stiffness: 1000,
+    damping: 500,
+    mass: 3,
+    overshootClamping: true,
+    restDisplacementThreshold: 0.01,
+    restSpeedThreshold: 0.01,
+  },
+};
+
 const MainApp = () => {
   return (
     <Tab.Navigator tabBar={(props) => <BottomTab {...props} />}>
@@ -41,54 +54,66 @@ const MainApp = () => {
 
 const Router = () => {
   return (
-    <Stack.Navigator initialRouteName="SplashScreen">
+    <Stack.Navigator initialRouteName="SplashScreen" screenOptions={{ headerShown: false }}>
       <Stack.Screen
-        options={{ headerShown: false }}
         name="SplashScreen"
         component={SplashScreen}
       />
       <Stack.Screen
-        options={{ headerShown: false }}
         name="GetStarted"
         component={GetStarted}
+        options={{
+          gestureDirection: 'horizontal',
+          transitionSpec: {
+            open: config,
+            close: config,
+          },
+        }}
       />
       <Stack.Screen
-        options={{ headerShown: false }}
+
         name="Login"
         component={Login}
+        options={{
+          gestureDirection: 'horizontal',
+          transitionSpec: {
+            open: config,
+            close: config,
+          },
+        }}
       />
       <Stack.Screen
-        options={{ headerShown: false }}
+
         name="Register"
         component={Register}
       />
       <Stack.Screen
-        options={{ headerShown: false }}
+
         name="RegisterVerification"
         component={RegisterVerification}
       />
       <Stack.Screen
-        options={{ headerShown: false }}
+
         name="MainApp"
         component={MainApp}
       />
       <Stack.Screen
-        options={{ headerShown: false }}
+
         name="Pulsa"
         component={Pulsa}
       />
       <Stack.Screen
-        options={{ headerShown: false }}
+
         name="StoreRegister"
         component={StoreRegister}
       />
       <Stack.Screen
-        options={{ headerShown: false }}
+
         name="CoperationMember"
         component={CoperationMember}
       />
       <Stack.Screen
-        options={{ headerShown: false }}
+
         name="CoperationAccount"
         component={CoperationAccount}
       />
@@ -98,17 +123,17 @@ const Router = () => {
       <Stack.Screen options={{ headerShown: false }} name="QRCamera" component={QRCamera} />
       <Stack.Screen options={{ headerShown: false }} name="CoperationMemberSaving" component={CoperationMemberSaving} />
       <Stack.Screen
-        options={{ headerShown: false }}
+
         name="CoperationMemberSavingPayment"
         component={CoperationMemberSavingPayment}
       />
       <Stack.Screen
-        options={{ headerShown: false }}
+
         name="CoperationMemberSavingPaymentMethod"
         component={CoperationMemberSavingPaymentMethod}
       />
       <Stack.Screen
-        options={{ headerShown: false }}
+
         name="CoperationMemberLoan"
         component={CoperationMemberLoan}
       />
