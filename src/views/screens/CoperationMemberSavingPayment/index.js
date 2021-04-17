@@ -1,12 +1,12 @@
+import Clipboard from '@react-native-clipboard/clipboard'
 import React, { useEffect, useState } from 'react'
-import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { useSelector } from 'react-redux'
-import { ICCopy, IMGAccountConfirmation } from '../../../assets'
+import { BackHandler, Image, SafeAreaView, ScrollView, StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from 'react-native'
+import NumberFormat from 'react-number-format'
+import { useDispatch, useSelector } from 'react-redux'
+import { ICCopy, IMGAccountConfirmation, IMGQRDummy } from '../../../assets'
 import { changeSavingCoperationMember } from '../../../store/actions'
 import { colors, fonts } from '../../../utils'
 import { Gap, TopNavbar } from '../../components'
-import NumberFormat from 'react-number-format';
-import { useDispatch } from 'react-redux'
 
 const formatHour = (time) =>
     `${String(Math.floor(time / 3600)).padStart(2, '0')}`;
@@ -22,9 +22,19 @@ const formatSecond = (time) =>
 const CoperationMemberSavingPayment = ({ navigation }) => {
     const dispatch = useDispatch()
     const savingCoperationMemberReducer = useSelector(state => state.savingCoperationMemberReducer);
-    const { simpananWajib, simpananPokok, simpananSukarela } = savingCoperationMemberReducer;
+    const { simpananWajib, simpananPokok, simpananSukarela, viaPayment, timeLimit } = savingCoperationMemberReducer;
 
-    const [time, setTime] = useState(7200);
+
+    const [time, setTime] = useState(43200);
+
+    const handleBackButtonClick = () => {
+        navigation.navigate('MainApp'); dispatch(changeSavingCoperationMember({
+            simpananPokok: "",
+            simpananWajib: "",
+            simpananSukarela: "",
+            timeLimit: ""
+        }))
+    }
 
     useEffect(() => {
         if (time === 0) {
@@ -39,6 +49,19 @@ const CoperationMemberSavingPayment = ({ navigation }) => {
 
         return () => clearInterval(timer);
     }, [time]);
+
+    useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+        return () => {
+            BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
+        };
+    }, []);
+
+    const copyToClipboard = () => {
+        Clipboard.setString('89836554376538192');
+        ToastAndroid.show("Nomor rekening berhasil disalin", ToastAndroid.SHORT);
+
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -62,16 +85,20 @@ const CoperationMemberSavingPayment = ({ navigation }) => {
                     </View>
                     <Gap height={30} />
                     <View style={styles.merchantContainer}>
-                        <Image source={IMGAccountConfirmation} style={styles.imageContainer} />
+                        {viaPayment === "QRISPAY" ?
+                            <Image source={IMGQRDummy} style={styles.imageContainer} />
+                            : <Image source={IMGAccountConfirmation} style={styles.imageContainer} />
+
+                        }
                         <Gap height={5} />
                         <Text style={styles.text}>Mohon transfer ke tujuan nomor rekening</Text>
                         <Text style={styles.text}>dengan atas nama berikut</Text>
                         <Gap height={10} />
-                        <Text style={styles.text}>
-                            Nama Akun
+                        <Text style={styles.accountNumber}>
+                            Paylink
                     </Text>
                     </View>
-                    <Gap height={30} />
+                    <Gap height={20} />
                     <View style={styles.card}>
                         <Text style={styles.accountNumber}>89836554376538192</Text>
                         <Gap height={20} />
@@ -79,7 +106,7 @@ const CoperationMemberSavingPayment = ({ navigation }) => {
                             <TouchableOpacity style={styles.guideBox}>
                                 <Text style={styles.guideText}>Panduan Transfer</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.cardContent}>
+                            <TouchableOpacity onPress={copyToClipboard} style={styles.cardContent}>
                                 <Text style={styles.text}>Salin </Text>
                                 <Gap width={5} />
                                 <ICCopy />
@@ -119,6 +146,7 @@ const CoperationMemberSavingPayment = ({ navigation }) => {
                     simpananPokok: "",
                     simpananWajib: "",
                     simpananSukarela: "",
+                    timeLimit: ""
                 }))
             }} style={styles.okButton}>
                 <Text style={styles.okText}>OK</Text>

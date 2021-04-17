@@ -1,16 +1,16 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Swiper from 'react-native-swiper';
-import {startedCarouselData} from '../../../../assets';
-import {colors} from '../../../../utils';
-import {StartedSwiperItem} from '../../atoms';
+import { startedCarouselData } from '../../../../assets';
+import { colors } from '../../../../utils';
+import { StartedSwiperItem } from '../../atoms';
 
 const StartedSwiper = () => (
   <Swiper
     loadMinimal={true}
     showsButtons={false}
-    loop={true}
-    paginationStyle={{bottom: 10}}
+    loop={false}
+    paginationStyle={{ bottom: 10 }}
     dot={<View style={styles.dotStyle} />}
     activeDotStyle={styles.activeDotStyle}
     style={styles.wrapper}>

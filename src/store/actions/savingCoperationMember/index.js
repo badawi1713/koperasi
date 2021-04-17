@@ -1,5 +1,7 @@
-import { ApiGetRequest, ApiPostRequest } from '../../../utils/api/koperasi';
+import { Api, ApiGetRequest } from '../../../utils/api/koperasi';
 import { SET_SAVING_COPERATION_MEMBER } from '../../constants';
+import { navigate, replace } from '../../../helpers/RootNavigation'
+import { Alert } from "react-native";
 
 export const getSavingCoperationMemberPaymentMethod = () => {
     return async (dispatch) => {
@@ -42,11 +44,32 @@ export const postSavingCoperationMemberTransfer = () => {
         }
 
         try {
-            await ApiPostRequest(
+            const response = await Api.post(
                 `/mobile/koperasi/simpanan`, data
             );
 
+            await replace('CoperationMemberSavingPayment')
+            dispatch({
+                type: SET_SAVING_COPERATION_MEMBER,
+                payload: {
+                    timeLimit: response.data.data.batasBayar
+                },
+            });
+
         } catch (err) {
+            console.log("error", err.response.data.rd)
+            Alert.alert(
+                "Setor Simpanan Gagal",
+                err.response.data.rd,
+                [
+                    {
+                        text: "OK",
+                        onPress: () => replace("CoperationMemberSaving"),
+                        style: "cancel",
+                    },
+                ],
+
+            );
             dispatch({
                 type: SET_SAVING_COPERATION_MEMBER,
                 payload: {

@@ -12,7 +12,8 @@ const initialState = {
     simpananSukarela: "",
     totalSimpanan: 0,
     viaPayment: "",
-    paymentMethodData: []
+    paymentMethodData: [],
+    timeLimit: ""
 };
 
 const savingCoperationMemberReducer = (state = initialState, action) => {

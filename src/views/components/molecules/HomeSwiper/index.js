@@ -12,7 +12,7 @@ const HomeSwiper = () => {
             style={{ justifyContent: 'center' }}
             height={120}
             showsButtons={false}
-            loop={true}
+            loop={false}
             autoplay
             paginationStyle={{ bottom: 0 }}
             dot={<View style={styles.dotStyle} />}

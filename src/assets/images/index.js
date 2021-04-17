@@ -9,15 +9,20 @@ import IMGGetStarted1 from './img-getstarted-1.png';
 import IMGGetStarted2 from './img-getstarted-2.png';
 import IMGGetStarted3 from './img-getstarted-3.png';
 import IMGLogo from './img-logo.jpg';
+import IMGNoData from './img-no_data.svg';
 import IMGNoLoan from './img-no_loan.svg';
 import IMGPdam from './img-PDAM.png';
 import IMGPending from './img-pending.svg';
 import IMGPln from './img-PLN.png';
 import IMGPulsa from './img-pulsa.png';
+import IMGQRDummy from './img-qr-dummy.png';
 import IMGAll from './img-semua.png';
+import IMGStoreRegistrationSuccess from './img-store_registration-success.svg';
 import IMGUnderConstruction from './img-underconstruction.svg';
-
 export {
+  IMGNoData,
+  IMGStoreRegistrationSuccess,
+  IMGQRDummy,
   IMGNoLoan,
   IMGPending,
   IMGDefaultUser,

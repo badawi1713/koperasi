@@ -25,8 +25,35 @@ const SavingTransfer = ({ showSavingTransferHandler, handleBackButtonClick }) =>
         };
     }, []);
 
-    const savingTransferCondition = simpananWajib > 0 && simpananWajib < 20000 || simpananPokok > 0 && simpananPokok < 20000 || simpananSukarela > 0 && simpananSukarela < 20000 || ((!simpananPokok && simpananPokok === 0) && (!simpananWajib && simpananWajib === 0) && (!simpananSukarela && simpananSukarela === 0))
-    console.log(simpananPokok, simpananSukarela, simpananWajib)
+    const savingSubmitHandler = () => {
+        if ((simpananWajib >= 0 && simpananWajib < 20000 || simpananWajib === "") && (simpananPokok >= 0 && simpananPokok < 20000 || simpananPokok === "") && (simpananSukarela >= 0 && simpananSukarela < 20000 || simpananSukarela === "")) {
+            setIsPokokError(true)
+            setIsWajibError(true)
+            setIsSukarelaError(true)
+        } else if (simpananWajib >= 0 && simpananWajib < 20000 || simpananWajib === "") {
+            setIsWajibError(true)
+            setIsPokokError(false)
+            setIsSukarelaError(false)
+        } else if (simpananPokok >= 0 && simpananPokok < 20000 || simpananPokok === "") {
+            setIsWajibError(false)
+            setIsPokokError(true)
+            setIsSukarelaError(false)
+
+        } else if (simpananSukarela >= 0 && simpananSukarela < 20000 || simpananSukarela === "") {
+            setIsWajibError(false)
+            setIsPokokError(false)
+            setIsSukarelaError(true)
+        }
+        else {
+            setIsPokokError(false)
+            setIsWajibError(false)
+            setIsSukarelaError(false)
+            navigate('CoperationMemberSavingPaymentMethod')
+        }
+    }
+
+    const savingTransferCondition =
+        console.log('res simpanan', simpananPokok, simpananSukarela, simpananWajib)
     return (
         <SafeAreaView style={styles.container}>
             <TopNavbar title='Setor Simpanan' back linkBack={showSavingTransferHandler} />
@@ -40,7 +67,7 @@ const SavingTransfer = ({ showSavingTransferHandler, handleBackButtonClick }) =>
                                 <TextInput
                                     onChangeText={async (e) => {
                                         dispatch(changeSavingCoperationMember({ simpananWajib: e }))
-                                        if (e > 0 && e < 20000) {
+                                        if (e >= 0 && e < 20000) {
                                             setIsWajibError(true)
                                         } else {
                                             setIsWajibError(false)
@@ -65,7 +92,7 @@ const SavingTransfer = ({ showSavingTransferHandler, handleBackButtonClick }) =>
                                 <TextInput
                                     onChangeText={async (e) => {
                                         dispatch(changeSavingCoperationMember({ simpananPokok: e }))
-                                        if (e > 0 && e < 20000) {
+                                        if (e >= 0 && e < 20000) {
                                             setIsPokokError(true)
                                         } else {
                                             setIsPokokError(false)
@@ -90,7 +117,7 @@ const SavingTransfer = ({ showSavingTransferHandler, handleBackButtonClick }) =>
                                     value={simpananSukarela}
                                     onChangeText={async (e) => {
                                         dispatch(changeSavingCoperationMember({ simpananSukarela: e }))
-                                        if (e > 0 && e < 20000) {
+                                        if (e >= 0 && e < 20000) {
                                             setIsSukarelaError(true)
                                         } else {
                                             setIsSukarelaError(false)
@@ -111,7 +138,7 @@ const SavingTransfer = ({ showSavingTransferHandler, handleBackButtonClick }) =>
                     </View>
                 </ScrollView>
 
-                <Button disabled={savingTransferCondition} onPress={() => { navigate('CoperationMemberSavingPaymentMethod') }} rounded={false} fullWidth title='Lanjutkan' variant={savingTransferCondition ? 'disabled' : 'primary'} />
+                <Button onPress={savingSubmitHandler} rounded={false} fullWidth title='Lanjutkan' variant={savingTransferCondition ? 'disabled' : 'primary'} />
             </View>
         </SafeAreaView>
     )

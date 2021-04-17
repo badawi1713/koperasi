@@ -1,19 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  ScrollView, StyleSheet, Text,
-
-
+  Platform, ScrollView, StyleSheet, Text,
   TextInput,
   TouchableOpacity, View
 } from 'react-native';
+import { Modal, Portal } from 'react-native-paper';
 import { useSelector } from 'react-redux';
-import { ICAdd } from '../../../assets';
+import { ICAdd, IMGStoreRegistrationSuccess } from '../../../assets';
 import { colors, fonts } from '../../../utils';
 import { Button, Gap, TopNavbar } from '../../components';
+
 
 const StoreRegister = ({ navigation }) => {
   const profileReducer = useSelector(state => state.profileReducer);
   const { userProfile: { name } } = profileReducer;
+
+
+  const [showModal, setShowModal] = useState(false);
+
+
+  const showModalHandler = async () => {
+    await setShowModal(true)
+    await setTimeout(() => {
+      setShowModal(false)
+    }, 2000)
+  }
+
+  const closeModalHandler = () => {
+    setShowModal(false)
+  }
+
   return (
     <View style={styles.container}>
       <TopNavbar
@@ -84,9 +100,18 @@ const StoreRegister = ({ navigation }) => {
             </View>
           </View>
           <Gap height={20} />
-          <Button title="Buka Toko Koperasi" variant="primary" fullWidth />
+          <Button title="Buka Toko Koperasi" onPress={showModalHandler} variant="primary" fullWidth />
         </View>
       </ScrollView>
+      <Portal>
+        <Modal visible={showModal} onDismiss={closeModalHandler} contentContainerStyle={styles.modalContainer}>
+          <IMGStoreRegistrationSuccess width={160} height={180} />
+          <Text style={styles.text}>Selamat Kamu Berhasil Membuka</Text>
+          <Text style={styles.text}>Toko Koperasi</Text>
+          <Gap height={10} />
+          <Text style={styles.storeTitle}>Koperasi Charisma</Text>
+        </Modal>
+      </Portal>
     </View>
   );
 };
@@ -135,5 +160,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
+  },
+  modalContainer: {
+    backgroundColor: colors.white,
+    justifyContent: 'center',
+    padding: 18,
+    height: 300,
+    margin: 18,
+    borderRadius: 6,
+    alignItems: 'center'
+  },
+  storeTitle: {
+    fontSize: 18,
+    color: colors.text.dark1,
+    fontFamily: fonts.primary[600],
   },
 });

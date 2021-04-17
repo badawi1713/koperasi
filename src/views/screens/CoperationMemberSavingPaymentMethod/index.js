@@ -14,7 +14,7 @@ const CoperationMemberSavingPaymentMethod = ({ navigation }) => {
 
     const { loading, paymentMethodData } = savingCoperationMemberReducer
 
-    console.log("payment", paymentMethodData)
+    console.log("list", savingCoperationMemberReducer)
 
     useEffect(() => {
         const getTopUpMethodList = () => {
@@ -29,7 +29,6 @@ const CoperationMemberSavingPaymentMethod = ({ navigation }) => {
                 viaPayment: item.idBank
             }))
             await dispatch(postSavingCoperationMemberTransfer())
-            await navigation.navigate('CoperationMemberSavingPayment')
         }} style={styles.paymentItem}>
             <Image style={styles.paymentImage} source={item.logo === "--" ? IMGCashOnDelivery : { uri: item.logo }} />
             <Gap height={10} />
