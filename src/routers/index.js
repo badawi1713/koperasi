@@ -12,6 +12,7 @@ import {
   GetStarted,
   History,
   Home,
+  Indihome,
   Login,
   Profile,
   Pulsa,
@@ -71,7 +72,6 @@ const Router = () => {
         }}
       />
       <Stack.Screen
-
         name="Login"
         component={Login}
         options={{
@@ -83,12 +83,10 @@ const Router = () => {
         }}
       />
       <Stack.Screen
-
         name="Register"
         component={Register}
       />
       <Stack.Screen
-
         name="RegisterVerification"
         component={RegisterVerification}
       />
@@ -98,44 +96,44 @@ const Router = () => {
         component={MainApp}
       />
       <Stack.Screen
-
         name="Pulsa"
         component={Pulsa}
       />
       <Stack.Screen
-
         name="StoreRegister"
         component={StoreRegister}
       />
       <Stack.Screen
-
         name="CoperationMember"
         component={CoperationMember}
       />
       <Stack.Screen
-
         name="CoperationAccount"
         component={CoperationAccount}
       />
-      <Stack.Screen options={{ headerShown: false }} name="TopUp" component={TopUp} />
-      <Stack.Screen options={{ headerShown: false }} name="TopUpPaymentMethod" component={TopUpPaymentMethod} />
-      <Stack.Screen options={{ headerShown: false }} name="TopUpPayment" component={TopUpPayment} />
-      <Stack.Screen options={{ headerShown: false }} name="QRCamera" component={QRCamera} />
-      <Stack.Screen options={{ headerShown: false }} name="CoperationMemberSaving" component={CoperationMemberSaving} />
+      <Stack.Screen name="TopUp" component={TopUp} />
+      <Stack.Screen name="TopUpPaymentMethod" component={TopUpPaymentMethod} />
+      <Stack.Screen name="TopUpPayment" component={TopUpPayment} />
+      <Stack.Screen name="QRCamera" component={QRCamera} />
+      <Stack.Screen name="CoperationMemberSaving" component={CoperationMemberSaving} />
       <Stack.Screen
-
         name="CoperationMemberSavingPayment"
         component={CoperationMemberSavingPayment}
       />
-      <Stack.Screen
 
+      <Stack.Screen
         name="CoperationMemberSavingPaymentMethod"
         component={CoperationMemberSavingPaymentMethod}
       />
-      <Stack.Screen
 
+      <Stack.Screen
         name="CoperationMemberLoan"
         component={CoperationMemberLoan}
+      />
+
+      <Stack.Screen
+        name="Indihome"
+        component={Indihome}
       />
 
     </Stack.Navigator>

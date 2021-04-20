@@ -1,16 +1,17 @@
-import { ScrollView as Scroll } from 'react-native-gesture-handler';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Dimensions, ScrollView,
+  ActivityIndicator, Dimensions, ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
-  View
+  View, BackHandler
 } from 'react-native';
+import { ScrollView as Scroll } from 'react-native-gesture-handler';
 import RBSheet from "react-native-raw-bottom-sheet";
-import Animated from 'react-native-reanimated';
+import TextInputMask from 'react-native-text-input-mask';
+import { useDispatch, useSelector } from 'react-redux';
 import { ICPhone, ICProtection, ICTime } from '../../../assets';
+import { changePulsa, getInitialPulsaDataList, getPulsaDataList } from '../../../store/actions';
 import { colors, fonts } from '../../../utils';
 import { Button, Gap, Link, PhoneDataContent, PulsaContent, TopNavbar } from '../../components';
 
@@ -18,8 +19,51 @@ const screenHeight = Math.round(Dimensions.get('window').height);
 
 
 const Pulsa = ({ navigation }) => {
+  const dispatch = useDispatch()
   const [pulsaActive, setPulsaActive] = useState(true);
   const [paketDataActive, setPaketDataActive] = useState(false);
+
+  const pulsaReducer = useSelector(state => state.pulsaReducer)
+  const profileReducer = useSelector(state => state.profileReducer);
+
+  const { userProfile: { noTelp } } = profileReducer
+
+  const { loading, nomorTelepon, daftarPulsa, daftarKuota } = pulsaReducer
+
+  const handleBackButtonClick = () => {
+    dispatch(changePulsa({ nomorTelepon: "" }))
+  }
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
+    };
+  }, []);
+
+  useEffect(() => {
+
+    const getInitialPulsaData = () => {
+      dispatch(getInitialPulsaDataList())
+    }
+
+    return getInitialPulsaData()
+  }, [dispatch])
+
+  useEffect(() => {
+    const getPulsaData = () => {
+      console.log("WHY")
+      dispatch(getPulsaDataList())
+    }
+
+    if (nomorTelepon.length === 3) {
+      return getPulsaData()
+    } else {
+      return;
+    }
+
+
+  }, [dispatch, nomorTelepon])
 
   const pulsaTabHandler = () => {
     setPulsaActive(true);
@@ -30,7 +74,6 @@ const Pulsa = ({ navigation }) => {
     setPaketDataActive(true);
     setPulsaActive(false);
   };
-
 
   const PulsaBottomDrawer = () => (
     <View style={{ paddingHorizontal: 18, flex: 1 }}>
@@ -155,7 +198,11 @@ const Pulsa = ({ navigation }) => {
   return (
     <>
       <View style={styles.container}>
-        <TopNavbar title="Pulsa" back linkBack={() => navigation.goBack()} />
+        <TopNavbar title="Pulsa" back linkBack={() => {
+          navigation.goBack()
+          handleBackButtonClick()
+        }
+        } />
 
         <ScrollView showsVerticalScrollIndicator={false}>
           <Gap height={20} />
@@ -166,8 +213,16 @@ const Pulsa = ({ navigation }) => {
               <Gap width={15} />
               <View style={styles.phoneNumberField}>
                 <Text style={styles.text}>Nomor Telepon</Text>
-                <TextInput
-                  placeholder="contoh: +6212 3456 7890"
+
+                <TextInputMask
+                  onChangeText={(formatted, extracted) => {
+                    dispatch(
+                      changePulsa({ nomorTelepon: extracted })
+                    )
+                  }}
+                  defaultValue={noTelp[0] === "0" ? noTelp.substring(1) : noTelp}
+                  mask={"+62 [000] [0000] [00000]"}
+                  placeholder="contoh: +62 812 3456 7890"
                   keyboardType="phone-pad"
                   style={styles.phoneNumberInput}
                 />
@@ -195,8 +250,9 @@ const Pulsa = ({ navigation }) => {
             <Gap height={20} />
             {/* Pulsa Content */}
 
-            {
-              pulsaActive ? <PulsaContent pulsaConfirmation={pulsaConfirmation} /> : <PhoneDataContent dataConfirmation={dataConfirmation} />
+            {loading ?
+              <ActivityIndicator size='large' color={colors.background.green1} /> :
+              pulsaActive ? <PulsaContent content={daftarPulsa} pulsaConfirmation={pulsaConfirmation} /> : <PhoneDataContent content={daftarKuota} dataConfirmation={dataConfirmation} />
             }
 
             {/* Paket Data Content */}

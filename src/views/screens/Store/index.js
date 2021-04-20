@@ -1,72 +1,35 @@
-import React, { useEffect, useState } from 'react';
-import { Controller, useForm } from "react-hook-form";
+import React, { useState } from 'react';
 import {
-  BackHandler, Image,
-  Platform, SafeAreaView,
-  ScrollView, StyleSheet, Text, TextInput,
+  Image,
+  SafeAreaView,
+  ScrollView, StyleSheet, Text,
   TouchableOpacity, View
 } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';
 import { Avatar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { ICAdd, IMGGetStarted1, IMGNoData } from '../../../assets';
+import { useSelector, useDispatch } from 'react-redux';
+import { IMGGetStarted1, IMGNoData } from '../../../assets';
 import { colors, fonts } from '../../../utils';
-import { Button, Gap, TopNavbar } from '../../components';
-
-
-const createFormData = (file, body = {}) => {
-  const data = new FormData();
-
-  data.append('ktp', {
-    name: file.fileName,
-    type: file.type,
-    uri: Platform.OS === 'ios' ? file.uri.replace('file://', '') : file.uri,
-  });
-
-  Object.keys(body).forEach((key) => {
-    data.append(key, body[key]);
-  });
-
-  return data;
-};
+import { AddProductForm, Button, Gap, TopNavbar } from '../../components';
+import { changeStoreProduct } from '../../../store/actions';
 
 const Store = ({ navigation }) => {
-  const haveStore = false;
+  const dispatch = useDispatch()
   const [showAddProductForm, setShowAddProductForm] = useState(false)
-  const [ktpError, setKtpError] = useState(false);
-  const [ktpErrorMessage, setKtpErrorMessage] = useState("")
 
-  const { control, handleSubmit, errors } = useForm();
+  const miscReducer = useSelector(state => state.miscReducer)
+  const storeProductReducer = useSelector(state => state.storeProductReducer)
 
-  const openGalleryHandler = async () => {
-    await launchImageLibrary({ noData: true }, async (response) => {
-      if (response.didCancel) {
-        setKtpError(true)
-        setKtpErrorMessage("Ukuran berkas KTP maksimal 1 MB")
+  const { newProductData, registerLoading } = storeProductReducer
 
-      }
-      else {
-        setKtpError(false)
-        setKtpErrorMessage("")
-      }
-    })
-  }
 
-  const postMemberProfileHandler = async () => {
-    console.log("Press")
-
-  };
+  const { showStoreDetail } = miscReducer
 
   const handleBackButtonClick = () => {
     setShowAddProductForm(false)
-  }
+    dispatch(changeStoreProduct({ newProductData: { ...newProductData, namaProduk: "", kategori: "", harga: "", berat: "", stok: "", kondisi: "", deksripsi: "", gambar: [] } }))
 
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
-    };
-  }, []);
+  }
 
   const StoreRegistration = () => {
     return <View style={styles.content}>
@@ -89,223 +52,9 @@ const Store = ({ navigation }) => {
     </View>
   }
 
-  const AddProductForm = () => {
-    return <View style={styles.mainContent}>
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Nama Produk</Text>
-        <View style={styles.inputContainer}>
-          <Controller
-            control={control}
-            render={({ onChange, onBlur, value }) => (
-              <TextInput
-                placeholderTextColor={colors.text.grey1}
-
-                onBlur={onBlur}
-                style={styles.textInput}
-                placeholder="Nama Produk"
-                keyboardType="name-phone-pad"
-                value={value}
-                onChangeText={(e) => { onChange(e) }}
-              />
-            )}
-            name="nama"
-            rules={{ required: true }}
-            defaultValue={""}
-          />
-        </View>
-        {errors.nama && <>
-          <Gap height={5} />
-          <Text style={styles.errorText}>Nama lengkap harus diisi</Text>
-        </>}
-      </View>
-      <Gap height={10} />
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Kategori</Text>
-        <View style={styles.inputContainer}>
-          <Controller
-            control={control}
-            render={({ onChange, onBlur, value }) => (
-              <TextInput
-                placeholderTextColor={colors.text.grey1}
-
-                onBlur={onBlur}
-                style={styles.textInput}
-                placeholder="Pilih Kategori"
-                keyboardType="name-phone-pad"
-                value={value}
-                onChangeText={(e) => { onChange(e) }}
-              />
-            )}
-            name="kategori"
-            rules={{ required: true }}
-            defaultValue={""}
-          />
-        </View>
-        {errors.nama && <>
-          <Gap height={5} />
-          <Text style={styles.errorText}>Kategori harus diisi</Text>
-        </>}
-      </View>
-      <Gap height={10} />
-      <View style={[styles.inputGroup, { flexDirection: 'row', justifyContent: 'space-between' }]}>
-        <View style={{ width: "50%" }}>
-          <Text style={styles.label}>Harga</Text>
-          <View style={styles.inputContainer}>
-            <Controller
-              control={control}
-              render={({ onChange, onBlur, value }) => (
-                <TextInput
-                  placeholderTextColor={colors.text.grey1}
-                  onBlur={onBlur}
-                  style={styles.textInput}
-                  value={value}
-                  placeholder="Rp 0"
-                  keyboardType="name-phone-pad"
-                  onChangeText={(e) => { onChange(e) }}
-                />
-              )}
-              name="tempatLahir"
-              rules={{ required: true }}
-              defaultValue=""
-            />
-          </View>
-          {errors.tempatLahir && <>
-            <Gap height={5} />
-            <Text style={styles.errorText}>Tempat lahir harus diisi</Text>
-          </>}
-        </View>
-        <View style={{ width: "45%" }}>
-          <Text style={styles.label}>Berat</Text>
-          <View style={styles.inputContainer}>
-            <Controller
-              control={control}
-              render={({ onChange, onBlur, value }) => (
-                <TextInput
-                  placeholderTextColor={colors.text.grey1}
-                  onBlur={onBlur}
-                  style={styles.textInput}
-                  value={value}
-                  placeholder="0 gram"
-                  keyboardType="name-phone-pad"
-                  onChangeText={(e) => { onChange(e) }}
-                />
-              )}
-              name="tempatLahir"
-              rules={{ required: true }}
-              defaultValue=""
-            />
-          </View>
-          {errors.tempatLahir && <>
-            <Gap height={5} />
-            <Text style={styles.errorText}>Tempat lahir harus diisi</Text>
-          </>}
-        </View>
-      </View>
-      <Gap height={10} />
-      <View style={[styles.inputGroup, { flexDirection: 'row', justifyContent: 'space-between' }]}>
-        <View style={{ width: "50%" }}>
-          <Text style={styles.label}>Stok Produk</Text>
-          <View style={styles.inputContainer}>
-            <Controller
-              control={control}
-              render={({ onChange, onBlur, value }) => (
-                <TextInput
-                  placeholderTextColor={colors.text.grey1}
-                  onBlur={onBlur}
-                  style={styles.textInput}
-                  value={value}
-                  placeholder="0"
-                  keyboardType="name-phone-pad"
-                  onChangeText={(e) => { onChange(e) }}
-                />
-              )}
-              name="tempatLahir"
-              rules={{ required: true }}
-              defaultValue=""
-            />
-          </View>
-          {errors.tempatLahir && <>
-            <Gap height={5} />
-            <Text style={styles.errorText}>Tempat lahir harus diisi</Text>
-          </>}
-        </View>
-        <View style={{ width: "45%" }}>
-          <Text style={styles.label}>Kondisi Produk</Text>
-          <View style={styles.inputContainer}>
-            <Controller
-              control={control}
-              render={({ onChange, onBlur, value }) => (
-                <TextInput
-                  placeholderTextColor={colors.text.grey1}
-                  onBlur={onBlur}
-                  style={styles.textInput}
-                  value={value}
-                  placeholder="Pilih Kondisi"
-                  keyboardType="name-phone-pad"
-                  onChangeText={(e) => { onChange(e) }}
-                />
-              )}
-              name="tempatLahir"
-              rules={{ required: true }}
-              defaultValue=""
-            />
-          </View>
-          {errors.tempatLahir && <>
-            <Gap height={5} />
-            <Text style={styles.errorText}>Tempat lahir harus diisi</Text>
-          </>}
-        </View>
-      </View>
-      <Gap height={10} />
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Deskripsi</Text>
-        <View style={styles.inputAddressContainer}>
-          <Controller
-            control={control}
-            render={({ onChange, onBlur, value }) => (
-              <TextInput
-                placeholderTextColor={colors.text.grey1}
-                onBlur={onBlur}
-                style={styles.textInput}
-                value={value}
-                placeholder="Deskripsi Produk"
-                keyboardType="name-phone-pad"
-                multiline={true}
-                onChangeText={(e) => { onChange(e) }}
-              />
-            )}
-            name="deskripsi"
-            rules={{ required: true }}
-            defaultValue=""
-          />
-
-        </View>
-        {errors.alamat && <>
-          <Gap height={5} />
-          <Text style={styles.errorText}>Alamat harus diisi</Text>
-        </>}
-      </View>
-      <Gap height={10} />
-      <TouchableOpacity style={styles.uploadContainer(0)} onPress={openGalleryHandler}>
-        <ICAdd />
-        <Gap width={10} />
-        <Text numberOfLines={1} ellipsizeMode='middle' style={styles.buttonText(0)}>Upload Foto Produk</Text>
-      </TouchableOpacity>
-      {ktpError && <>
-        <Gap height={5} />
-        <Text style={styles.errorText}>{ktpErrorMessage}</Text>
-      </>}
-
-      <Gap height={20} />
-      <Button onPress={
-        handleSubmit(postMemberProfileHandler)
-      } title="Tambah Produk" variant="primary" fullWidth />
-    </View>
-  }
-
   const StoreScreen = () => {
     return (
-      showAddProductForm ? <AddProductForm /> :
+      showAddProductForm ? <AddProductForm handleBackButtonClick={handleBackButtonClick} /> :
         <View style={styles.mainContent}>
           <View style={styles.row}>
             <Avatar.Icon size={64} style={{ backgroundColor: colors.background.grey4 }} icon="store" />
@@ -373,10 +122,11 @@ const Store = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <TopNavbar back={showAddProductForm} linkBack={() => setShowAddProductForm(false)} title={showAddProductForm ? "Tambah Produk" : "Toko"} />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {haveStore ? <StoreScreen /> : <StoreRegistration />
-        }
+
+      {showStoreDetail ? <ScrollView showsVerticalScrollIndicator={false}><StoreScreen />
       </ScrollView>
+        : <StoreRegistration />
+      }
     </SafeAreaView>
   );
 };
@@ -395,6 +145,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 18,
+    flex: 1
   },
   imageContainer: {
     width: 300,
@@ -470,7 +221,7 @@ const styles = StyleSheet.create({
   },
   uploadContainer: (ktpData) => ({
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.text.grey1,
     borderRadius: 4,
     padding: 14,
     width: '100%',

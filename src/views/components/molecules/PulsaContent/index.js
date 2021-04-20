@@ -1,74 +1,27 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { IMGNoData } from '../../../../assets';
 import { colors, fonts } from '../../../../utils';
-const PulsaContent = ({ pulsaConfirmation }) => {
+const PulsaContent = ({ pulsaConfirmation, content = [] }) => {
     return (
         <View style={styles.content}>
-            <TouchableOpacity
-                style={styles.card}
-                onPress={pulsaConfirmation}>
-                <Text style={styles.header}>15rb</Text>
-                <Text style={styles.subHeader}>Rp 16.500</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.card}>
-                <Text style={styles.header}>20rb</Text>
-                <Text style={styles.subHeader}>Rp 21.500</Text>
-            </TouchableOpacity>
 
-            <TouchableOpacity style={styles.card}>
-                <Text style={styles.header}>25rb</Text>
-                <Text style={styles.subHeader}>Rp 26.500</Text>
-            </TouchableOpacity>
+            {content.length === 0 ? <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><IMGNoData width={120} height={140} />
+                <Text style={styles.textEmpty}>Maaf, produk pulsa tidak tersedia</Text>
+            </View> :
+                content.map((item, index) => (
+                    <TouchableOpacity
+                        onPress={pulsaConfirmation}
+                        style={styles.card}
+                        key={index}
+                    >
+                        <Text style={styles.header}>{item.produkNama}</Text>
+                        <Text style={styles.subHeader}>{item.produkHarga}</Text>
+                    </TouchableOpacity>
+                ))
 
-            <TouchableOpacity style={styles.card}>
-                <Text style={styles.header}>30rb</Text>
-                <Text style={styles.subHeader}>Rp 31.500</Text>
-            </TouchableOpacity>
+            }
 
-            <TouchableOpacity style={styles.card}>
-                <Text style={styles.header}>40rb</Text>
-                <Text style={styles.subHeader}>Rp 41.500</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.card}>
-                <Text style={styles.header}>50rb</Text>
-                <Text style={styles.subHeader}>Rp 51.500</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.card}>
-                <Text style={styles.header}>75rb</Text>
-                <Text style={styles.subHeader}>Rp 76.500</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.card}>
-                <Text style={styles.header}>100rb</Text>
-                <Text style={styles.subHeader}>Rp 102.500</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.card}>
-                <Text style={styles.header}>150rb</Text>
-                <Text style={styles.subHeader}>Rp 152.500</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.card}>
-                <Text style={styles.header}>200rb</Text>
-                <Text style={styles.subHeader}>Rp 202.500</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.card}>
-                <Text style={styles.header}>300rb</Text>
-                <Text style={styles.subHeader}>Rp 302.500</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.card}>
-                <Text style={styles.header}>500rb</Text>
-                <Text style={styles.subHeader}>Rp 502.500</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.card}>
-                <Text style={styles.header}>1jt</Text>
-                <Text style={styles.subHeader}>Rp 997.500</Text>
-            </TouchableOpacity>
         </View>
     )
 }
@@ -102,4 +55,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: fonts.primary[600],
     },
+    textEmpty: {
+        color: colors.text.header,
+        fontSize: 16,
+        fontFamily: fonts.primary[600],
+    }
+
 })

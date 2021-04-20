@@ -7,7 +7,9 @@ const initialState = {
     showSavingDetail: false,
     showSavingTransfer: false,
     showLoanDetail: false,
-    showLoanTransfer: false
+    showLoanTransfer: false,
+    showAddProductForm: false,
+    showStoreDetail: false
 };
 
 const miscReducer = (state = initialState, action) => {

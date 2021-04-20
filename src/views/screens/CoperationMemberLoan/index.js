@@ -49,7 +49,6 @@ const CoperationMemberLoan = ({ navigation }) => {
             showLoanDetail: false,
             showLoanTransfer: !showLoanTransfer
         }))
-        dispatch(getLoanCoperationMemberData())
 
     }
 

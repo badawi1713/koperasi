@@ -28,7 +28,8 @@ const CoperationMemberSavingPayment = ({ navigation }) => {
     const [time, setTime] = useState(43200);
 
     const handleBackButtonClick = () => {
-        navigation.navigate('MainApp'); dispatch(changeSavingCoperationMember({
+        navigation.replace('MainApp')
+        dispatch(changeSavingCoperationMember({
             simpananPokok: "",
             simpananWajib: "",
             simpananSukarela: "",
@@ -86,33 +87,45 @@ const CoperationMemberSavingPayment = ({ navigation }) => {
                     <Gap height={30} />
                     <View style={styles.merchantContainer}>
                         {viaPayment === "QRISPAY" ?
-                            <Image source={IMGQRDummy} style={styles.imageContainer} />
+                            <Image source={IMGQRDummy} style={styles.imageQrContainer} />
                             : <Image source={IMGAccountConfirmation} style={styles.imageContainer} />
 
                         }
-                        <Gap height={5} />
-                        <Text style={styles.text}>Mohon transfer ke tujuan nomor rekening</Text>
-                        <Text style={styles.text}>dengan atas nama berikut</Text>
-                        <Gap height={10} />
-                        <Text style={styles.accountNumber}>
-                            Paylink
+                        {viaPayment !== "QRISPAY" && <>
+                            <Gap height={5} />
+                            <Text style={styles.text}>Mohon transfer ke tujuan nomor rekening</Text>
+                            <Text style={styles.text}>dengan atas nama berikut</Text>
+                            <Gap height={10} />
+                            <Text style={styles.accountNumber}>
+                                Paylink
                     </Text>
+                        </>}
+
                     </View>
+
                     <Gap height={20} />
-                    <View style={styles.card}>
-                        <Text style={styles.accountNumber}>89836554376538192</Text>
-                        <Gap height={20} />
-                        <View style={styles.cardContent}>
-                            <TouchableOpacity style={styles.guideBox}>
-                                <Text style={styles.guideText}>Panduan Transfer</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={copyToClipboard} style={styles.cardContent}>
-                                <Text style={styles.text}>Salin </Text>
-                                <Gap width={5} />
-                                <ICCopy />
-                            </TouchableOpacity>
+                    {viaPayment === "QRISPAY" &&
+                        <View style={styles.merchantContainer}>
+                            <Text style={styles.text}>Mohon untuk men-scan QR di atas untuk</Text>
+                            <Text style={styles.text}>melanjutkan pembayaran melalui QRIS</Text>
                         </View>
-                    </View>
+                    }
+                    {viaPayment !== "QRISPAY" &&
+                        <View style={styles.card}>
+                            <Text style={styles.accountNumber}>89836554376538192</Text>
+                            <Gap height={20} />
+                            <View style={styles.cardContent}>
+                                <TouchableOpacity style={styles.guideBox}>
+                                    <Text style={styles.guideText}>Panduan Transfer</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={copyToClipboard} style={styles.cardContent}>
+                                    <Text style={styles.text}>Salin </Text>
+                                    <Gap width={5} />
+                                    <ICCopy />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    }
                     <Gap height={30} />
                     <Text style={styles.text}>Batas Waktu Pembayaran</Text>
                     <Gap height={10} />
@@ -172,6 +185,11 @@ const styles = StyleSheet.create({
     imageContainer: {
         width: 80,
         height: 100,
+        resizeMode: 'contain'
+    },
+    imageQrContainer: {
+        width: 160,
+        height: 160,
         resizeMode: 'contain'
     },
     card: {

@@ -1,8 +1,13 @@
 import homeReducer from './home'
-import profileReducer from './profile'
-import registerReducer from './register'
-import topUpReducer from './topUp'
-import miscReducer from './misc'
-import savingCoperationMemberReducer from './savingCoperationMember'
 import loanCoperationMemberReducer from './loanCoperationMember'
-export { registerReducer, topUpReducer, profileReducer, homeReducer, miscReducer, savingCoperationMemberReducer, loanCoperationMemberReducer }
+import miscReducer from './misc'
+import productReducer from './product'
+import profileReducer from './profile'
+import pulsaReducer from './pulsa'
+import registerReducer from './register'
+import savingCoperationMemberReducer from './savingCoperationMember'
+import storeProductReducer from './storeProduct'
+import topUpReducer from './topUp'
+
+export { storeProductReducer, pulsaReducer, productReducer, registerReducer, topUpReducer, profileReducer, homeReducer, miscReducer, savingCoperationMemberReducer, loanCoperationMemberReducer }
+

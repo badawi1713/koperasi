@@ -149,15 +149,15 @@ const Home = ({ navigation }) => {
                     </View>
                     <Text style={styles.ppobTitle}>Semua</Text>
                   </TouchableOpacity>
-                  {category && category.map((item, index) => (
+                  {category && category.map((item,) => (
                     <TouchableOpacity
                       key={item.categoryId}
                       style={styles.ppobGroup}
-                      onPress={() => { item.categoryId === "PLS1" ? navigation.navigate('Pulsa') : null }}>
+                      onPress={() => { item.categoryId === "PLS1" ? navigation.navigate('Pulsa') : item.categoryId === "TELKOM" ? navigation.navigate('Indihome') : null }}>
                       <View style={styles.ppobItem}>
-                        <Image source={IMGPulsa} style={styles.ppobImage} />
+                        <Image source={{ uri: item.categoryImage }} style={styles.ppobImage} />
                       </View>
-                      <Text style={styles.ppobTitle}>{item.categoryName === "PULSA PRABAYAR" ? "PULSA" : item.categoryName}</Text>
+                      <Text style={styles.ppobTitle}>{item.categoryName === "PULSA PRABAYAR" ? "Pulsa" : item.categoryName}</Text>
                     </TouchableOpacity>
                   ))
                   }

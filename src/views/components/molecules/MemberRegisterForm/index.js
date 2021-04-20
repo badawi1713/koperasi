@@ -350,7 +350,7 @@ const styles = StyleSheet.create({
     },
     uploadContainer: (ktpData) => ({
         borderWidth: 1,
-        borderColor: colors.border,
+        borderColor: colors.text.grey1,
         borderRadius: 4,
         padding: 14,
         width: '100%',

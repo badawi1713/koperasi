@@ -1,71 +1,34 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { ICPhoneData } from '../../../../assets';
+import { ICPhoneData, IMGNoData } from '../../../../assets';
 import { colors, fonts } from '../../../../utils';
 import { Gap } from '../../atoms';
-const PhoneDataContent = ({ dataConfirmation }) => {
+const PhoneDataContent = ({ dataConfirmation, content = [] }) => {
     return (
         <View style={styles.content}>
-            <TouchableOpacity
-                style={styles.card}
-                onPress={dataConfirmation}>
-                <View style={styles.icon}>
-                    <ICPhoneData width={36} height={36} />
-                </View>
-                <Gap width={20} />
-                <View style={{ flex: 1 }}>
-                    <Text style={styles.header}>Data 12 GB</Text>
-                    <Gap height={5} />
-                    <Text style={styles.text}>12GB Kuota Utama pada Semua Jaringan dan Semua Zona + 2GB Videomax</Text>
-                    <Gap height={5} />
-                    <Text><Text style={styles.price}>Rp 103.000</Text> <Text style={styles.text}>• Aktif untuk 30 hari</Text></Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.card}
-                onPress={dataConfirmation}>
-                <View style={styles.icon}>
-                    <ICPhoneData width={40} height={40} />
-                </View>
-                <Gap width={20} />
-                <View style={{ flex: 1 }}>
-                    <Text style={styles.header}>Data 4.5 GB</Text>
-                    <Gap height={5} />
-                    <Text style={styles.text}>4.5GB Kuota Utama + 2GB Video</Text>
-                    <Gap height={5} />
-                    <Text><Text style={styles.price}>Rp 40.000</Text> <Text style={styles.text}>• Aktif untuk 30 hari</Text></Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.card}
-                onPress={dataConfirmation}>
-                <View style={styles.icon}>
-                    <ICPhoneData width={40} height={40} />
-                </View>
-                <Gap width={20} />
-                <View style={{ flex: 1 }}>
-                    <Text style={styles.header}>Data 50 GB</Text>
-                    <Gap height={5} />
-                    <Text style={styles.text}>50GB Kuota Utama pada Semua Jaringan dan Semua Zona + 2GB Videomax</Text>
-                    <Gap height={5} />
-                    <Text><Text style={styles.price}>Rp 203.500</Text> <Text style={styles.text}>• Aktif untuk 30 hari</Text></Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.card}
-                onPress={dataConfirmation}>
-                <View style={styles.icon}>
-                    <ICPhoneData width={40} height={40} />
-                </View>
-                <Gap width={20} />
-                <View style={{ flex: 1 }}>
-                    <Text style={styles.header}>Data 8 GB</Text>
-                    <Gap height={5} />
-                    <Text style={styles.text}>8GB Kuota Utama + 2GB Vide</Text>
-                    <Gap height={5} />
-                    <Text><Text style={styles.price}>Rp 87.000</Text> <Text style={styles.text}>• Aktif untuk 30 hari</Text></Text>
-                </View>
-            </TouchableOpacity>
+
+            {content.length === 0 ? <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><IMGNoData width={120} height={140} />
+                <Text style={styles.textEmpty}>Maaf, produk paket data tidak tersedia</Text>
+            </View> :
+                content.map((item, index) => (
+                    <TouchableOpacity
+                        key={index}
+                        style={styles.card}
+                        onPress={dataConfirmation}>
+                        <View style={styles.icon}>
+                            <ICPhoneData width={36} height={36} />
+                        </View>
+                        <Gap width={20} />
+                        <View style={{ flex: 1 }}>
+                            <Text style={styles.header}>{item.produkNama}</Text>
+                            <Gap height={5} />
+                            <Text style={styles.text}>{item.produkKeterangan}</Text>
+                            <Gap height={5} />
+                            <Text><Text style={styles.price}>{item.produkHarga}</Text> <Text style={styles.text}>• Aktif untuk 30 hari</Text></Text>
+                        </View>
+                    </TouchableOpacity>
+                ))}
+
         </View>
     )
 }
@@ -109,5 +72,10 @@ const styles = StyleSheet.create({
         color: colors.text.header,
         fontSize: 14,
         fontFamily: fonts.primary[400],
+    },
+    textEmpty: {
+        color: colors.text.header,
+        fontSize: 16,
+        fontFamily: fonts.primary[600],
     }
 })

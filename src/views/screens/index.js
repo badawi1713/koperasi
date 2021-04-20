@@ -1,14 +1,14 @@
-import AddProduct from './AddProduct';
 import CoperationAccount from './CoperationAccount';
 import CoperationMember from './CoperationMember';
+import CoperationMemberLoan from './CoperationMemberLoan';
 import CoperationMemberSaving from './CoperationMemberSaving';
 import CoperationMemberSavingPayment from './CoperationMemberSavingPayment';
 import CoperationMemberSavingPaymentMethod from './CoperationMemberSavingPaymentMethod';
-import CoperationMemberLoan from './CoperationMemberLoan';
 import EWallet from './EWallet';
 import GetStarted from './GetStarted';
 import History from './History';
 import Home from './Home';
+import Indihome from './Indihome';
 import Login from './Login';
 import Profile from './Profile';
 import Pulsa from './Pulsa';
@@ -23,13 +23,13 @@ import TopUpPayment from './TopUpPayment';
 import TopUpPaymentMethod from './TopUpPaymentMethod';
 
 export {
+  Indihome,
   CoperationMemberLoan,
   CoperationMemberSavingPayment,
   CoperationMemberSavingPaymentMethod,
   CoperationMemberSaving,
   QRCamera,
   CoperationAccount,
-  AddProduct,
   CoperationMember,
   EWallet,
   GetStarted,

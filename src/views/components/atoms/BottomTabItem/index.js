@@ -13,10 +13,13 @@ import {
   ICStoreActive,
   ICStoreInActive
 } from '../../../../assets/icons';
+import { changeMisc } from '../../../../store/actions';
 import { colors, fonts } from '../../../../utils';
-
+import { useDispatch } from 'react-redux'
 
 const BottomTabItem = ({ title, active, onPress, onLongPress, indexActive, navigation }) => {
+
+  const dispatch = useDispatch()
 
   const Icon = () => {
     if (title === 'Home') {
@@ -66,9 +69,25 @@ const BottomTabItem = ({ title, active, onPress, onLongPress, indexActive, navig
       <TouchableOpacity
         onPress={() => {
           onPress()
+          dispatch(changeMisc({
+            showSavingDetail: false,
+            showSavingTransfer: false,
+            showLoanDetail: false,
+            showLoanTransfer: false,
+            showAddProductForm: false,
+            showStoreDetail: false
+          }))
         }}
         onLongPress={() => {
           onLongPress()
+          dispatch(changeMisc({
+            showSavingDetail: false,
+            showSavingTransfer: false,
+            showLoanDetail: false,
+            showLoanTransfer: false,
+            showAddProductForm: false,
+            showStoreDetail: false
+          }))
         }
         }
         style={styles.container}>
@@ -82,9 +101,25 @@ const BottomTabItem = ({ title, active, onPress, onLongPress, indexActive, navig
     <TouchableOpacity
       onPress={() => {
         onPress()
+        dispatch(changeMisc({
+          showSavingDetail: false,
+          showSavingTransfer: false,
+          showLoanDetail: false,
+          showLoanTransfer: false,
+          showAddProductForm: false,
+          showStoreDetail: false
+        }))
       }}
       onLongPress={() => {
         onLongPress()
+        dispatch(changeMisc({
+          showSavingDetail: false,
+          showSavingTransfer: false,
+          showLoanDetail: false,
+          showLoanTransfer: false,
+          showAddProductForm: false,
+          showStoreDetail: false
+        }))
       }
       }
       style={styles.container}>
