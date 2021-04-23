@@ -9,3 +9,7 @@ export const SET_LOAN_COPERATION_MEMBER = 'SET_LOAN_COPERATION_MEMBER'
 export const SET_STORE_PRODUCT = 'SET_STORE_PRODUCT'
 export const SET_PRODUCT = 'SET_PRODUCT'
 export const SET_PULSA = 'SET_PULSA'
+export const SET_PLN = 'SET_PLN'
+export const SET_PDAM = 'SET_PDAM'
+export const SET_INDIHOME = 'SET_INDIHOME'
+

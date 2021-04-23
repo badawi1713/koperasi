@@ -13,6 +13,8 @@ import { changeMisc, changeStoreProduct } from '../../../store/actions';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { Controller, useForm } from "react-hook-form";
 
+const theme = { colors: { primary: colors.background.green1, placeholder: colors.text.grey1, accent: colors.text.grey1 } }
+
 const createFormData = (file, body = {}) => {
   const data = new FormData();
 
@@ -112,7 +114,7 @@ const StoreRegister = ({ navigation }) => {
             control={control}
             render={({ onChange, onBlur, value }) => (
               <TextInput
-                theme={{ colors: { primary: colors.background.green1 } }}
+                theme={theme}
                 mode='outlined'
                 placeholderTextColor={colors.text.grey1}
                 onBlur={onBlur}
@@ -136,7 +138,7 @@ const StoreRegister = ({ navigation }) => {
             control={control}
             render={({ onChange, onBlur, value }) => (
               <TextInput
-                theme={{ colors: { primary: colors.background.green1 } }}
+                theme={theme}
                 mode='outlined'
                 placeholderTextColor={colors.text.grey1}
                 onBlur={onBlur}
@@ -160,7 +162,7 @@ const StoreRegister = ({ navigation }) => {
             control={control}
             render={({ onChange, onBlur, value }) => (
               <TextInput
-                theme={{ colors: { primary: colors.background.green1 } }}
+                theme={theme}
                 mode='outlined'
                 placeholderTextColor={colors.text.grey1}
                 onBlur={onBlur}

@@ -1,6 +1,6 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import thunk from 'redux-thunk';
-import { homeReducer, loanCoperationMemberReducer, miscReducer, productReducer, profileReducer, pulsaReducer, registerReducer, savingCoperationMemberReducer, storeProductReducer, topUpReducer } from './reducers';
+import { indihomeReducer, homeReducer, loanCoperationMemberReducer, miscReducer, pdamReducer, plnReducer, productReducer, profileReducer, pulsaReducer, registerReducer, savingCoperationMemberReducer, storeProductReducer, topUpReducer } from './reducers';
 
 const reducer = combineReducers({
   pulsaReducer,
@@ -12,7 +12,10 @@ const reducer = combineReducers({
   savingCoperationMemberReducer,
   loanCoperationMemberReducer,
   storeProductReducer,
-  productReducer
+  productReducer,
+  plnReducer,
+  pdamReducer,
+  indihomeReducer
 });
 
 const middleware = [thunk];

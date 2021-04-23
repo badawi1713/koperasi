@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import {
-  ActivityIndicator, Dimensions, ScrollView,
+  ActivityIndicator,
+  BackHandler, Dimensions, ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View, BackHandler
+  View
 } from 'react-native';
 import { ScrollView as Scroll } from 'react-native-gesture-handler';
 import RBSheet from "react-native-raw-bottom-sheet";
 import TextInputMask from 'react-native-text-input-mask';
+import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
 import { ICPhone, ICProtection, ICTime } from '../../../assets';
-import { changePulsa, getInitialPulsaDataList, getPulsaDataList } from '../../../store/actions';
+import { changePulsa, getInitialPulsaDataList, getPulsaDataList, postPulsaPayment } from '../../../store/actions';
+import { getSaldoBalance } from '../../../store/actions/home';
 import { colors, fonts } from '../../../utils';
-import { Button, Gap, Link, PhoneDataContent, PulsaContent, TopNavbar } from '../../components';
+import { Button, Gap, Link, PhoneDataContent, PulsaContent, SuccessModal, TopNavbar } from '../../components';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
-
 
 const Pulsa = ({ navigation }) => {
   const dispatch = useDispatch()
@@ -28,7 +30,10 @@ const Pulsa = ({ navigation }) => {
 
   const { userProfile: { noTelp } } = profileReducer
 
-  const { loading, nomorTelepon, daftarPulsa, daftarKuota } = pulsaReducer
+  const { loading, nomorTelepon, daftarPulsa, daftarKuota, detailLoading, detailPulsa, showSuccessModal, paymentLoading } = pulsaReducer
+  const {
+    pelId, productName, productPrice
+  } = detailPulsa
 
   const handleBackButtonClick = () => {
     dispatch(changePulsa({ nomorTelepon: "" }))
@@ -45,6 +50,7 @@ const Pulsa = ({ navigation }) => {
 
     const getInitialPulsaData = () => {
       dispatch(getInitialPulsaDataList())
+      dispatch(changePulsa({ nomorTelepon: noTelp[0] === "0" ? noTelp.substring(1) : noTelp }))
     }
 
     return getInitialPulsaData()
@@ -52,13 +58,13 @@ const Pulsa = ({ navigation }) => {
 
   useEffect(() => {
     const getPulsaData = () => {
-      console.log("WHY")
       dispatch(getPulsaDataList())
     }
 
     if (nomorTelepon.length === 3) {
       return getPulsaData()
-    } else {
+    }
+    else {
       return;
     }
 
@@ -86,7 +92,7 @@ const Pulsa = ({ navigation }) => {
             <View>
               <Text style={styles.drawerSubtitle}>Nomor Telepon</Text>
               <Gap height={5} />
-              <Text style={styles.drawerText}>+62821 3652 6531</Text>
+              <Text style={styles.drawerText}>{pelId}</Text>
             </View>
           </View>
           <Gap height={30} />
@@ -94,7 +100,7 @@ const Pulsa = ({ navigation }) => {
             <Text style={styles.drawerTitle}>Detail Pembelian</Text>
             <Gap height={10} />
             <View>
-              <Text style={styles.drawerSubtitle}>Pulsa 15.000</Text>
+              <Text style={styles.drawerSubtitle}>{productName}</Text>
             </View>
           </View>
           <Gap height={30} />
@@ -105,7 +111,9 @@ const Pulsa = ({ navigation }) => {
               <View style={styles.totalGroup}>
                 <Text style={styles.totalText}>Total</Text>
                 <Gap height={5} />
-                <Text style={styles.totalText}>Rp 16.500</Text>
+                <NumberFormat value={productPrice || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                  <Text style={styles.totalText}>Rp {value}</Text>
+                } />
               </View>
             </View>
             <Gap height={160} />
@@ -113,12 +121,17 @@ const Pulsa = ({ navigation }) => {
               <ICProtection />
               <Gap width={10} />
               <Text style={styles.protectionText}>Semua transaksi pelanggan dijamin aman dan cepat, dengan melanjutkan pembayaran, anda setuju pada{" "}
-                <Link variant='text' onPress={() => console.log('press')} title='Persyaratan dan Kondisi' />
+                <Link variant='text' title='Persyaratan dan Kondisi' />
               </Text>
             </View>
           </View>
           <Gap height={20} />
-          <Button variant='primary' fullWidth title='Bayar' />
+          <Button variant='primary' disabled={paymentLoading} fullWidth title='Bayar' onPress={async () => {
+            await pulsaConfirmationRef.current.close()
+            await dispatch(postPulsaPayment())
+            await dispatch(getSaldoBalance())
+
+          }} />
           <Gap height={20} />
         </View>
       </Scroll>
@@ -126,8 +139,7 @@ const Pulsa = ({ navigation }) => {
   );
 
   const DataBottomDrawer = () => (
-    <View style={styles.drawerContainer}>
-      <View style={styles.drawerLine} />
+    <View style={{ paddingHorizontal: 18, flex: 1 }}>
       <Gap height={40} />
       <Scroll showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
@@ -137,7 +149,7 @@ const Pulsa = ({ navigation }) => {
             <View>
               <Text style={styles.drawerSubtitle}>Nomor Telepon</Text>
               <Gap height={5} />
-              <Text style={styles.drawerText}>+62821 3652 6531</Text>
+              <Text style={styles.drawerText}>{nomorTelepon || noTelp[0] === "0" ? noTelp.substring(1) : noTelp}</Text>
             </View>
           </View>
           <Gap height={30} />
@@ -197,6 +209,8 @@ const Pulsa = ({ navigation }) => {
 
   return (
     <>
+      {showSuccessModal && <SuccessModal showModal={showSuccessModal} title="Transaksi Pembayaran Berhasil" loading={paymentLoading} />}
+
       <View style={styles.container}>
         <TopNavbar title="Pulsa" back linkBack={() => {
           navigation.goBack()
@@ -220,6 +234,7 @@ const Pulsa = ({ navigation }) => {
                       changePulsa({ nomorTelepon: extracted })
                     )
                   }}
+                  placeholderTextColor={colors.text.grey1}
                   defaultValue={noTelp[0] === "0" ? noTelp.substring(1) : noTelp}
                   mask={"+62 [000] [0000] [00000]"}
                   placeholder="contoh: +62 812 3456 7890"
@@ -252,7 +267,8 @@ const Pulsa = ({ navigation }) => {
 
             {loading ?
               <ActivityIndicator size='large' color={colors.background.green1} /> :
-              pulsaActive ? <PulsaContent content={daftarPulsa} pulsaConfirmation={pulsaConfirmation} /> : <PhoneDataContent content={daftarKuota} dataConfirmation={dataConfirmation} />
+              pulsaActive ? <PulsaContent loading={detailLoading} phoneNumber={nomorTelepon} content={daftarPulsa} pulsaConfirmation={pulsaConfirmation} /> :
+                <PhoneDataContent loading={detailLoading} phoneNumber={nomorTelepon} content={daftarKuota} dataConfirmation={dataConfirmation} />
             }
 
             {/* Paket Data Content */}
@@ -262,6 +278,8 @@ const Pulsa = ({ navigation }) => {
         <RBSheet
           height={screenHeight - 80}
           ref={pulsaConfirmationRef}
+          openDuration={600}
+          closeDuration={500}
           closeOnDragDown={true}
           customStyles={{
             wrapper: {
@@ -284,6 +302,8 @@ const Pulsa = ({ navigation }) => {
         <RBSheet
           height={screenHeight - 80}
           ref={dataConfirmationRef}
+          openDuration={600}
+          closeDuration={500}
           closeOnDragDown={true}
           customStyles={{
             wrapper: {
@@ -300,8 +320,12 @@ const Pulsa = ({ navigation }) => {
             }
           }}
         >
-          <PulsaBottomDrawer />
+          <DataBottomDrawer />
+
         </RBSheet>
+
+
+
       </View>
 
 
@@ -336,6 +360,7 @@ const styles = StyleSheet.create({
     padding: 0,
     fontSize: 14,
     fontFamily: fonts.primary[600],
+    color: colors.text.dark1
   },
   text: {
     color: colors.text.header,
@@ -405,15 +430,6 @@ const styles = StyleSheet.create({
   },
   confirmationContent: {
     flex: 1
-  },
-  // Shadow
-  shadowContainer: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#000',
-    zIndex: 2,
-    position: 'absolute',
-    top: 0,
-    left: 0
   },
   drawerTitle: {
     color: colors.primary,

@@ -14,6 +14,9 @@ import { ICAdd } from '../../../../assets';
 import { changeProduct } from '../../../../store/actions';
 import { colors, fonts } from '../../../../utils';
 import { Button, DialogOptions, Gap } from '../../atoms';
+
+const theme = { colors: { primary: colors.background.green1, placeholder: colors.text.grey1, accent: colors.text.grey1 } }
+
 const createFormData = (file, body = {}) => {
     const data = new FormData();
 
@@ -117,7 +120,7 @@ const AddProductForm = ({ handleBackButtonClick }) => {
                 control={control}
                 render={({ onChange, onBlur, value }) => (
                     <TextInput
-                        theme={{ colors: { primary: colors.background.green1 } }}
+                        theme={theme}
                         mode='outlined'
                         placeholderTextColor={colors.text.grey1}
                         onBlur={onBlur}
@@ -150,7 +153,7 @@ const AddProductForm = ({ handleBackButtonClick }) => {
                         <DialogOptions title='Pilih Kategori Produk' options={conditionCategory} visible={showCategory} value={value} onCancel={() => { cancelCategoryHandler(); onChange("") }} onValueChange={(e) => { onChange(e); changeCategoryHandler(e) }} hideDialog={hideCategoryModal} />
                         <TextInput
                             placeholderTextColor={colors.text.grey1}
-                            theme={{ colors: { primary: colors.background.green1 } }}
+                            theme={theme}
                             mode='outlined'
                             style={styles.textInput}
                             placeholder="Pilih Kategori"
@@ -177,7 +180,7 @@ const AddProductForm = ({ handleBackButtonClick }) => {
                     control={control}
                     render={({ onChange, onBlur, value }) => (
                         <TextInput
-                            theme={{ colors: { primary: colors.background.green1 } }}
+                            theme={theme}
                             mode='outlined'
                             placeholderTextColor={colors.text.grey1}
                             onBlur={onBlur}
@@ -203,7 +206,7 @@ const AddProductForm = ({ handleBackButtonClick }) => {
                     control={control}
                     render={({ onChange, onBlur, value }) => (
                         <TextInput
-                            theme={{ colors: { primary: colors.background.green1 } }}
+                            theme={theme}
                             mode='outlined'
                             placeholderTextColor={colors.text.grey1}
                             onBlur={onBlur}
@@ -233,7 +236,7 @@ const AddProductForm = ({ handleBackButtonClick }) => {
                     control={control}
                     render={({ onChange, onBlur, value }) => (
                         <TextInput
-                            theme={{ colors: { primary: colors.background.green1 } }}
+                            theme={theme}
                             mode='outlined'
                             placeholderTextColor={colors.text.grey1}
                             onBlur={onBlur}
@@ -260,7 +263,7 @@ const AddProductForm = ({ handleBackButtonClick }) => {
                     control={control}
                     render={({ onChange, onBlur, value }) => (
                         <TextInput
-                            theme={{ colors: { primary: colors.background.green1 } }}
+                            theme={theme}
                             mode='outlined'
                             placeholderTextColor={colors.text.grey1}
                             onBlur={onBlur}
@@ -288,7 +291,7 @@ const AddProductForm = ({ handleBackButtonClick }) => {
                 control={control}
                 render={({ onChange, onBlur, value }) => (
                     <TextInput
-                        theme={{ colors: { primary: colors.background.green1 } }}
+                        theme={theme}
                         mode='outlined'
                         placeholderTextColor={colors.text.grey1}
                         onBlur={onBlur}

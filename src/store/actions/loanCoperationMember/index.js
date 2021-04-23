@@ -88,8 +88,6 @@ export const postLoanCalculateTransfer = () => {
                 `/mobile/koperasi/pinjamanSimulasi`, data
             );
 
-            console.log(response.data)
-
             if (response.data.rc === "00") {
                 await Api.post(
                     `/mobile/koperasi/pinjamanApply`, data

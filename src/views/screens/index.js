@@ -10,6 +10,8 @@ import History from './History';
 import Home from './Home';
 import Indihome from './Indihome';
 import Login from './Login';
+import PDAM from './PDAM';
+import PLN from './PLN';
 import Profile from './Profile';
 import Pulsa from './Pulsa';
 import QRCamera from './QRCamera';
@@ -23,6 +25,7 @@ import TopUpPayment from './TopUpPayment';
 import TopUpPaymentMethod from './TopUpPaymentMethod';
 
 export {
+  PDAM,
   Indihome,
   CoperationMemberLoan,
   CoperationMemberSavingPayment,
@@ -45,6 +48,7 @@ export {
   StoreRegister,
   TopUp,
   TopUpPaymentMethod,
-  TopUpPayment
+  TopUpPayment,
+  PLN
 };
 

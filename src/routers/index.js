@@ -22,7 +22,8 @@ import {
   Store,
   StoreRegister,
   TopUp,
-
+  PLN,
+  PDAM,
   TopUpPayment, TopUpPaymentMethod
 } from '../views/screens';
 
@@ -134,6 +135,16 @@ const Router = () => {
       <Stack.Screen
         name="Indihome"
         component={Indihome}
+      />
+
+      <Stack.Screen
+        name="PLN"
+        component={PLN}
+      />
+
+      <Stack.Screen
+        name="PDAM"
+        component={PDAM}
       />
 
     </Stack.Navigator>

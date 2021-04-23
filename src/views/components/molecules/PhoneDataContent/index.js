@@ -3,7 +3,13 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ICPhoneData, IMGNoData } from '../../../../assets';
 import { colors, fonts } from '../../../../utils';
 import { Gap } from '../../atoms';
-const PhoneDataContent = ({ dataConfirmation, content = [] }) => {
+import NumberFormat from 'react-number-format';
+import { changePulsa, getProductDetail } from '../../../../store/actions';
+import { useDispatch } from 'react-redux';
+
+const PhoneDataContent = ({ dataConfirmation, content = [], phoneNumber, loading }) => {
+    const dispatch = useDispatch()
+
     return (
         <View style={styles.content}>
 
@@ -12,9 +18,19 @@ const PhoneDataContent = ({ dataConfirmation, content = [] }) => {
             </View> :
                 content.map((item, index) => (
                     <TouchableOpacity
+                        disabled={loading}
                         key={index}
                         style={styles.card}
-                        onPress={dataConfirmation}>
+                        onPress={async () => {
+                            if (phoneNumber.length < 10) {
+                                ToastAndroid.show("Format digit nomor telepon tidak valid.", ToastAndroid.SHORT);
+                            } else {
+                                await dispatch(changePulsa({ produkId: item.produkId }))
+                                await dispatch(getProductDetail())
+                                await dataConfirmation()
+                            }
+                        }}
+                    >
                         <View style={styles.icon}>
                             <ICPhoneData width={36} height={36} />
                         </View>
@@ -24,7 +40,11 @@ const PhoneDataContent = ({ dataConfirmation, content = [] }) => {
                             <Gap height={5} />
                             <Text style={styles.text}>{item.produkKeterangan}</Text>
                             <Gap height={5} />
-                            <Text><Text style={styles.price}>{item.produkHarga}</Text> <Text style={styles.text}>• Aktif untuk 30 hari</Text></Text>
+                            <Text>
+                                <NumberFormat value={item.produkHarga || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                                    <Text style={styles.price}>Rp {value}</Text>
+                                } />
+                                <Text style={styles.text}> • Aktif untuk 30 hari</Text></Text>
                         </View>
                     </TouchableOpacity>
                 ))}

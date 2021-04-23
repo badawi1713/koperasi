@@ -1,12 +1,18 @@
 import { SET_PULSA } from '../../constants';
 
 const initialState = {
-    loading: true,
+    loading: false,
+    detailLoading: false,
+    paymentLoading: false,
+    showSuccessModal: false,
     error: false,
     errorMessage: "",
     nomorTelepon: "",
+    produkId: "",
     daftarPulsa: [],
-    daftarKuota: []
+    daftarKuota: [],
+    detailPulsa: {},
+    detailKuota: {}
 };
 
 const pulsaReducer = (state = initialState, action) => {

@@ -1,20 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
   Image,
-  SafeAreaView,
+  RefreshControl, SafeAreaView,
   ScrollView,
-  StyleSheet,
+  StatusBar, StyleSheet,
   Text,
   TouchableOpacity,
-  View,
-  RefreshControl,
-  StatusBar
+  View
 } from 'react-native';
 import ContentLoader from "react-native-easy-content-loader";
 import NumberFormat from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
-import { IMGAll, IMGPulsa } from '../../../assets';
-import { ICImage, ICTopUp, ICTransfer, ICWithdraw } from '../../../assets/icons';
+import { IMGAll, productList } from '../../../assets';
+import { ICTopUp, ICTransfer, ICWithdraw } from '../../../assets/icons';
 import { Context } from '../../../context/AuthContext';
 import { changeProfile } from '../../../store/actions';
 import { getHomeContent, getSaldoBalance } from '../../../store/actions/home';
@@ -32,7 +30,6 @@ const Home = ({ navigation }) => {
   const homeReducer = useSelector(state => state.homeReducer);
   const userProfile = state.userProfile;
   const { saldoBalance, loading, category } = homeReducer;
-
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -153,7 +150,7 @@ const Home = ({ navigation }) => {
                     <TouchableOpacity
                       key={item.categoryId}
                       style={styles.ppobGroup}
-                      onPress={() => { item.categoryId === "PLS1" ? navigation.navigate('Pulsa') : item.categoryId === "TELKOM" ? navigation.navigate('Indihome') : null }}>
+                      onPress={() => { item.categoryId === "PLS1" ? navigation.navigate('Pulsa') : item.categoryId === "TELKOM" ? navigation.navigate('Indihome') : item.categoryId === "PLN" ? navigation.navigate('PLN') : item.categoryId === "PDAM" ? navigation.navigate('PDAM') : null }}>
                       <View style={styles.ppobItem}>
                         <Image source={{ uri: item.categoryImage }} style={styles.ppobImage} />
                       </View>
@@ -169,51 +166,26 @@ const Home = ({ navigation }) => {
           <Text style={styles.textSection}>Kategori Produk (RK) : </Text>
           {loading ?
             <View style={styles.productGroup}>
-              <ContentLoader containerStyles={{ width: '50%', marginBottom: 20 }} paragraphStyles={{ borderRadius: 6, }} tHeight={100} tWidth={'100%'} pRows={1} active />
-              <ContentLoader containerStyles={{ width: '50%', marginBottom: 20 }} paragraphStyles={{ borderRadius: 6, }} tHeight={100} tWidth={'100%'} pRows={1} active />
-              <ContentLoader containerStyles={{ width: '50%', marginBottom: 20 }} paragraphStyles={{ borderRadius: 6, }} tHeight={100} tWidth={'100%'} pRows={1} active />
-              <ContentLoader containerStyles={{ width: '50%', marginBottom: 20 }} paragraphStyles={{ borderRadius: 6, }} tHeight={100} tWidth={'100%'} pRows={1} active />
-              <ContentLoader containerStyles={{ width: '50%', marginBottom: 20 }} paragraphStyles={{ borderRadius: 6, }} tHeight={100} tWidth={'100%'} pRows={1} active />
-              <ContentLoader containerStyles={{ width: '50%', marginBottom: 20 }} paragraphStyles={{ borderRadius: 6, }} tHeight={100} tWidth={'100%'} pRows={1} active />
+              <ContentLoader containerStyles={{ width: '30%', marginBottom: 20 }} paragraphStyles={{ borderRadius: 6, }} tHeight={100} tWidth={'100%'} pRows={1} active />
+              <ContentLoader containerStyles={{ width: '30%', marginBottom: 20 }} paragraphStyles={{ borderRadius: 6, }} tHeight={100} tWidth={'100%'} pRows={1} active />
+              <ContentLoader containerStyles={{ width: '30%', marginBottom: 20 }} paragraphStyles={{ borderRadius: 6, }} tHeight={100} tWidth={'100%'} pRows={1} active />
             </View>
             :
             <View style={styles.productGroup}>
-              <View style={styles.productItem}>
-                <View style={styles.productImageContainer}>
-                  <ICImage width={100} height={100} />
-                </View>
-                <Text style={styles.productTitle}>
-                  Kipas Angin 16" Hitam Merah
-              </Text>
-                <Text style={styles.productPrice}>Rp 360.000</Text>
-              </View>
-              <View style={styles.productItem}>
-                <View style={styles.productImageContainer}>
-                  <ICImage width={100} height={100} />
-                </View>
-                <Text style={styles.productTitle}>
-                  Kipas Angin 16" Hitam Merah
-              </Text>
-                <Text style={styles.productPrice}>Rp 360.000</Text>
-              </View>
-              <View style={styles.productItem}>
-                <View style={styles.productImageContainer}>
-                  <ICImage width={100} height={100} />
-                </View>
-                <Text style={styles.productTitle}>
-                  Kipas Angin 16" Hitam Merah
-              </Text>
-                <Text style={styles.productPrice}>Rp 360.000</Text>
-              </View>
-              <View style={styles.productItem}>
-                <View style={styles.productImageContainer}>
-                  <ICImage width={100} height={100} />
-                </View>
-                <Text style={styles.productTitle}>
-                  Kipas Angin 16" Hitam Merah
-              </Text>
-                <Text style={styles.productPrice}>Rp 360.000</Text>
-              </View>
+              {productList.map((item, index) => (
+                <TouchableOpacity style={styles.productItem} key={index}>
+                  <View style={styles.productImageContainer}>
+                    <Image source={{ uri: item.imageUrl }} style={styles.productImage} />
+                  </View>
+                  <Text numberOfLines={1} style={styles.productTitle}>
+                    {item.name}
+                  </Text>
+                  <NumberFormat value={item.price || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                    <Text style={styles.productPrice}>Rp {value}</Text>
+                  } />
+                </TouchableOpacity>
+              ))}
+
             </View>
           }
         </View>
@@ -284,6 +256,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 6,
     alignItems: 'center',
+    elevation: 1,
   },
   ppobTitle: {
     fontSize: 14,
@@ -296,7 +269,6 @@ const styles = StyleSheet.create({
     height: 46,
     resizeMode: 'cover',
   },
-
   productGroup: {
     paddingHorizontal: 18,
     flexWrap: 'wrap',
@@ -304,7 +276,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   productItem: {
-    width: '45%',
+    width: '30%',
     alignItems: 'center',
     marginBottom: 10,
   },
@@ -313,9 +285,15 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.white,
     borderRadius: 6,
     marginBottom: 10,
+    elevation: 1
+  },
+  productImage: {
+    borderRadius: 6,
+    width: "100%",
+    height: "100%",
+    resizeMode: 'cover',
   },
   productTitle: {
     textAlign: 'center',
