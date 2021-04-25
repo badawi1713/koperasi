@@ -11,7 +11,9 @@ import Home from './Home';
 import Indihome from './Indihome';
 import Login from './Login';
 import PDAM from './PDAM';
+import PDAMPayment from './PDAMPayment';
 import PLN from './PLN';
+import PLNPayment from './PLNPayment';
 import Profile from './Profile';
 import Pulsa from './Pulsa';
 import QRCamera from './QRCamera';
@@ -25,6 +27,8 @@ import TopUpPayment from './TopUpPayment';
 import TopUpPaymentMethod from './TopUpPaymentMethod';
 
 export {
+  PDAMPayment,
+  PLNPayment,
   PDAM,
   Indihome,
   CoperationMemberLoan,

@@ -2,9 +2,18 @@ import { SET_PLN } from '../../constants';
 
 const initialState = {
     loading: false,
+    detailLoading: false,
+    paymentLoading: false,
+    showModal: false,
     error: false,
     errorMessage: "",
-    menuPln: []
+    menuPln: [],
+    groupId: "",
+    groupName: "",
+    customerId: "",
+    productId: "",
+    products: [],
+    detailProduk: {}
 };
 
 const plnReducer = (state = initialState, action) => {

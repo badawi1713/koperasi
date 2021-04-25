@@ -14,7 +14,9 @@ import {
   Home,
   Indihome,
   Login,
-  Profile,
+  PDAM,
+  PDAMPayment, PLN,
+  PLNPayment, Profile,
   Pulsa,
   QRCamera, Register,
   RegisterVerification,
@@ -22,8 +24,6 @@ import {
   Store,
   StoreRegister,
   TopUp,
-  PLN,
-  PDAM,
   TopUpPayment, TopUpPaymentMethod
 } from '../views/screens';
 
@@ -143,8 +143,18 @@ const Router = () => {
       />
 
       <Stack.Screen
+        name="PLNPayment"
+        component={PLNPayment}
+      />
+
+      <Stack.Screen
         name="PDAM"
         component={PDAM}
+      />
+
+      <Stack.Screen
+        name="PDAMPayment"
+        component={PDAMPayment}
       />
 
     </Stack.Navigator>

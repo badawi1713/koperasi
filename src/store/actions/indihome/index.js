@@ -2,6 +2,63 @@ import { navigate } from '../../../helpers/RootNavigation';
 import { Api } from '../../../utils/api/koperasi';
 import { SET_INDIHOME } from "../../constants";
 
+export const postIndhomePayment = () => {
+    return async (dispatch, getState) => {
+        const { indihomeReducer } = getState()
+        const { inquiryId } = indihomeReducer
+
+        dispatch({
+            type: SET_INDIHOME,
+            payload: {
+                paymentLoading: true,
+                showModal: true
+            }
+        })
+
+        const data = {
+            inquiryId: inquiryId
+        }
+
+        try {
+            const response = await Api.post(`/mobile/ppob/paymentTagihan`, data)
+            await dispatch({
+                type: SET_INDIHOME,
+
+                payload: {
+                    paymentLoading: false,
+                    showModal: true
+                }
+
+
+            })
+
+            await setTimeout(() => {
+                dispatch({
+                    type: SET_INDIHOME,
+                    payload: {
+                        paymentLoading: false,
+                        showModal: false
+                    }
+                })
+                navigate("MainApp")
+            }, 2000)
+
+            console.log(response.data)
+        } catch (error) {
+            dispatch({
+                type: SET_INDIHOME,
+                payload: {
+                    paymentLoading: false,
+                    error: true,
+                    showModal: false
+
+                }
+            })
+        }
+
+    }
+}
+
 export const getIndihomeBill = () => {
     return async (dispatch, getState) => {
         const { indihomeReducer } = getState()
@@ -21,7 +78,8 @@ export const getIndihomeBill = () => {
 
                 payload: {
                     loading: false,
-                    detailProduk: response.data.data
+                    detailProduk: response.data.data,
+                    inquiryId: response.data.data.inquiryId
                 }
             })
 

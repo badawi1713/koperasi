@@ -1,34 +1,33 @@
 import React, { useEffect, useRef } from 'react'
-import { BackHandler, Dimensions, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { ActivityIndicator, BackHandler, Dimensions, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, ToastAndroid, TouchableOpacity, View } from 'react-native'
 import { ScrollView as Scroll } from 'react-native-gesture-handler'
 import RBSheet from "react-native-raw-bottom-sheet"
 import NumberFormat from 'react-number-format'
 import { useDispatch, useSelector } from 'react-redux'
-import { ICProtection } from '../../../assets'
-import { changeIndihome, getIndihomeBill, postIndhomePayment } from '../../../store/actions'
+import { ICProtection, IMGNoData } from '../../../assets'
+import { changePdam, getPdamBill, getPdamProducts, postPdamPayment } from '../../../store/actions'
 import { getSaldoBalance } from '../../../store/actions/home'
 import { colors, fonts } from '../../../utils'
-import { Button, Gap, TopNavbar, Link, SuccessModal } from '../../components'
+import { Button, Gap, Link, SuccessModal, TopNavbar } from '../../components'
 
 const screenHeight = Math.round(Dimensions.get('window').height);
 
-const Indihome = ({ navigation }) => {
+const PDAMPayment = ({ navigation }) => {
     const dispatch = useDispatch();
-    const indihomeReducer = useSelector(state => state.indihomeReducer);
-    const { customerId, loading, detailProduk, paymentLoading, showModal } = indihomeReducer
+    const pdamReducer = useSelector(state => state.pdamReducer);
+    const { customerId, loading, detailProduk, paymentLoading, showModal, groupName, products } = pdamReducer
 
     const {
-        inquiryId,
         pelId,
         saldo,
         productName,
         productPrice
     } = detailProduk
 
-    const indihomeConfirmationRef = useRef(null);
+    const plnConfirmationRef = useRef(null);
 
     const handleBackButtonClick = () => {
-        dispatch(changeIndihome({ customerId: "" }))
+        dispatch(changePdam({ groupId: "", groupName: "" }))
     }
 
     useEffect(() => {
@@ -37,6 +36,10 @@ const Indihome = ({ navigation }) => {
             BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
         };
     }, []);
+
+    useEffect(() => {
+        return dispatch(getPdamProducts())
+    }, [])
 
     const BillConfirmation = () => (
         <View style={{ paddingHorizontal: 18, flex: 1 }}>
@@ -90,9 +93,8 @@ const Indihome = ({ navigation }) => {
                     </View>
                     <Gap height={20} />
                     <Button variant={saldo < productPrice || paymentLoading ? 'disabled' : 'primary'} loading={paymentLoading} disabled={paymentLoading || saldo < productPrice} fullWidth title='Bayar' onPress={async () => {
-                        await dispatch(changeIndihome({ customerId: "" }))
-                        await indihomeConfirmationRef.current.close()
-                        await dispatch(postIndhomePayment())
+                        await plnConfirmationRef.current.close()
+                        await dispatch(postPdamPayment())
                         await dispatch(getSaldoBalance())
                     }} />
                 </View>
@@ -100,14 +102,14 @@ const Indihome = ({ navigation }) => {
         </View>
     );
 
-    const indihomeBillConfirmation = async () => {
-        await dispatch(getIndihomeBill())
-        await indihomeConfirmationRef.current.open()
+    const payConfirmation = async () => {
+        // await dispatch(getIndihomeBill())
+        await plnConfirmationRef.current.open()
     }
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <TopNavbar title='Indihome' back linkBack={() => {
+            <TopNavbar title={groupName} back linkBack={() => {
                 navigation.goBack()
                 handleBackButtonClick()
             }} />
@@ -118,15 +120,50 @@ const Indihome = ({ navigation }) => {
                 <View style={styles.content}>
                     <Text style={styles.header}>Customer ID <Text style={{ color: colors.text.danger }}>*</Text></Text>
                     <Gap height={10} />
-                    <TextInput value={customerId} keyboardType='decimal-pad' onChangeText={(e) => dispatch(changeIndihome({ customerId: e }))} placeholder='Masukkan Customer ID anda' placeholderTextColor={colors.text.grey1} style={styles.textInput} />
+                    <TextInput value={customerId} keyboardType='decimal-pad' onChangeText={(e) => dispatch(changePdam({ customerId: e }))} placeholder='Masukkan Customer ID anda' placeholderTextColor={colors.text.grey1} style={styles.textInput} />
                 </View>
-                <View style={{ paddingHorizontal: 18 }}>
-                    <Button disabled={customerId === "" || loading} title='Selanjutnya' loading={loading} variant={customerId === "" ? 'disabled' : 'primary'} onPress={indihomeBillConfirmation} />
-                </View>
+                <Gap height={20} />
+                {loading ? <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                    <ActivityIndicator size='large' color={colors.background.green1} />
+                </View> :
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        <View style={styles.productContent}>
+
+                            {products.length === 0 ? <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><IMGNoData width={120} height={140} />
+                                <Text style={styles.textEmpty}>Maaf, produk tidak tersedia</Text>
+                            </View> :
+                                products.map((item, index) => (
+                                    <TouchableOpacity
+                                        disabled={loading}
+                                        onPress={async () => {
+                                            if (customerId.length < 10) {
+                                                ToastAndroid.show("Nomor pelanggan tidak valid.", ToastAndroid.SHORT);
+                                            } else {
+                                                await dispatch(changePdam({ productId: item.produkId }))
+                                                await dispatch(getPdamBill())
+                                                await payConfirmation()
+                                            }
+                                        }}
+                                        style={styles.card}
+                                        key={index}
+                                    >
+                                        <Text style={styles.productTitle}>{item.produkNama}</Text>
+                                        <NumberFormat value={item.produkHarga || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                                            <Text style={styles.productPrice}>
+                                                Rp {value}</Text>
+                                        } />
+                                    </TouchableOpacity>
+                                ))
+
+                            }
+
+                        </View>
+                    </ScrollView>
+                }
             </View>
             <RBSheet
                 height={screenHeight - 80}
-                ref={indihomeConfirmationRef}
+                ref={plnConfirmationRef}
                 openDuration={600}
                 closeDuration={500}
                 closeOnDragDown={true}
@@ -152,7 +189,7 @@ const Indihome = ({ navigation }) => {
     )
 }
 
-export default Indihome
+export default PDAMPayment
 
 const styles = StyleSheet.create({
     section: {
@@ -267,5 +304,42 @@ const styles = StyleSheet.create({
         fontFamily: fonts.primary[400],
         flexDirection: 'row',
         flexShrink: 1
+    },
+    productContent: {
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+        paddingHorizontal: 18,
+        justifyContent: 'space-between',
+    },
+    card: {
+        paddingHorizontal: 16,
+        paddingVertical: 18,
+        backgroundColor: colors.primary,
+        width: '48%',
+        borderRadius: 6,
+        height: 100,
+        justifyContent: 'space-between',
+        marginBottom: 20,
+        elevation: 1
+    },
+    notes: {
+        color: colors.white,
+        fontSize: 13,
+        fontFamily: fonts.primary[600],
+    },
+    productTitle: {
+        color: colors.white,
+        fontSize: 13,
+        fontFamily: fonts.primary[400],
+    },
+    productPrice: {
+        color: colors.white,
+        fontSize: 16,
+        fontFamily: fonts.primary[600],
+    },
+    textEmpty: {
+        color: colors.text.header,
+        fontSize: 16,
+        fontFamily: fonts.primary[600],
     }
 })

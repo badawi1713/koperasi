@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
-import { ActivityIndicator, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import ContentLoader from 'react-native-easy-content-loader'
 import { Divider } from 'react-native-paper'
 import { useDispatch, useSelector } from 'react-redux'
 import { IMGPln } from '../../../assets'
-import { getPlnMenu } from '../../../store/actions'
+import { changePln, getPlnMenu } from '../../../store/actions'
 import { colors, fonts } from '../../../utils'
 import { Gap, TopNavbar } from '../../components'
 
@@ -17,9 +18,8 @@ const PLN = ({ navigation }) => {
         const getPlnList = () => {
             dispatch(getPlnMenu())
         }
-        return () => {
-            getPlnList()
-        }
+        return getPlnList()
+
     }, [])
 
     return (
@@ -28,11 +28,24 @@ const PLN = ({ navigation }) => {
             <Gap height={18} />
             <View style={{ flex: 1 }}>
                 <View style={styles.content}>
-                    {loading ? <View>
-                        <ActivityIndicator size={'large'} color={colors.background.green1} />
+                    {loading ? <View >
+                        <View style={styles.row} >
+                            <ContentLoader containerStyles={{ width: '30%' }} paragraphStyles={{ borderRadius: 6, }} tHeight={80} tWidth={'100%'} pRows={0} active />
+                            <ContentLoader containerStyles={{ width: '30%' }} paragraphStyles={{ borderRadius: 6, }} tHeight={10} tWidth={'100%'} pRows={0} active />
+                        </View>
+                        <Divider />
+                        <Gap height={10} />
+                        <View style={styles.row} >
+                            <ContentLoader containerStyles={{ width: '30%' }} paragraphStyles={{ borderRadius: 6, }} tHeight={80} tWidth={'100%'} pRows={0} active />
+                            <ContentLoader containerStyles={{ width: '30%' }} paragraphStyles={{ borderRadius: 6, }} tHeight={10} tWidth={'100%'} pRows={0} active />
+                        </View>
+                        <Divider />
                     </View> :
                         menuPln.map((item, index) => (
-                            <TouchableOpacity key={index} >
+                            <TouchableOpacity key={index} onPress={() => {
+                                dispatch(changePln({ groupId: item.groupId, groupName: item.groupName }))
+                                navigation.navigate("PLNPayment")
+                            }} >
                                 <View style={styles.row}>
                                     <Image source={IMGPln} style={styles.imageLogo} />
                                     <Gap width={20} />
