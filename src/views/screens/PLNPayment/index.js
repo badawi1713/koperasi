@@ -122,43 +122,60 @@ const PLNPayment = ({ navigation }) => {
                     <Gap height={10} />
                     <TextInput value={customerId} keyboardType='decimal-pad' onChangeText={(e) => dispatch(changePln({ customerId: e }))} placeholder='Masukkan Customer ID anda' placeholderTextColor={colors.text.grey1} style={styles.textInput} />
                 </View>
-                <Gap height={20} />
-                {loading ? <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                    <ActivityIndicator size='large' color={colors.background.green1} />
-                </View> :
-                    <ScrollView showsVerticalScrollIndicator={false}>
-                        <View style={styles.productContent}>
+                {groupName !== "PLN TAGIHAN" ? (
+                    loading ? <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                        <ActivityIndicator size='large' color={colors.background.green1} />
+                    </View> :
+                        <ScrollView showsVerticalScrollIndicator={false}>
+                            <Gap height={20} />
+                            <View style={styles.productContent}>
 
-                            {products.length === 0 ? <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><IMGNoData width={120} height={140} />
-                                <Text style={styles.textEmpty}>Maaf, produk tidak tersedia</Text>
-                            </View> :
-                                products.map((item, index) => (
-                                    <TouchableOpacity
-                                        disabled={loading}
-                                        onPress={async () => {
-                                            if (customerId.length < 10) {
-                                                ToastAndroid.show("Nomor pelanggan tidak valid.", ToastAndroid.SHORT);
-                                            } else {
-                                                await dispatch(changePln({ productId: item.produkId }))
-                                                await dispatch(getPlnBill())
-                                                await payConfirmation()
-                                            }
-                                        }}
-                                        style={styles.card}
-                                        key={index}
-                                    >
-                                        <Text style={styles.productTitle}>{item.produkNama}</Text>
-                                        <NumberFormat value={item.produkHarga || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
-                                            <Text style={styles.productPrice}>
-                                                Rp {value}</Text>
-                                        } />
-                                    </TouchableOpacity>
-                                ))
+                                {products.length === 0 ? <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><IMGNoData width={120} height={130} />
+                                    <Text style={styles.textEmpty}>Maaf, produk tidak tersedia</Text>
+                                </View> :
+                                    products.map((item, index) => (
+                                        <TouchableOpacity
+                                            disabled={loading}
+                                            onPress={async () => {
+                                                if (customerId.length < 10) {
+                                                    ToastAndroid.show("Nomor pelanggan tidak valid.", ToastAndroid.SHORT);
+                                                } else {
+                                                    await dispatch(changePln({ productId: item.produkId }))
+                                                    await dispatch(getPlnBill())
+                                                    await payConfirmation()
+                                                }
+                                            }}
+                                            style={styles.card}
+                                            key={index}
+                                        >
+                                            <Text style={styles.productTitle}>{item.produkNama}</Text>
+                                            <NumberFormat value={item.produkHarga || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                                                <Text style={styles.productPrice}>
+                                                    Rp {value}</Text>
+                                            } />
+                                        </TouchableOpacity>
+                                    ))
 
-                            }
+                                }
 
-                        </View>
-                    </ScrollView>
+                            </View>
+                        </ScrollView>
+                )
+
+                    :
+                    <View style={{ paddingHorizontal: 18 }}>
+                        <Button disabled={customerId === "" || loading} title='Selanjutnya' loading={loading} variant={customerId === "" ? 'disabled' : 'primary'}
+                            onPress={async () => {
+                                if (customerId.length < 10) {
+                                    ToastAndroid.show("Nomor pelanggan tidak valid.", ToastAndroid.SHORT);
+                                } else {
+                                    await dispatch(changePln({ productId: item.produkId }))
+                                    await dispatch(getPlnBill())
+                                    await payConfirmation()
+                                }
+                            }}
+                        />
+                    </View>
                 }
             </View>
             <RBSheet

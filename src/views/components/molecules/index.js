@@ -11,10 +11,12 @@ import MemberRegisterConfirmation from './MemberRegisterConfirmation';
 import MemberRegisterForm from './MemberRegisterForm';
 import PhoneDataContent from './PhoneDataContent';
 import PulsaContent from './PulsaContent';
+import SaldoAllContent from './SaldoAllContent';
+import SaldoRefundContent from './SaldoRefundContent';
 import SavingDetail from './SavingDetail';
 import SavingTransfer from './SavingTransfer';
 import StartedSwiper from './StartedSwiper';
 import TopNavbar from './TopNavbar';
 
-export { LoanTransfer, LoanDetail, TopNavbar, SavingTransfer, SavingDetail, MemberProfile, HomeSwiper, MemberRegisterConfirmation, StartedSwiper, Input, BottomTab, PulsaContent, PhoneDataContent, MemberRegisterForm, CoperationRegisterForm, CoperationRegisterConfirmation };
+export { SaldoAllContent, SaldoRefundContent, LoanTransfer, LoanDetail, TopNavbar, SavingTransfer, SavingDetail, MemberProfile, HomeSwiper, MemberRegisterConfirmation, StartedSwiper, Input, BottomTab, PulsaContent, PhoneDataContent, MemberRegisterForm, CoperationRegisterForm, CoperationRegisterConfirmation };
 

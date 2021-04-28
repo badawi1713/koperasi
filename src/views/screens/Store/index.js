@@ -110,7 +110,7 @@ const Store = ({ navigation }) => {
             <Text style={styles.headerText}>Produk</Text>
             <Gap height={20} />
             <View style={{ alignItems: 'center' }}>
-              <IMGNoData width={120} height={140} />
+              <IMGNoData width={120} height={130} />
               <Text style={styles.text}>Belum Ada Produk</Text>
 
             </View>

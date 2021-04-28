@@ -12,7 +12,7 @@ const PulsaContent = ({ pulsaConfirmation, content = [], phoneNumber, loading })
     return (
         <View style={styles.content}>
 
-            {content.length === 0 ? <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><IMGNoData width={120} height={140} />
+            {content.length === 0 ? <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}><IMGNoData width={120} height={130} />
                 <Text style={styles.textEmpty}>Maaf, produk pulsa tidak tersedia</Text>
             </View> :
                 content.map((item, index) => (

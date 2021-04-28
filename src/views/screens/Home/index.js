@@ -76,7 +76,7 @@ const Home = ({ navigation }) => {
           <Input variant="search" />
           <Gap height={20} />
           <View style={styles.transactionInfo}>
-            <View style={styles.walletInfo}>
+            <TouchableOpacity onPress={() => navigation.navigate("SaldoDetail")} style={styles.walletInfo}>
               <Text style={styles.rupiahtext}>Saldo Wallet</Text>
               <View style={styles.saldoInfo}>
                 <Text style={styles.rupiahtext}>Rp</Text>
@@ -91,7 +91,7 @@ const Home = ({ navigation }) => {
 
                 }
               </View>
-            </View>
+            </TouchableOpacity>
             <View style={styles.transactionGroup}>
               <TouchableOpacity onPress={() => navigation.navigate('TopUp')} style={styles.transactionButton}>
                 <ICTopUp />

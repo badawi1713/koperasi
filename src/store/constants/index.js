@@ -12,4 +12,5 @@ export const SET_PULSA = 'SET_PULSA'
 export const SET_PLN = 'SET_PLN'
 export const SET_PDAM = 'SET_PDAM'
 export const SET_INDIHOME = 'SET_INDIHOME'
+export const SET_SALDO_DETAIL = 'SET_SALDO_DETAIL'
 

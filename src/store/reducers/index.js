@@ -11,6 +11,7 @@ import registerReducer from './register'
 import savingCoperationMemberReducer from './savingCoperationMember'
 import storeProductReducer from './storeProduct'
 import topUpReducer from './topUp'
+import saldoDetailReducer from './saldoDetail'
 
-export { indihomeReducer, pdamReducer, plnReducer, storeProductReducer, pulsaReducer, productReducer, registerReducer, topUpReducer, profileReducer, homeReducer, miscReducer, savingCoperationMemberReducer, loanCoperationMemberReducer }
+export { saldoDetailReducer, indihomeReducer, pdamReducer, plnReducer, storeProductReducer, pulsaReducer, productReducer, registerReducer, topUpReducer, profileReducer, homeReducer, miscReducer, savingCoperationMemberReducer, loanCoperationMemberReducer }
 

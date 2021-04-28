@@ -30,13 +30,13 @@ const PLN = ({ navigation }) => {
                 <View style={styles.content}>
                     {loading ? <View >
                         <View style={styles.row} >
-                            <ContentLoader containerStyles={{ width: '30%' }} paragraphStyles={{ borderRadius: 6, }} tHeight={80} tWidth={'100%'} pRows={0} active />
+                            <ContentLoader containerStyles={{ width: '25%' }} paragraphStyles={{ borderRadius: 6, }} tHeight={60} tWidth={'100%'} pRows={0} active />
                             <ContentLoader containerStyles={{ width: '30%' }} paragraphStyles={{ borderRadius: 6, }} tHeight={10} tWidth={'100%'} pRows={0} active />
                         </View>
                         <Divider />
                         <Gap height={10} />
                         <View style={styles.row} >
-                            <ContentLoader containerStyles={{ width: '30%' }} paragraphStyles={{ borderRadius: 6, }} tHeight={80} tWidth={'100%'} pRows={0} active />
+                            <ContentLoader containerStyles={{ width: '25%' }} paragraphStyles={{ borderRadius: 6, }} tHeight={60} tWidth={'100%'} pRows={0} active />
                             <ContentLoader containerStyles={{ width: '30%' }} paragraphStyles={{ borderRadius: 6, }} tHeight={10} tWidth={'100%'} pRows={0} active />
                         </View>
                         <Divider />

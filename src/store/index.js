@@ -1,8 +1,9 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import thunk from 'redux-thunk';
-import { indihomeReducer, homeReducer, loanCoperationMemberReducer, miscReducer, pdamReducer, plnReducer, productReducer, profileReducer, pulsaReducer, registerReducer, savingCoperationMemberReducer, storeProductReducer, topUpReducer } from './reducers';
+import { homeReducer, indihomeReducer, loanCoperationMemberReducer, miscReducer, pdamReducer, plnReducer, productReducer, profileReducer, pulsaReducer, registerReducer, saldoDetailReducer, savingCoperationMemberReducer, storeProductReducer, topUpReducer } from './reducers';
 
 const reducer = combineReducers({
+  saldoDetailReducer,
   pulsaReducer,
   homeReducer,
   registerReducer,

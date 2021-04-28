@@ -20,7 +20,7 @@ import {
   Pulsa,
   QRCamera, Register,
   RegisterVerification,
-  SplashScreen,
+  SaldoDetail, SplashScreen,
   Store,
   StoreRegister,
   TopUp,
@@ -43,6 +43,8 @@ const config = {
 };
 
 const MainApp = () => {
+
+
   return (
     <Tab.Navigator tabBar={(props) => <BottomTab {...props} />}>
       <Tab.Screen name="Home" component={Home} />
@@ -155,6 +157,11 @@ const Router = () => {
       <Stack.Screen
         name="PDAMPayment"
         component={PDAMPayment}
+      />
+
+      <Stack.Screen
+        name="SaldoDetail"
+        component={SaldoDetail}
       />
 
     </Stack.Navigator>

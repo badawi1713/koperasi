@@ -122,7 +122,7 @@ const PDAMPayment = ({ navigation }) => {
                     <Gap height={10} />
                     <TextInput value={customerId} keyboardType='decimal-pad' onChangeText={(e) => dispatch(changePdam({ customerId: e }))} placeholder='Masukkan Customer ID anda' placeholderTextColor={colors.text.grey1} style={styles.textInput} />
                 </View>
-                <Gap height={20} />
+                {/* <Gap height={20} />
                 {loading ? <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
                     <ActivityIndicator size='large' color={colors.background.green1} />
                 </View> :
@@ -159,7 +159,20 @@ const PDAMPayment = ({ navigation }) => {
 
                         </View>
                     </ScrollView>
-                }
+                } */}
+                <View style={{ paddingHorizontal: 18 }}>
+                    <Button disabled={customerId === "" || loading} title='Selanjutnya' loading={loading} variant={customerId === "" ? 'disabled' : 'primary'}
+                        onPress={async () => {
+                            if (customerId.length < 10) {
+                                ToastAndroid.show("Nomor pelanggan tidak valid.", ToastAndroid.SHORT);
+                            } else {
+                                await dispatch(changePdam({ productId: item.produkId }))
+                                await dispatch(getPdamBill())
+                                await payConfirmation()
+                            }
+                        }}
+                    />
+                </View>
             </View>
             <RBSheet
                 height={screenHeight - 80}

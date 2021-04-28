@@ -19,6 +19,7 @@ import Pulsa from './Pulsa';
 import QRCamera from './QRCamera';
 import Register from './Register';
 import RegisterVerification from './RegisterVerification';
+import SaldoDetail from './SaldoDetail';
 import SplashScreen from './SplashScreen';
 import Store from './Store';
 import StoreRegister from './StoreRegister';
@@ -27,6 +28,7 @@ import TopUpPayment from './TopUpPayment';
 import TopUpPaymentMethod from './TopUpPaymentMethod';
 
 export {
+  SaldoDetail,
   PDAMPayment,
   PLNPayment,
   PDAM,
