@@ -6,7 +6,6 @@ import CoperationMemberSavingPayment from './CoperationMemberSavingPayment';
 import CoperationMemberSavingPaymentMethod from './CoperationMemberSavingPaymentMethod';
 import EWallet from './EWallet';
 import GetStarted from './GetStarted';
-import History from './History';
 import Home from './Home';
 import Indihome from './Indihome';
 import Login from './Login';
@@ -26,6 +25,8 @@ import StoreRegister from './StoreRegister';
 import TopUp from './TopUp';
 import TopUpPayment from './TopUpPayment';
 import TopUpPaymentMethod from './TopUpPaymentMethod';
+import TransactionHistory from './TransactionHistory';
+import TransactionHistoryDetail from './TransactionHistoryDetail';
 
 export {
   SaldoDetail,
@@ -42,7 +43,8 @@ export {
   CoperationMember,
   EWallet,
   GetStarted,
-  History,
+  TransactionHistory,
+  TransactionHistoryDetail,
   Home,
   Login,
   Profile,

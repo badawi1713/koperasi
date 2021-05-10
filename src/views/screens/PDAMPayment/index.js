@@ -164,7 +164,11 @@ const PDAMPayment = ({ navigation }) => {
                     <Button disabled={customerId === "" || loading} title='Selanjutnya' loading={loading} variant={customerId === "" ? 'disabled' : 'primary'}
                         onPress={async () => {
                             if (customerId.length < 10) {
-                                ToastAndroid.show("Nomor pelanggan tidak valid.", ToastAndroid.SHORT);
+                                ToastAndroid.show("Nomor pelanggan tidak valid.", ToastAndroid.SHORT, {
+                                    textStyle: {
+                                        textAlign: 'center'
+                                    }
+                                });
                             } else {
                                 await dispatch(changePdam({ productId: item.produkId }))
                                 await dispatch(getPdamBill())
@@ -258,7 +262,7 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.27,
         shadowRadius: 4.65,
-        elevation: 6,
+        elevation: 1,
     },
     drawerLine: {
         width: 40,

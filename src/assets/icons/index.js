@@ -6,6 +6,7 @@ import ICalendar from './calendar.svg';
 import ICCart from './cart.svg';
 import ICCopy from './copy.svg';
 import ICDebt from './debt.svg';
+import ICDownload from './download.svg';
 import ICEmail from './email.svg';
 import ICFilter from './filter.svg';
 import ICFlashOff from './flash-off.svg';
@@ -19,8 +20,11 @@ import ICImage from './image.svg';
 import ICInvisible from './invisible.svg';
 import ICLoan from './loan.svg';
 import ICNotification from './notification.svg';
+import ICPaymentDisabled from './payment-disabled.svg';
+import ICPayment from './payment.svg';
 import ICPhoneData from './phone-data.svg';
 import ICPhone from './phone.svg';
+import ICPrint from './print.svg';
 import ICPrivacy from './privacy.svg';
 import ICProfileActive from './profile-active.svg';
 import ICProfileInActive from './profile-inactive.svg';
@@ -28,8 +32,10 @@ import ICProtection from './protection.svg';
 import ICSavings from './save-money.svg';
 import ICSavingTotal from './saving.svg';
 import ICScanner from './scanner.svg';
+import ICScreenshoot from './screenshoot.svg';
 import ICSearch from './search.svg';
 import ICSetting from './setting.svg';
+import ICShare from './share.svg';
 import ICSort from './sort.svg';
 import ICStoreActive from './store-active.svg';
 import ICStoreInActive from './store-inactive.svg';
@@ -42,10 +48,12 @@ import ICVisible from './visible.svg';
 import ICEWalletActive from './wallet-active.svg';
 import ICEWalletInActive from './wallet-inactive.svg';
 import ICWithdraw from './withdraw.svg';
-import ICPayment from './payment.svg';
-import ICPaymentDisabled from './payment-disabled.svg';
 
 export {
+  ICDownload,
+  ICPrint,
+  ICScreenshoot,
+  ICShare,
   ICPaymentDisabled,
   ICPayment,
   ICDebt,

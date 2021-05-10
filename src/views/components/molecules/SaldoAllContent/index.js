@@ -28,7 +28,7 @@ const SaldoAllContent = ({ content }) => {
                                 } />
                             </View>
                         </View>
-                        <Divider />
+                        <View style={styles.horizontalLine} />
                     </View>
                 ))}
             </ScrollView>}
@@ -48,15 +48,22 @@ const styles = StyleSheet.create({
     },
     text: {
         color: colors.text.primary,
-        fontFamily: fonts.primary[400]
+        fontFamily: fonts.primary[400],
+        fontSize: 12
+
     },
     transactionText: {
         color: colors.text.green1,
         fontFamily: fonts.primary[600],
-        fontSize: 16
+        fontSize: 14
     },
     dateText: {
         color: colors.text.grey2,
-        fontFamily: fonts.primary[400]
+        fontFamily: fonts.primary[400],
+        fontSize: 12
+    },
+    horizontalLine: {
+        borderBottomColor: colors.border,
+        borderBottomWidth: 0.6
     }
 })

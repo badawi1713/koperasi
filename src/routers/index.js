@@ -10,7 +10,7 @@ import {
   CoperationMemberSavingPaymentMethod,
   EWallet,
   GetStarted,
-  History,
+  TransactionHistory,
   Home,
   Indihome,
   Login,
@@ -24,7 +24,7 @@ import {
   Store,
   StoreRegister,
   TopUp,
-  TopUpPayment, TopUpPaymentMethod
+  TopUpPayment, TopUpPaymentMethod, TransactionHistoryDetail
 } from '../views/screens';
 
 const Stack = createStackNavigator();
@@ -48,7 +48,7 @@ const MainApp = () => {
   return (
     <Tab.Navigator tabBar={(props) => <BottomTab {...props} />}>
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Riwayat" component={History} options={{ tabBarVisible: false }} />
+      <Tab.Screen name="Riwayat" component={TransactionHistory} options={{ tabBarVisible: false }} />
       <Tab.Screen name="E-Wallet" component={EWallet} />
       <Tab.Screen name="Toko" component={Store} />
       <Tab.Screen name="Akun" component={Profile} />
@@ -94,9 +94,12 @@ const Router = () => {
         component={RegisterVerification}
       />
       <Stack.Screen
-
         name="MainApp"
         component={MainApp}
+      />
+      <Stack.Screen
+        name="TransactionHistoryDetail"
+        component={TransactionHistoryDetail}
       />
       <Stack.Screen
         name="Pulsa"

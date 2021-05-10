@@ -5,34 +5,33 @@ import { colors, fonts } from '../../../utils';
 import { Gap, TopNavbar } from '../../components';
 
 const historyData = [
-  { transactionName: "Transaksi #1", time: "12:03", date: "14 Mar 2021" },
-  { transactionName: "Transaksi #2", time: "11:03", date: "15 Mar 2021" },
-  { transactionName: "Transaksi #3", time: "14:23", date: "15 Mar 2021" },
-  { transactionName: "Transaksi #4", time: "22:30", date: "15 Mar 2021" },
-  { transactionName: "Transaksi #5", time: "12:00", date: "16 Mar 2021" },
-  { transactionName: "Transaksi #6", time: "14:10", date: "16 Mar 2021" },
-  { transactionName: "Transaksi #7", time: "09:00", date: "17 Mar 2021" },
-  { transactionName: "Transaksi #8", time: "19:10", date: "17 Mar 2021" },
-  { transactionName: "Transaksi #9", time: "20:23", date: "17 Mar 2021" },
+  { transactionName: "Transaksi #1", time: "12:03", date: "14 Mar 2021", transactionAmount: 12000 },
+  { transactionName: "Transaksi #2", time: "11:03", date: "15 Mar 2021", transactionAmount: 21000 },
+  { transactionName: "Transaksi #3", time: "14:23", date: "15 Mar 2021", transactionAmount: 50000 },
+  { transactionName: "Transaksi #4", time: "22:30", date: "15 Mar 2021", transactionAmount: 1200000 },
+  { transactionName: "Transaksi #5", time: "12:00", date: "16 Mar 2021", transactionAmount: 27000000 },
+  { transactionName: "Transaksi #6", time: "14:10", date: "16 Mar 2021", transactionAmount: 51000 },
+  { transactionName: "Transaksi #7", time: "09:00", date: "17 Mar 2021", transactionAmount: 101000 },
+  { transactionName: "Transaksi #8", time: "19:10", date: "17 Mar 2021", transactionAmount: 200000 },
+  { transactionName: "Transaksi #9", time: "20:23", date: "17 Mar 2021", transactionAmount: 250000 },
 ]
 
-const HistoryCard = ({ item }) => {
-
+const HistoryCard = ({ item, navigation }) => {
   return (
-    <TouchableOpacity style={styles.transactionCard}>
+    <TouchableOpacity style={styles.transactionCard} onPress={() => navigation.navigate('TransactionHistoryDetail')}>
       <Text style={styles.transactionName}>{item.transactionName}</Text>
-      <Text style={styles.transactionAmount}>-Rp 20.000</Text>
+      <Text style={styles.transactionAmount}>-Rp {item.transactionAmount}</Text>
     </TouchableOpacity>
   )
 }
 
-const History = ({ navigation }) => {
+const TransactionHistory = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <View>
       <View style={styles.transactionTime}>
         <Text style={styles.transactionTimeText}>{item.date} • {item.time}</Text>
       </View>
-      <HistoryCard item={item} />
+      <HistoryCard item={item} navigation={navigation} />
     </View>
   );
   return (
@@ -61,7 +60,7 @@ const History = ({ navigation }) => {
   );
 };
 
-export default History;
+export default TransactionHistory;
 
 const styles = StyleSheet.create({
   container: {
@@ -117,12 +116,12 @@ const styles = StyleSheet.create({
   transactionName: {
     color: colors.text.secondary,
     fontFamily: fonts.primary[600],
-    fontSize: 16
+    fontSize: 14
   },
   transactionAmount: {
     color: colors.text.primary,
     fontFamily: fonts.primary[700],
-    fontSize: 14
+    fontSize: 12
   },
   transactionTime: {
     paddingHorizontal: 16,
@@ -132,7 +131,7 @@ const styles = StyleSheet.create({
   },
   transactionTimeText: {
     color: colors.white,
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: fonts.primary[600],
   }
 });

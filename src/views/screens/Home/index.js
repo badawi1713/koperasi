@@ -77,7 +77,7 @@ const Home = ({ navigation }) => {
           <Gap height={20} />
           <View style={styles.transactionInfo}>
             <TouchableOpacity onPress={() => navigation.navigate("SaldoDetail")} style={styles.walletInfo}>
-              <Text style={styles.rupiahtext}>Saldo Wallet</Text>
+              <Text style={styles.rupiahtext}>Saldo Sukarela</Text>
               <View style={styles.saldoInfo}>
                 <Text style={styles.rupiahtext}>Rp</Text>
                 {loading ?
@@ -105,7 +105,7 @@ const Home = ({ navigation }) => {
               <Gap width={10} />
               <TouchableOpacity style={styles.transactionButton}>
                 <ICWithdraw width={20} height={20} />
-                <Text style={styles.transactionIconText}>Withdraw</Text>
+                <Text style={styles.transactionIconText}>Tarik Dana</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -140,7 +140,7 @@ const Home = ({ navigation }) => {
                 <ContentLoader containerStyles={{ width: 100, justifyContent: 'center', alignItems: 'center', alignSelf: 'center' }} paragraphStyles={{ borderRadius: 6, }} tHeight={80} tWidth={80} pRows={1} active />
               </View> :
                 <>
-                  <TouchableOpacity style={styles.ppobGroup}>
+                  <TouchableOpacity activeOpacity={1} style={styles.ppobGroup}>
                     <View style={styles.ppobItem}>
                       <Image source={IMGAll} style={styles.ppobImage} />
                     </View>
@@ -148,6 +148,7 @@ const Home = ({ navigation }) => {
                   </TouchableOpacity>
                   {category && category.map((item,) => (
                     <TouchableOpacity
+                      activeOpacity={1}
                       key={item.categoryId}
                       style={styles.ppobGroup}
                       onPress={() => { item.categoryId === "PLS1" ? navigation.navigate('Pulsa') : item.categoryId === "TELKOM" ? navigation.navigate('Indihome') : item.categoryId === "PLN" ? navigation.navigate('PLN') : item.categoryId === "PDAM" ? navigation.navigate('PDAM') : null }}>
@@ -279,6 +280,7 @@ const styles = StyleSheet.create({
     width: '30%',
     alignItems: 'center',
     marginBottom: 10,
+    elevation: 1
   },
   productImageContainer: {
     height: 120,
@@ -287,7 +289,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 6,
     marginBottom: 10,
-    elevation: 1
   },
   productImage: {
     borderRadius: 6,

@@ -1,7 +1,5 @@
 import { Api } from '../../../utils/api/koperasi';
 import { SET_SALDO_DETAIL } from '../../constants';
-import { Alert } from "react-native";
-import * as RootNavigation from '../../../helpers/RootNavigation';
 
 export const getSaldoTransactions = () => {
     return async (dispatch, getState) => {

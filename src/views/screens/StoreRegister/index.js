@@ -1,35 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Controller, useForm } from "react-hook-form";
 import {
-  Platform, ScrollView, StyleSheet, Text,
+  ScrollView, StyleSheet, Text,
   TouchableOpacity, View
 } from 'react-native';
-import { Modal, Portal } from 'react-native-paper';
-import { TextInput } from 'react-native-paper';
-import { ICAdd, ICImage, IMGStoreRegistrationSuccess } from '../../../assets';
+import SelectPicker from 'react-native-form-select-picker';
+import { Modal, Portal, TextInput } from 'react-native-paper';
+import { useDispatch, useSelector } from 'react-redux';
+import { IMGStoreRegistrationSuccess } from '../../../assets';
+import { changeMisc, changeStoreProduct, getCityData, getProvinceData, getSubDistrictData } from '../../../store/actions';
 import { colors, fonts } from '../../../utils';
 import { Button, Gap, TopNavbar } from '../../components';
-import { useDispatch, useSelector } from 'react-redux'
-import { changeMisc, changeStoreProduct } from '../../../store/actions';
-import { launchImageLibrary } from 'react-native-image-picker';
-import { Controller, useForm } from "react-hook-form";
 
 const theme = { colors: { primary: colors.background.green1, placeholder: colors.text.grey1, accent: colors.text.grey1 } }
-
-const createFormData = (file, body = {}) => {
-  const data = new FormData();
-
-  data.append('ktp', {
-    name: file.fileName,
-    type: file.type,
-    uri: Platform.OS === 'ios' ? file.uri.replace('file://', '') : file.uri,
-  });
-
-  Object.keys(body).forEach((key) => {
-    data.append(key, body[key]);
-  });
-
-  return data;
-};
 
 const StoreRegister = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -37,35 +20,11 @@ const StoreRegister = ({ navigation }) => {
   const { userProfile: { name } } = profileReducer;
 
   const [showModal, setShowModal] = useState(false);
-  const [ktpError, setKtpError] = useState(false);
-  const [ktpErrorMessage, setKtpErrorMessage] = useState("")
 
   const storeProductReducer = useSelector(state => state.storeProductReducer)
-  const { storeProfile, registerLoading } = storeProductReducer;
-  const { namaToko, kota, kodePos, ktp } = storeProfile;
+  const { storeProfile, registerLoading, dataProvinsi, dataKota, dataKecamatan } = storeProductReducer;
+  const { namaToko, kota, kodePos, provinsi, kecamatan, alamat } = storeProfile;
   const { control, handleSubmit, errors } = useForm();
-
-  const openGalleryHandler = async () => {
-    await launchImageLibrary({ noData: true }, async (response) => {
-      if (response.didCancel) {
-        await dispatch(changeStoreProduct({ storeProfile: { ...storeProfile, ktp: [] } }))
-        setKtpError(true)
-        setKtpErrorMessage("Berkas KTP belum dipilih")
-      } else {
-        if (response.fileSize > 1048576) {
-          await dispatch(changeStoreProduct({ storeProfile: { ...storeProfile, ktp: [] } }))
-          setKtpError(true)
-          setKtpErrorMessage("Ukuran berkas KTP maksimal 1 MB")
-
-        }
-        else {
-          await dispatch(changeStoreProduct({ storeProfile: { ...storeProfile, ktp: response } }))
-          setKtpError(false)
-          setKtpErrorMessage("")
-        }
-      }
-    });
-  };
 
   const showModalHandler = async () => {
 
@@ -79,24 +38,32 @@ const StoreRegister = ({ navigation }) => {
     }, 2000)
   }
 
+  console.log(errors)
 
   const postStoreProfileHandler = async () => {
     dispatch(changeStoreProduct({ registerLoading: true }))
 
-    if (ktp.length === 0) {
-      setKtpError(true)
-      setKtpErrorMessage("Berkas KTP belum dipilih")
-      dispatch(changeStoreProduct({ registerLoading: false }))
-
-    } else {
-      const data = await createFormData(ktp, { namaToko, kota, kodePos });
-      setKtpError(false)
-      setKtpErrorMessage("")
-      await showModalHandler();
-      dispatch(changeStoreProduct({ registerLoading: false }))
-
+    const data = {
+      "namaToko": namaToko,
+      "provinsi": provinsi,
+      "kota": kota,
+      "kecamatan": kecamatan,
+      "detailAlamat": alamat,
+      "kodePos": kodePos
     }
+
+    await dispatch(postStoreProfileHandler(data))
+    await showModalHandler();
+
   }
+
+  useEffect(() => {
+    const getProvinceList = () => {
+      dispatch(getProvinceData())
+    }
+
+    return getProvinceList()
+  }, [])
 
   return (
     <View style={styles.container}>
@@ -133,31 +100,95 @@ const StoreRegister = ({ navigation }) => {
             <Gap height={5} />
             <Text style={styles.errorText}>Nama toko harus diisi</Text>
           </>}
-          <Gap height={10} />
+          <Gap height={15} />
           <Controller
             control={control}
-            render={({ onChange, onBlur, value }) => (
-              <TextInput
-                theme={theme}
-                mode='outlined'
-                placeholderTextColor={colors.text.grey1}
-                onBlur={onBlur}
-                label='Kota atau Kecamatan'
-                style={styles.textInput}
-                keyboardType="name-phone-pad"
-                value={value}
-                onChangeText={(e) => { onChange(e); dispatch(changeStoreProduct({ storeProfile: { ...storeProfile, kota: e } })); }}
-              />
+            render={({ onChange }) => (
+              <SelectPicker
+                doneButtonTextStyle={{ color: colors.text.green1, fontFamily: fonts.primary[600] }}
+                doneButtonText='Pilih'
+                onValueChange={async (e) => { await onChange(e); dispatch(changeStoreProduct({ storeProfile: { ...storeProfile, provinsi: e } })); await dispatch(getCityData()) }}
+                placeholder='Pilih Provinsi'
+                selected={provinsi}
+                style={styles.selectInput}
+                placeholderStyle={{ color: colors.text.grey1, fontFamily: fonts.primary.normal }}
+              >
+                {Object.values(dataProvinsi).map((item) => (
+                  <SelectPicker.Item key={item.id} label={item.provinsiName} value={item.id} />
+                ))}
+              </SelectPicker>
+            )}
+            name="provinsi"
+            rules={{ required: true }}
+            defaultValue=""
+          />
+
+          {errors.provinsi && <>
+            <Gap height={5} />
+            <Text style={styles.errorText}>Provinsi harus diisi</Text>
+          </>}
+          <Gap height={15} />
+          <Controller
+            control={control}
+            render={({ onChange }) => (
+              <>
+                <SelectPicker
+                  doneButtonTextStyle={{ color: colors.text.green1, fontFamily: fonts.primary[600] }}
+                  doneButtonText='Pilih'
+                  onValueChange={async (e) => { await onChange(e); await dispatch(changeStoreProduct({ storeProfile: { ...storeProfile, kota: e } })); await dispatch(getSubDistrictData()) }}
+                  placeholder='Pilih Kota atau Kabupaten'
+                  selected={kota}
+                  disabled={provinsi === ""}
+                  style={styles.selectInput}
+                  placeholderStyle={{ color: colors.text.grey1, fontFamily: fonts.primary.normal }}
+                >
+                  {Object.values(dataKota).map((item) => (
+                    <SelectPicker.Item key={item.id} label={item.namaKota} value={item.id} />
+                  ))}
+                </SelectPicker>
+              </>
             )}
             name="kota"
             rules={{ required: true }}
             defaultValue=""
           />
+
           {errors.kota && <>
             <Gap height={5} />
-            <Text style={styles.errorText}>Kota atau kecamatan harus diisi</Text>
+            <Text style={styles.errorText}>Kota atau kabupaten harus diisi</Text>
           </>}
-          <Gap height={10} />
+          <Gap height={15} />
+          <Controller
+            control={control}
+            render={({ onChange }) => (
+              <SelectPicker
+                doneButtonTextStyle={{ color: colors.text.green1, fontFamily: fonts.primary[600] }}
+                doneButtonText='Pilih'
+                disabled={kota === ""}
+                onValueChange={(e) => { onChange(e); dispatch(changeStoreProduct({ storeProfile: { ...storeProfile, kecamatan: e } })); }}
+                placeholder='Pilih Kecamatan'
+                selected={kecamatan}
+                style={styles.selectInput}
+
+                placeholderStyle={{ color: colors.text.grey1, fontFamily: fonts.primary.normal }}
+              >
+                {Object.values(dataKecamatan).map((item) => (
+                  <SelectPicker.Item key={item.id} label={item.namaKecamatan} value={item.id} />
+                ))}
+
+              </SelectPicker>
+            )}
+            name="kecamatan"
+            rules={{ required: true }}
+            defaultValue=""
+          />
+
+          {errors.kecamatan && <>
+            <Gap height={5} />
+            <Text style={styles.errorText}>Kecamatan harus diisi</Text>
+          </>}
+
+          <Gap height={15} />
           <Controller
             control={control}
             render={({ onChange, onBlur, value }) => (
@@ -167,7 +198,34 @@ const StoreRegister = ({ navigation }) => {
                 placeholderTextColor={colors.text.grey1}
                 onBlur={onBlur}
                 style={styles.textInput}
-                keyboardType='decimal-pad'
+                keyboardType='name-phone-pad'
+                value={value}
+                label='Alamat'
+                multiline
+                numberOfLines={3}
+                onChangeText={(e) => { onChange(e); dispatch(changeStoreProduct({ storeProfile: { ...storeProfile, alamat: e } })); }}
+              />
+            )}
+            name="alamat"
+            rules={{ required: true }}
+            defaultValue=""
+          />
+          {errors.alamat && <>
+            <Gap height={5} />
+            <Text style={styles.errorText}>Alamat harus diisi</Text>
+          </>}
+
+          <Gap height={15} />
+          <Controller
+            control={control}
+            render={({ onChange, onBlur, value }) => (
+              <TextInput
+                theme={theme}
+                mode='outlined'
+                placeholderTextColor={colors.text.grey1}
+                onBlur={onBlur}
+                style={styles.textInput}
+                keyboardType='number-pad'
                 value={value}
                 label='Kode Pos'
                 onChangeText={(e) => { onChange(e); dispatch(changeStoreProduct({ storeProfile: { ...storeProfile, kodePos: e } })); }}
@@ -179,19 +237,9 @@ const StoreRegister = ({ navigation }) => {
           />
           {errors.kodePos && <>
             <Gap height={5} />
-            <Text style={styles.errorText}>Kode Pos harus diisi</Text>
+            <Text style={styles.errorText}>Kode pos harus diisi</Text>
           </>}
-          <Gap height={16} />
 
-          <TouchableOpacity style={styles.uploadContainer(ktp.length === 0)} onPress={openGalleryHandler}>
-            {ktp.length === 0 ? <ICAdd /> : <ICImage />}
-            <Gap width={10} />
-            <Text numberOfLines={1} ellipsizeMode='middle' style={styles.buttonText(ktp.length === 0)}>{ktp.length === 0 ? "Upload KTP" : ktp.fileName}</Text>
-          </TouchableOpacity>
-          {ktpError && <>
-            <Gap height={5} />
-            <Text style={styles.errorText}>{ktpErrorMessage}</Text>
-          </>}
           <Gap height={20} />
           <View style={styles.conditionTermContainer}>
             <Text style={styles.text}>Dengan membuka toko koperasi</Text>
@@ -283,6 +331,20 @@ const styles = StyleSheet.create({
     flex: 1,
     color: colors.black,
     backgroundColor: colors.white,
+
+  },
+  selectInput: {
+    flex: 1,
+    color: colors.black,
+    backgroundColor: colors.white,
+    borderWidth: 1,
+    borderColor: colors.text.grey1,
+    borderRadius: 4,
+    paddingHorizontal: 14,
+    paddingVertical: 16,
+    width: '100%',
+    fontSize: 16,
+    fontFamily: fonts.primary[400]
   },
   uploadContainer: (data) => ({
     borderWidth: 1,

@@ -4,11 +4,16 @@ const initialState = {
     loading: true,
     error: false,
     errorMessage: "",
+    dataProvinsi: [],
+    dataKota: [],
+    dataKecamatan: [],
     storeProfile: {
         namaToko: "",
+        provinsi: "",
         kota: "",
+        kecamatan: "",
+        alamat: "",
         kodePos: "",
-        ktp: []
     },
     registerLoading: false
 

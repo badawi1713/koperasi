@@ -21,6 +21,7 @@ Api.interceptors.request.use(
     return config;
   },
   (err) => {
+    console.log('error response', err)
     return Promise.reject(err);
   }
 )
