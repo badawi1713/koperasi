@@ -1,6 +1,38 @@
 import { Api } from "../../../utils/api/koperasi";
 import { SET_STORE_PRODUCT } from "../../constants";
 
+export const checkStoreProfile = () => {
+    return async dispatch => {
+        await dispatch({
+            type: SET_STORE_PRODUCT,
+            payload: {
+                loading: true
+            }
+        })
+
+        try {
+            const response = await Api.get('/mobile/toko/profile')
+
+            await dispatch({
+                type: SET_STORE_PRODUCT,
+                payload: {
+                    loading: false,
+                    storeStatus: response.data.data.status,
+                    storeData: response.data.data
+                }
+            })
+        } catch (error) {
+            await dispatch({
+                type: SET_STORE_PRODUCT,
+                payload: {
+                    loading: false,
+                    error: true
+                }
+            })
+        }
+    }
+}
+
 export const postStoreRegistration = (data) => {
     return async (dispatch) => {
         dispatch({

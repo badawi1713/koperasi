@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
+  ActivityIndicator,
   Image,
   SafeAreaView,
   ScrollView, StyleSheet, Text,
@@ -11,19 +12,19 @@ import { useSelector, useDispatch } from 'react-redux';
 import { IMGGetStarted1, IMGNoData } from '../../../assets';
 import { colors, fonts } from '../../../utils';
 import { AddProductForm, Button, Gap, TopNavbar } from '../../components';
-import { changeStoreProduct } from '../../../store/actions';
+import { changeStoreProduct, checkStoreProfile } from '../../../store/actions';
 
 const Store = ({ navigation }) => {
   const dispatch = useDispatch()
   const [showAddProductForm, setShowAddProductForm] = useState(false)
 
-  const miscReducer = useSelector(state => state.miscReducer)
   const storeProductReducer = useSelector(state => state.storeProductReducer)
 
-  const { newProductData, registerLoading } = storeProductReducer
+  const { newProductData, loading, storeStatus, storeData } = storeProductReducer
 
-
-  const { showStoreDetail } = miscReducer
+  useEffect(() => {
+    return dispatch(checkStoreProfile())
+  }, [])
 
   const handleBackButtonClick = () => {
     setShowAddProductForm(false)
@@ -60,7 +61,7 @@ const Store = ({ navigation }) => {
             <Avatar.Icon size={64} style={{ backgroundColor: colors.background.grey4 }} icon="store" />
             <Gap width={10} />
             <View >
-              <Text style={styles.storeTitle}>Koperasi Charisma</Text>
+              <Text style={styles.storeTitle}>{storeData && storeData.namaToko}</Text>
               <Gap height={5} />
               <View style={styles.row}>
                 <Icon name="star" size={14} color="#FFD700" solid />
@@ -123,9 +124,13 @@ const Store = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <TopNavbar back={showAddProductForm} linkBack={() => setShowAddProductForm(false)} title={showAddProductForm ? "Tambah Produk" : "Toko"} />
 
-      {showStoreDetail ? <ScrollView showsVerticalScrollIndicator={false}><StoreScreen />
-      </ScrollView>
-        : <StoreRegistration />
+      {
+        loading ? <View style={{ flex: 1, justifyContent: 'center' }}>
+          <ActivityIndicator color={colors.background.green1} size='large' />
+        </View> :
+          storeStatus ? <ScrollView showsVerticalScrollIndicator={false}><StoreScreen />
+          </ScrollView>
+            : <StoreRegistration />
       }
     </SafeAreaView>
   );

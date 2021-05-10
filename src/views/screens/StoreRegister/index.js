@@ -8,11 +8,13 @@ import SelectPicker from 'react-native-form-select-picker';
 import { Modal, Portal, TextInput } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { IMGStoreRegistrationSuccess } from '../../../assets';
-import { changeMisc, changeStoreProduct, getCityData, getProvinceData, getSubDistrictData } from '../../../store/actions';
+import { changeMisc, changeStoreProduct, getCityData, getProvinceData, getSubDistrictData, postStoreRegistration } from '../../../store/actions';
 import { colors, fonts } from '../../../utils';
 import { Button, Gap, TopNavbar } from '../../components';
 
 const theme = { colors: { primary: colors.background.green1, placeholder: colors.text.grey1, accent: colors.text.grey1 } }
+
+const storeName = /^\S*$/
 
 const StoreRegister = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -52,7 +54,7 @@ const StoreRegister = ({ navigation }) => {
       "kodePos": kodePos
     }
 
-    await dispatch(postStoreProfileHandler(data))
+    await dispatch(postStoreRegistration(data))
     await showModalHandler();
 
   }
@@ -93,12 +95,18 @@ const StoreRegister = ({ navigation }) => {
               />
             )}
             name="namaToko"
-            rules={{ required: true }}
+            patt
+            rules={{
+              required: {
+                value: true,
+                message: "Nama toko harus diisi"
+              }, pattern: { value: storeName, message: "Nama toko tidak boleh ada spasi" }
+            }}
             defaultValue=""
           />
           {errors.namaToko && <>
             <Gap height={5} />
-            <Text style={styles.errorText}>Nama toko harus diisi</Text>
+            <Text style={styles.errorText}>{errors?.namaToko?.message}</Text>
           </>}
           <Gap height={15} />
           <Controller
@@ -107,7 +115,7 @@ const StoreRegister = ({ navigation }) => {
               <SelectPicker
                 doneButtonTextStyle={{ color: colors.text.green1, fontFamily: fonts.primary[600] }}
                 doneButtonText='Pilih'
-                onValueChange={async (e) => { await onChange(e); dispatch(changeStoreProduct({ storeProfile: { ...storeProfile, provinsi: e } })); await dispatch(getCityData()) }}
+                onValueChange={async (e) => { await onChange(e); dispatch(changeStoreProduct({ storeProfile: { ...storeProfile, provinsi: e, kota: "", kecamatan: "" } })); await dispatch(getCityData()) }}
                 placeholder='Pilih Provinsi'
                 selected={provinsi}
                 style={styles.selectInput}
@@ -135,7 +143,7 @@ const StoreRegister = ({ navigation }) => {
                 <SelectPicker
                   doneButtonTextStyle={{ color: colors.text.green1, fontFamily: fonts.primary[600] }}
                   doneButtonText='Pilih'
-                  onValueChange={async (e) => { await onChange(e); await dispatch(changeStoreProduct({ storeProfile: { ...storeProfile, kota: e } })); await dispatch(getSubDistrictData()) }}
+                  onValueChange={async (e) => { await onChange(e); await dispatch(changeStoreProduct({ storeProfile: { ...storeProfile, kota: e, kecamatan: "" } })); await dispatch(getSubDistrictData()) }}
                   placeholder='Pilih Kota atau Kabupaten'
                   selected={kota}
                   disabled={provinsi === ""}
