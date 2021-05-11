@@ -4,7 +4,7 @@ const initialState = {
     loading: true,
     error: false,
     errorMessage: "",
-    storeStatus: 0,
+    storeStatus: "",
     storeData: {},
     dataProvinsi: [],
     dataKota: [],

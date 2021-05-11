@@ -128,7 +128,6 @@ export const postLoanCalculateTransfer = () => {
             }
 
         } catch (err) {
-            console.log('nop', err.response.data.rd)
             Alert.alert(
                 "Proses Pinjam Dana Gagal",
                 err.response.data.rd,
@@ -161,15 +160,12 @@ export const postLoanSaveTransfer = () => {
             nominal: loanAmount, tenor: month
         }
 
-        console.log('data loan', data)
-
         try {
             await Api.post(
                 `/mobile/koperasi/pinjamanSimulasi`, data
             );
 
         } catch (err) {
-            console.log('this', err.response.data.rd,)
             dispatch({
                 type: SET_LOAN_COPERATION_MEMBER,
                 payload: {

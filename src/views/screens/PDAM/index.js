@@ -3,7 +3,7 @@ import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'r
 import ContentLoader from "react-native-easy-content-loader"
 import { Divider } from 'react-native-paper'
 import { useDispatch, useSelector } from 'react-redux'
-import { IMGPdam } from '../../../assets'
+import { IMGNoData, IMGPdam } from '../../../assets'
 import { changePdam, getPdamMenu } from '../../../store/actions'
 import { colors, fonts } from '../../../utils'
 import { Gap, TopNavbar } from '../../components'
@@ -41,23 +41,27 @@ const PDAM = ({ navigation }) => {
                         </View>
                         <Divider />
                     </View> :
-                        menuPdam.map((item, index) => (
-                            <TouchableOpacity key={index}
-                                onPress={() => {
-                                    dispatch(changePdam({ groupId: item.groupId, groupName: item.groupName }))
-                                    navigation.navigate("PDAMPayment")
-                                }}
-                            >
-                                <View style={styles.row}>
-                                    <Image source={IMGPdam} style={styles.imageLogo} />
-                                    <Gap width={20} />
-                                    <Text style={styles.text}>{item.groupName}</Text>
-                                </View>
-                                <Gap height={10} />
-                                <Divider />
-                                <Gap height={10} />
-                            </TouchableOpacity>
-                        ))
+                        menuPdam.length === 0 ? <View style={{ alignItems: 'center' }}>
+                            <IMGNoData width={120} height={130} />
+                            <Text style={styles.text}>Maaf layanan sedang tidak tersedia</Text>
+                        </View> :
+                            menuPdam.map((item, index) => (
+                                <TouchableOpacity key={index}
+                                    onPress={() => {
+                                        dispatch(changePdam({ groupId: item.groupId, groupName: item.groupName }))
+                                        navigation.navigate("PDAMPayment")
+                                    }}
+                                >
+                                    <View style={styles.row}>
+                                        <Image source={IMGPdam} style={styles.imageLogo} />
+                                        <Gap width={20} />
+                                        <Text style={styles.text}>{item.groupName}</Text>
+                                    </View>
+                                    <Gap height={10} />
+                                    <Divider />
+                                    <Gap height={10} />
+                                </TouchableOpacity>
+                            ))
                     }
                 </View>
             </View>

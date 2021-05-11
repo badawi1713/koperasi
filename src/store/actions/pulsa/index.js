@@ -76,7 +76,6 @@ export const getProductDetail = () => {
                     detailPulsa: response.data.data,
                 }
             })
-            console.log('tes', response)
         } catch (error) {
             console.log(error.response.data.rd)
             dispatch({

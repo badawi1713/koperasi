@@ -14,8 +14,6 @@ const CoperationMemberSavingPaymentMethod = ({ navigation }) => {
 
     const { loading, paymentMethodData } = savingCoperationMemberReducer
 
-    console.log("list", savingCoperationMemberReducer)
-
     useEffect(() => {
         const getTopUpMethodList = () => {
             dispatch(getSavingCoperationMemberPaymentMethod())

@@ -12,7 +12,6 @@ export const checkStoreProfile = () => {
 
         try {
             const response = await Api.get('/mobile/toko/profile')
-
             await dispatch({
                 type: SET_STORE_PRODUCT,
                 payload: {
@@ -44,7 +43,6 @@ export const postStoreRegistration = (data) => {
 
         try {
             const response = Api.post(`/mobile/toko/register`, data)
-            console.log(response)
             dispatch({
                 type: SET_STORE_PRODUCT,
                 payload: {

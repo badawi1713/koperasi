@@ -1,5 +1,12 @@
 import axios from "axios";
+import { ToastAndroid } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { replace } from "../../../helpers/RootNavigation";
+import jwtDecode from 'jwt-decode';
+
+const showMessage = () => {
+    ToastAndroid.show("Sesi login berakhir, silakan login kembali.", ToastAndroid.SHORT);
+};
 
 let url = "http://rumahkios.com:8001/api"
 
@@ -12,16 +19,33 @@ export const Api = axios.create({
 
 Api.interceptors.request.use(
     async (config) => {
-        const token = await AsyncStorage.getItem("token");
+        const token = await AsyncStorage.getItem("token")
+
         if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+            if (jwtDecode(token).exp < Date.now() / 1000) {
+                await AsyncStorage.removeItem('token')
+                await replace('Login')
+                await showMessage()
+            } else {
+                config.headers.Authorization = `Bearer ${token}`
+                return config
+            }
         }
-        return config;
     },
-    (err) => {
-        console.log('error response', err)
-        return Promise.reject(err);
+    async (error) => {
+        if (!error.response) {
+            console.log('error response', error)
+            return Promise.reject(error);
+        }
+
+        if (error.response.status === 403) {
+            await AsyncStorage.removeItem('token');
+            await replace('Login');
+        } else {
+            return Promise.reject(error);
+        }
     }
+
 );
 
 export function ApiGetRequest(url, data = {}) {

@@ -1,4 +1,4 @@
-import { ApiGetRequest } from '../../../utils/api/koperasi';
+import { Api } from '../../../utils/api/koperasi';
 import { SET_HOME } from '../../constants';
 
 export const getHomeContent = () => {
@@ -11,7 +11,7 @@ export const getHomeContent = () => {
         })
 
         try {
-            const response = await ApiGetRequest(`/mobile/home`)
+            const response = await Api.get(`/mobile/home`)
             await dispatch({
                 type: SET_HOME,
                 payload: {
@@ -42,7 +42,7 @@ export const getSaldoBalance = () => {
         })
 
         try {
-            const response = await ApiGetRequest(`/mobile/profile/saldo`)
+            const response = await Api.get(`/mobile/profile/saldo`)
             await dispatch({
                 type: SET_HOME,
                 payload: {

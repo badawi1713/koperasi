@@ -23,7 +23,10 @@ const Store = ({ navigation }) => {
   const { newProductData, loading, storeStatus, storeData } = storeProductReducer
 
   useEffect(() => {
-    return dispatch(checkStoreProfile())
+    const getStoreStatus = () => {
+      dispatch(checkStoreProfile())
+    }
+    return getStoreStatus()
   }, [])
 
   const handleBackButtonClick = () => {
@@ -128,7 +131,7 @@ const Store = ({ navigation }) => {
         loading ? <View style={{ flex: 1, justifyContent: 'center' }}>
           <ActivityIndicator color={colors.background.green1} size='large' />
         </View> :
-          storeStatus ? <ScrollView showsVerticalScrollIndicator={false}><StoreScreen />
+          storeStatus === 1 ? <ScrollView showsVerticalScrollIndicator={false}><StoreScreen />
           </ScrollView>
             : <StoreRegistration />
       }
