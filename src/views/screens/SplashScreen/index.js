@@ -8,11 +8,10 @@ const SplashScreen = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      // navigation.replace('GetStarted');
       tryLocalSignin();
     }, 3000);
   }, []);
-  // useEffect dengan array kosong berfungsi supaya useEffect hanya te-render sekali.
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar

@@ -365,6 +365,7 @@ const styles = StyleSheet.create({
     },
     mainContent: {
         padding: 18,
+        backgroundColor: colors.white,
     },
     content: {
         justifyContent: 'center',

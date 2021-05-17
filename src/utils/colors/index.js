@@ -15,6 +15,7 @@ export const colors = {
   secondary: mainColors.dark1,
   white: '#FFFFFF',
   black: mainColors.dark1,
+  gold: '#FFD700',
   disabled: mainColors.grey2,
   text: {
     danger: mainColors.red1,
