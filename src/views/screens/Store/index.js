@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -6,6 +6,7 @@ import {
   ScrollView, StyleSheet, Text,
   TouchableOpacity, View
 } from 'react-native';
+import NumberFormat from 'react-number-format';
 import { Avatar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,8 +14,14 @@ import { IMGGetStarted1 } from '../../../assets';
 import { changeStoreProduct, checkStoreProfile } from '../../../store/actions';
 import { colors, fonts } from '../../../utils';
 import { AddProductForm, Button, Gap, Link, TopNavbar } from '../../components';
+import { Context } from '../../../context/AuthContext';
+
 
 const Store = ({ navigation }) => {
+  const { state } = useContext(Context);
+  const homeReducer = useSelector(state => state.homeReducer);
+  const { saldoBalance} = homeReducer;
+
   const dispatch = useDispatch()
   const [showAddProductForm, setShowAddProductForm] = useState(false)
 
@@ -77,7 +84,7 @@ const Store = ({ navigation }) => {
             <Gap height={20} />
             <View style={styles.row, { justifyContent: 'space-between', flexDirection: 'row' }}>
               <Text>Skor Performa Toko</Text>
-              <TouchableOpacity style={styles.row}>
+              <TouchableOpacity style={styles.row} >
                 <Text>85/100</Text>
                 <Gap width={5} />
                 <Icon size={16} color={colors.text.grey2} name='chevron-right' />
@@ -98,8 +105,10 @@ const Store = ({ navigation }) => {
             <Gap height={16} />
 
             <View style={{ justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
-              <Text>Saldo</Text>
-              <Text>Rp0</Text>
+              <Text>Saldo (Rp)</Text>
+              <NumberFormat value={saldoBalance || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                    <Text style={styles.moneyText}>{value}</Text>
+                  } />
             </View>
           </View>
           <Gap height={10} />
@@ -107,7 +116,7 @@ const Store = ({ navigation }) => {
             <View>
               <View style={{ justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                 <Text style={styles.headerText}>Penjualan</Text>
-                <Link title="Lihat Riwayat" />
+                <Link title="Lihat Riwayat" onPress={() => navigation.navigate('Riwayat')} />
               </View>
               <Gap height={20} />
               <View style={{ justifyContent: 'space-between', flex: 1, flexDirection: 'row' }}>
@@ -143,10 +152,12 @@ const Store = ({ navigation }) => {
               <Gap height={20} />
               <View style={{ justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
                 <View>
-                  <Text>Daftar Produk</Text>
-                  <Text>0 Produk</Text>
+                  <Text>Daftar Produkmu (0)</Text>
                 </View>
-                <Icon size={16} color={colors.text.grey2} name='chevron-right' />
+                <TouchableOpacity style={styles.row} onPress={() => navigation.navigate('StoreProduct')}>
+                  <Gap width={5} />
+                  <Icon size={16} color={colors.text.grey2} name='chevron-right' />
+                </TouchableOpacity>  
               </View>
             </View>
           </View>

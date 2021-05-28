@@ -22,9 +22,12 @@ import {
   RegisterVerification,
   SaldoDetail, SplashScreen,
   Store,
+  StoreProduct,
   StoreRegister,
   TopUp,
-  TopUpPayment, TopUpPaymentMethod, TransactionHistoryDetail
+  TopUpPayment, 
+  TopUpPaymentMethod, 
+  TransactionHistoryDetail
 } from '../views/screens';
 
 const Stack = createStackNavigator();
@@ -110,12 +113,20 @@ const Router = () => {
         component={StoreRegister}
       />
       <Stack.Screen
+        name="StoreProduct"
+        component={StoreProduct}
+      />
+      <Stack.Screen
         name="CoperationMember"
         component={CoperationMember}
       />
       <Stack.Screen
         name="CoperationAccount"
         component={CoperationAccount}
+      />
+      <Stack.Screen
+        name="Riwayat"
+        component={TransactionHistory}
       />
       <Stack.Screen name="TopUp" component={TopUp} />
       <Stack.Screen name="TopUpPaymentMethod" component={TopUpPaymentMethod} />

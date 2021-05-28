@@ -151,7 +151,8 @@ const Home = ({ navigation }) => {
                       activeOpacity={1}
                       key={item.categoryId}
                       style={styles.ppobGroup}
-                      onPress={() => { item.categoryId === "PLS1" ? navigation.navigate('Pulsa') : item.categoryId === "TELKOM" ? navigation.navigate('Indihome') : item.categoryId === "PLN" ? navigation.navigate('PLN') : item.categoryId === "PDAM" ? navigation.navigate('PDAM') : navigation.navigate('CoperationMember') }}>
+                      onPress={() => { item.categoryId === "PLS1" ? navigation.navigate('Pulsa') : item.categoryId === "TELKOM" ? navigation.navigate('Indihome') : item.categoryId === "PLN" ? navigation.navigate('PLN') : item.categoryId === "PDAM" ? navigation.navigate('PDAM') 
+                       : item.categoryId === "kp_sukarela" ? navigation.navigate('TopUp') : navigation.navigate('CoperationMember') }}>
                       <View style={styles.ppobItem}>
                         <Image source={{ uri: item.categoryImage }} style={styles.ppobImage} />
                       </View>

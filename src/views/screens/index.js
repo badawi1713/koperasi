@@ -21,9 +21,10 @@ import RegisterVerification from './RegisterVerification';
 import SaldoDetail from './SaldoDetail';
 import SplashScreen from './SplashScreen';
 import Store from './Store';
+import StoreProduct from './StoreProduct';
 import StoreRegister from './StoreRegister';
 import TopUp from './TopUp';
-import TopUpPayment from './TopUpPayment';
+import TopUpPayment from './TopupPayment';
 import TopUpPaymentMethod from './TopUpPaymentMethod';
 import TransactionHistory from './TransactionHistory';
 import TransactionHistoryDetail from './TransactionHistoryDetail';
@@ -53,6 +54,7 @@ export {
   RegisterVerification,
   SplashScreen,
   Store,
+  StoreProduct,
   StoreRegister,
   TopUp,
   TopUpPaymentMethod,
