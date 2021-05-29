@@ -4,6 +4,7 @@ import ICBackArrow from './back.svg';
 import ICBackspace from './backspace.svg';
 import ICalendar from './calendar.svg';
 import ICCart from './cart.svg';
+import ICCartGreen from './cart-green.svg';
 import ICCopy from './copy.svg';
 import ICDebt from './debt.svg';
 import ICDownload from './download.svg';
@@ -48,8 +49,15 @@ import ICVisible from './visible.svg';
 import ICEWalletActive from './wallet-active.svg';
 import ICEWalletInActive from './wallet-inactive.svg';
 import ICWithdraw from './withdraw.svg';
+import ICWaiting from './waiting.svg';
+import ICShoppingBag from './shopping-bag.svg';
+import ICTransaction from './transaction.svg'
 
 export {
+  ICCartGreen,
+  ICTransaction,
+  ICWaiting,
+  ICShoppingBag,
   ICDownload,
   ICPrint,
   ICScreenshoot,
