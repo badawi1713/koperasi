@@ -13,13 +13,15 @@ import { IMGGetStarted1 } from '../../../assets';
 import { changeStoreProduct, checkStoreProfile } from '../../../store/actions';
 import { colors, fonts } from '../../../utils';
 import { AddProductForm, Button, Gap, Link, TopNavbar } from '../../components';
+import NumberFormat from 'react-number-format';
 
 const Store = ({ navigation }) => {
   const dispatch = useDispatch()
   const [showAddProductForm, setShowAddProductForm] = useState(false)
 
   const storeProductReducer = useSelector(state => state.storeProductReducer)
-
+  const homeReducer = useSelector(state => state.homeReducer);
+  const { saldoBalance } = homeReducer;
   const { newProductData, loading, storeStatus, storeData } = storeProductReducer
 
   useEffect(() => {
@@ -99,7 +101,9 @@ const Store = ({ navigation }) => {
 
             <View style={{ justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center' }}>
               <Text style={styles.miscText}>Saldo</Text>
-              <Text style={styles.miscText}>Rp0</Text>
+              <NumberFormat value={saldoBalance || 0} displayType={'text'} thousandSeparator={'.'} decimalSeparator={','} renderText={value =>
+                    <Text style={styles.miscText}>Rp{value}</Text>
+                  } />
             </View>
           </View>
           <Gap height={10} />
