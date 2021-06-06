@@ -5975,11 +5975,6 @@ react-native-barcode-mask@^1.2.4:
   dependencies:
     prop-types "^15.6.2"
 
-react-native-bluetooth-escpos-printer@^0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/react-native-bluetooth-escpos-printer/-/react-native-bluetooth-escpos-printer-0.0.5.tgz#45a31d37c213f95f2cc590cebcb48e0574ce1b45"
-  integrity sha512-a+GTlz8dctb48wkoJ8woE7gV24NCOoA13J95A+RFEKhjONEWf3/dP5pIqrrlO5fsf/2QYDeMfU3P8bIVQoEqig==
-
 react-native-camera@^3.43.1:
   version "3.43.1"
   resolved "https://registry.yarnpkg.com/react-native-camera/-/react-native-camera-3.43.1.tgz#26758ed66a63ea87a8bb25361364034419c60043"

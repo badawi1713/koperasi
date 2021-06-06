@@ -1,19 +1,18 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext , useEffect} from 'react';
 import {
   ActivityIndicator,
-  Image,
-  FlatList,
-  SafeAreaView,
-  ScrollView, StyleSheet, Text,
-  View,
-  TouchableOpacity
-} from 'react-native';
 
+
+  SafeAreaView,
+  StyleSheet,
+  View
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { colors, fonts } from '../../../utils';
-import { Gap, TopNavbar, Input, ProductList } from '../../components';
 import { Context } from '../../../context/AuthContext';
-import { productList } from '../../../assets';
+import { getListMyProduct } from '../../../store/actions';
+import { colors, fonts } from '../../../utils';
+import { Gap, Input, ProductList, TopNavbar } from '../../components';
+
 
 
 const StoreProduct = ({ navigation }) => {
@@ -24,6 +23,15 @@ const StoreProduct = ({ navigation }) => {
   const storeProductReducer = useSelector(state => state.storeProductReducer)
 
   const { newProductData, loading, storeStatus, storeData } = storeProductReducer;
+
+
+  useEffect(() => {
+    const getProduct = () => {
+        dispatch(getListMyProduct())
+    }
+
+    return getProduct()
+}, [dispatch])
    
 
   const SearchBar = () => {
@@ -55,8 +63,7 @@ const StoreProduct = ({ navigation }) => {
         </View> :
         <>
           <SearchBar />
-          <ScrollView showsVerticalScrollIndicator={false}><ProductList />
-          </ScrollView>
+          <ProductList />
         </>
       
       }

@@ -20,7 +20,9 @@ export const getProfile = () => {
                     loading: false,
                     transactionHistory: response.data.data.riwayatTransaksi,
                     totalSaving: response.data.data.totalSimpanan,
-                    memberStatus: response.data.data.statusAnggota
+                    memberStatus: response.data.data.statusAnggota,
+                    biayaPendaftaran: response.data.data.biayaPendaftaran,
+                    statusBayarPendaftaran: response.data.data.statusBayarPendaftaran
                 }
             })
 

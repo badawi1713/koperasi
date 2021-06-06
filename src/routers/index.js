@@ -6,8 +6,10 @@ import {
   CoperationAccount,
   CoperationMember,
   CoperationMemberLoan,
-  CoperationMemberSaving, CoperationMemberSavingPayment,
+  CoperationMemberSaving, 
+  CoperationMemberSavingPayment,
   CoperationMemberSavingPaymentMethod,
+  CoperationRegisterHistory,
   EWallet,
   GetStarted,
   TransactionHistory,
@@ -142,7 +144,10 @@ const Router = () => {
         name="CoperationMemberSavingPaymentMethod"
         component={CoperationMemberSavingPaymentMethod}
       />
-
+      <Stack.Screen
+        name="CoperationRegisterHistory"
+        component={CoperationRegisterHistory}
+      />
       <Stack.Screen
         name="CoperationMemberLoan"
         component={CoperationMemberLoan}

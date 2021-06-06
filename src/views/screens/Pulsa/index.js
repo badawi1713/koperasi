@@ -295,7 +295,7 @@ const Pulsa = ({ navigation }) => {
               height: 4,
             }
           }}
-        >
+          >
           <PulsaBottomDrawer />
         </RBSheet>
 

@@ -91,6 +91,36 @@ export const getProvinceData = () => {
     }
 }
 
+export const getListMyProduct = () => {
+    return async (dispatch) => {
+        dispatch({
+            type: SET_STORE_PRODUCT,
+            payload: {
+                loading: true
+            }
+        })
+
+        try {
+            const response = await Api.get('/mobile/toko/product')
+            await dispatch({
+                type: SET_STORE_PRODUCT,
+                payload: {
+                    productList: response.data.data,
+                    loading: false
+                }
+            })
+        } catch (error) {
+            await dispatch({
+                type: SET_STORE_PRODUCT,
+                payload: {
+                    error: true,
+                    loading: false
+                }
+            })
+        }
+    }
+}
+
 export const getCityData = () => {
     return async (dispatch, getState) => {
 

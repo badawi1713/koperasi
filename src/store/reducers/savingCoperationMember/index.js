@@ -13,7 +13,12 @@ const initialState = {
     totalSimpanan: 0,
     viaPayment: "",
     paymentMethodData: [],
-    timeLimit: ""
+    paymentRegistration: [],
+    timeLimit: "",
+    caraBayar: "",
+    kodeBayar: "",
+    biayaPendaftaran: "",
+    statusBayarPendaftaran: ""
 };
 
 const savingCoperationMemberReducer = (state = initialState, action) => {

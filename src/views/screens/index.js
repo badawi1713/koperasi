@@ -4,6 +4,7 @@ import CoperationMemberLoan from './CoperationMemberLoan';
 import CoperationMemberSaving from './CoperationMemberSaving';
 import CoperationMemberSavingPayment from './CoperationMemberSavingPayment';
 import CoperationMemberSavingPaymentMethod from './CoperationMemberSavingPaymentMethod';
+import CoperationRegisterHistory from './CoperationRegisterHistory';
 import EWallet from './EWallet';
 import GetStarted from './GetStarted';
 import Home from './Home';
@@ -39,6 +40,7 @@ export {
   CoperationMemberSavingPayment,
   CoperationMemberSavingPaymentMethod,
   CoperationMemberSaving,
+  CoperationRegisterHistory,
   QRCamera,
   CoperationAccount,
   CoperationMember,

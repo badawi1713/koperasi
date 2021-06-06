@@ -14,6 +14,10 @@ const initialState = {
         deskripsi: "",
         gambar: []
     },
+    productId: "",
+    productName: "",
+    harga: "",
+    stok: ""
 };
 
 const productReducer = (state = initialState, action) => {

@@ -14,7 +14,9 @@ const initialState = {
     },
     transactionHistory: [],
     memberStatus: [],
-    totalSaving: []
+    totalSaving: [],
+    biayaPendaftaran: "",
+    statusBayarPendaftaran: ""
 };
 
 const profileReducer = (state = initialState, action) => {

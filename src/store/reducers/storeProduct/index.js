@@ -17,6 +17,7 @@ const initialState = {
         alamat: "",
         kodePos: "",
     },
+    productList: [],
     registerLoading: false
 
 };
