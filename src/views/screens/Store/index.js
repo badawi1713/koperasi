@@ -77,15 +77,15 @@ const Store = ({ navigation }) => {
                 <View style={styles.row}>
                   <Icon name='star' size={18} color={colors.gold} solid />
                   <Gap width={6} />
-                  <Text>• {0} Pengikut</Text>
+                  <Text style={styles.miscText}>• {0} Pengikut</Text>
                 </View>
               </View>
             </View>
             <Gap height={20} />
             <View style={styles.row, { justifyContent: 'space-between', flexDirection: 'row' }}>
-              <Text>Skor Performa Toko</Text>
-              <TouchableOpacity style={styles.row} >
-                <Text>85/100</Text>
+              <Text style={styles.miscText}>Skor Performa Toko</Text>
+              <TouchableOpacity style={styles.row}>
+                <Text style={styles.miscText}>85/100</Text>
                 <Gap width={5} />
                 <Icon size={16} color={colors.text.grey2} name='chevron-right' />
               </TouchableOpacity>
@@ -172,19 +172,19 @@ const Store = ({ navigation }) => {
             <TouchableOpacity style={styles.row}>
               <Icon name='star' size={18} color={colors.text.grey2} solid />
               <Gap width={10} />
-              <Text>Ulasan</Text>
+              <Text style={styles.miscText}>Ulasan</Text>
             </TouchableOpacity>
             <Gap height={16} />
             <TouchableOpacity style={styles.row}>
               <Icon name='comments' size={18} color={colors.text.grey2} solid />
               <Gap width={10} />
-              <Text>Diskusi</Text>
+              <Text style={styles.miscText}>Diskusi</Text>
             </TouchableOpacity>
             <Gap height={16} />
             <TouchableOpacity style={styles.row}>
               <Icon name='exclamation-triangle' size={18} color={colors.text.grey2} solid />
               <Gap width={10} />
-              <Text>Pesanan Dikomplain</Text>
+              <Text style={styles.miscText}>Pesanan Dikomplain</Text>
             </TouchableOpacity>
           </View>
 
@@ -198,13 +198,13 @@ const Store = ({ navigation }) => {
             <TouchableOpacity style={styles.row}>
               <Icon name='toolbox' size={18} color={colors.text.grey2} solid />
               <Gap width={10} />
-              <Text>Pengaturan Toko</Text>
+              <Text style={styles.miscText}>Pengaturan Toko</Text>
             </TouchableOpacity>
             <Gap height={16} />
             <TouchableOpacity style={styles.row}>
               <Icon name='headset' size={18} color={colors.text.grey2} solid />
               <Gap width={10} />
-              <Text>Pusat Bantuan</Text>
+              <Text style={styles.miscText}>Pusat Bantuan</Text>
             </TouchableOpacity>
           </View>
         </>
@@ -332,6 +332,11 @@ const styles = StyleSheet.create({
     fontFamily: fonts.primary[600],
     flex: ktpData ? 0 : 1,
   }),
+  miscText: {
+    color: colors.text.dark1,
+    fontSize: 14,
+    fontFamily: fonts.primary[400],
+  },
   conditionTermContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',

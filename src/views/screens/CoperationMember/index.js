@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { ActivityIndicator, Image, StyleSheet, View } from 'react-native'
-import { IMGLogo } from '../../../assets'
+import { ActivityIndicator, Image, StyleSheet, View, Text } from 'react-native'
+import { IMGBlockedAccount, IMGLogo } from '../../../assets'
 import { colors } from '../../../utils'
 import { Button, Gap, MemberRegisterConfirmation, MemberRegisterForm, TopNavbar, MemberProfile } from '../../components'
 import { getProfile } from '../../../store/actions';
@@ -37,7 +37,12 @@ const CoperationMember = ({ navigation }) => {
             {
                 loading ? <View style={styles.content}>
                     <ActivityIndicator color={colors.background.green1} size='large' />
-                </View> :
+                </View> : memberStatus === 2 ?
+                    <View style={styles.content}>
+                        <IMGBlockedAccount width={320} />
+                        <Gap height={20} /><Text>Maaf, akun anggota anda sedang diblokir</Text>
+                    </View>
+                    :
                     memberStatus === 1 ?
                         <MemberProfile />
                         :
